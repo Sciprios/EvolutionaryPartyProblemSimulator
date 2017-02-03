@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, Mock
 from unittest import TestCase
-from BoolTree import SimpleNode, InverseSimple, AndNode, OrNode
+from BoolTree import SimpleNode, InverseNode, AndNode, OrNode
 
 class TestSimpleNode(TestCase):
     """ Tests the simple node class. """
@@ -18,17 +18,12 @@ class TestSimpleNode(TestCase):
         assert nde.evaluate({'B': True, 'A': True})
         assert not nde.evaluate({'A': False, 'B': True})
 
-class TestInverseSimple(TestCase):
+class TestInverseNode(TestCase):
     """ Tests the simple node class. """
-
-    def test_init(self):
-        """ Ensures the node is initialised  """
-        nde = InverseSimple('B')
-        assert nde.id is 'B'
     
     def test_evaluate(self):
         """ Ensures the simple node evaluates itself properly. """
-        nde = InverseSimple('A')
+        nde = InverseNode(SimpleNode('A'))
         assert not nde.evaluate({'A': True})
         assert nde.evaluate({'A': False})
         assert not nde.evaluate({'B': True, 'A': True})

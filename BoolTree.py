@@ -14,23 +14,22 @@ class SimpleNode(object):
         """
         if input_vector[self.id]:
             return True
+        elif not input_vector[self.id]:
+            return False
 
-class InverseSimple(object):
+class InverseNode(object):
     """ Inverses a simple nodes evaluation. """
 
-    def __init__(self, identifier):
+    def __init__(self, node):
         """ Initializes a Terminal. """
-        self.id = identifier
+        self.node = node
 
     def evaluate(self, input_vector):
         """
         Evaluates the result of this node.
         Returns true if the input contains this variable as false.
         """
-        if input_vector[self.id]:
-            return False
-        elif not input_vector[self.id]:
-            return True
+        return not self.node.evaluate(input_vector)
 
 class AndNode(object):
     """ A node which 'Ands' the result of two inner nodes. """
