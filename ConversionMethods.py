@@ -64,11 +64,9 @@ def validate_string(input_string):
     
     if brack_count != 0:
         # Brackets are unbalanced.
-        print(1)
         valid = False;
     elif not has_var:
         # No variables
-        print(2)
         valid = False
     
     return valid
@@ -140,13 +138,13 @@ def convert_clause(clause):
     return node
 
 
-test = '(A.B)+(C.A)'
-print("Is the string valid? {}".format(validate_string(test)))
+#test = '(A.B)+(C.A)'
+#print("Is the string valid? {}".format(validate_string(test)))
 
-nde = convert_clause(test)
-inp = {
-    'A': True,
-    'B': False,
-    'C': False
-}
-print("Is the string true given {}? {}".format(inp, nde.evaluate(inp)))
+#nde = convert_clause(test)
+#inp = {
+#    'A': True,
+#    'B': False,
+#    'C': False
+#}
+#print("Is the string true given {}? {}".format(inp, nde.evaluate(inp)))
