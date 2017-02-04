@@ -38,7 +38,7 @@ def validate_string(input_string):
                     # Invalid symbol before operator
                     valid = False
                     break
-                elif input_string[i+1] not in (['('] + VARIABLES):
+                elif input_string[i+1] not in (['(', INVERSE] + VARIABLES):
                     # Invalid symbol following operator
                     valid = False
                     break
