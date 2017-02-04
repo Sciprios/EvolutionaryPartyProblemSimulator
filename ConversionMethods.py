@@ -4,7 +4,6 @@ from BoolTree import SimpleNode, InverseNode, AndNode, OrNode
 def convert_clause(clause):
     """ Identifies next nodes to be generated. Assumes clause has been validated."""
     node = None
-    print(clause)
     if clause[0] in ['A', 'B', 'C', 'D', 'E']:   # Is it a variable?
         if len(clause) == 1:        # Is it just a variable?
             node = SimpleNode(clause[0])
@@ -17,8 +16,30 @@ def convert_clause(clause):
                 rhs_node = convert_clause(clause[2:])    # Get the right hand side node of this OR
                 node = OrNode(SimpleNode(clause[0]), rhs_node)
     elif clause[0] is '¬':                  # Inverse operation
-        rhs_node = convert_clause(clause[1:])
-        node = InverseSimple(rhs_node)
+        # Find end of next statement
+        i = 1
+        if len(clause) > 2:     # Is the LHS of a clause.
+            open_cnt = 0
+            while i < len(clause):
+                if clause[i] is '(':
+                    open_cnt = open_cnt + 1
+                elif clause[i] is ')':
+                    open_cnt = open_cnt - 1
+                elif (clause[i] in ['.', '+']) and (open_cnt == 0):
+                    lhs_node = InverseNode(convert_clause(clause[1:i]))
+                    # What's next?
+                    if clause[1] is '.':  # It's an AND
+                        rhs_node = convert_clause(clause[i+1:])    # Get the right hand side node of this AND
+                        node = AndNode(lhs_node, rhs_node)
+                        break;
+                    elif clause[1] is '+':  # It's an OR
+                        rhs_node = convert_clause(clause[i+1:])    # Get the right hand side node of this OR
+                        node = OrNode(lhs_node, rhs_node)
+                        break;
+                i = i + 1
+            node = InverseNode(convert_clause(clause[1:i]))
+        else:                   # Inverse of a variable.
+            node = InverseNode(SimpleNode(clause[1]))
     elif clause[0] is '(':       # Brackets
         i = 1
         open_cnt = 0
@@ -46,6 +67,6 @@ def convert_clause(clause):
             i = i + 1
     return node
 
-test = '(A.B)+(C.A)+(B.B)'
+test = '¬(A.B)+C'
 nde = convert_clause(test)
-print(nde.evaluate({'A': False, 'B': True, 'C': False}))
+print(nde.evaluate({'A': True, 'B': True, 'C': True}))
