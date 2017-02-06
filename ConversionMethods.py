@@ -5,6 +5,10 @@ VARIABLES = ['A', 'B', 'C', 'D', 'E']
 OPERATORS = ['.', '+']
 INVERSE = '¬'
 
+def validate_CNF(input_string):
+    """ Validates a string id in CNF. """
+    pass
+
 def validate_string(input_string):
     """ Determines whether a given string is in a convertable format. """
     valid = True    # Innocent until proven guilty
@@ -70,6 +74,12 @@ def validate_string(input_string):
         valid = False
     
     return valid
+
+def convert_to_CNF(clause):
+    """ Builds a array consisting of a CNF structure. """
+    clauses = []
+    operators = []
+    pass
 
 def convert_clause(clause):
     """ Identifies next nodes to be generated. Assumes clause has been validated."""
@@ -137,14 +147,14 @@ def convert_clause(clause):
             i = i + 1
     return node
 
+test = '(A)+(B+B).(C.A)'
+print("Is the string valid? {}".format(validate_string(test)))
 
-#test = '(A.B)+(C.A)'
-#print("Is the string valid? {}".format(validate_string(test)))
-
-#nde = convert_clause(test)
-#inp = {
-#    'A': True,
-#    'B': False,
-#    'C': False
-#}
-#print("Is the string true given {}? {}".format(inp, nde.evaluate(inp)))
+nde = convert_clause(test)
+inp = {
+    'A': True,
+    'B': False,
+    'C': False
+}
+print("Is the string true given {}? {}".format(inp, nde.evaluate(inp)))
+print("The string has a analyzed fitness of: {}".format(nde.get_satisfaction(inp)))
