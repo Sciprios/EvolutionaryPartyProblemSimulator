@@ -128,7 +128,7 @@ class Clause(object):
 
     def _set_first_node(self, node):
         """ Sets the first node value of this object. """
-        if type(node) is BooleanNode:
+        if issubclass(type(node), BooleanNode) or issubclass(type(node), CombinationOperatorNode):
             self._first_node = node
         else:
             raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
@@ -208,14 +208,14 @@ class CombinationOperatorNode(BooleanNode, ABC):
     
     def _set_lhs_child(self, child):
         """ Sets the reference of the left hand side child. """
-        if type(child) is BooleanNode:
+        if issubclass(type(child), BooleanNode) or issubclass(type(child), CombinationOperatorNode):
             self._lhs_child = child
         else:
             raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
     
     def _set_rhs_child(self, child):
         """ Sets the reference of the right hand side child. """
-        if type(child) is BooleanNode:
+        if issubclass(type(child), BooleanNode) or issubclass(type(child), CombinationOperatorNode):
             self._rhs_child = child
         else:
             raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
