@@ -1,6 +1,71 @@
 """ This module contains the classes required to make a boolean equation. """
 from abc import ABC, abstractmethod
 
+class Symbols(Enum):
+    LHS_BRACKET = '('
+    RHS_BRACKET = ')'
+    OR = '+'
+    AND = '.'
+    INVERSE = '¬'
+    VARIABLES = ['A', 'B', 'C', 'D', 'E']
+
+class Equation(BooleanNode):
+    """ Used to analyse an equation. """
+    _unparsed_equation = None
+    _clauses = []
+
+    def __init__(self, input_string):
+        """ Initialises an eqaution by interpreting the input string. """
+        self._set_unparsed_equation(input_string)
+
+    
+    def _validate_string(self, eq_str):
+        """ Validates the input string for this equation. """
+        pass
+    
+    def _generate_tree(self):
+        """ Creates a tree from the _unparsed_equation attribute. """
+        bracket_index = 0
+        bracket_count = 0
+        i = 0
+        for symbol in self._unparsed_equation:
+            if symbol is Symbols.LHS_BRACKET:
+                if bracket_count is 0:
+                    bracket_index = i   # We have found a new clause.
+                bracket_count = bracket_count + 1
+            elif symbol is Symbols.RHS_BRACKET:
+                bracket_count = bracket_count - 1
+                if bracket_count is 0:  # Have we found the end to a clause?
+                    new_clause = self._generate_clause(self._unparsed_equation[bracket_index-1:i])  # Only want to parse string not including brackets.
+                    self._clauses.append(new_clause)
+            i = i + 1
+    
+    def _generate_clause(self, clause):
+        """ Generates an initial node for a clause. """
+        pass
+
+    def evaluate(self, input_vector):
+        """ Evaluates the CNF equation through AND'ing the clauses. """
+        if False in self.get_clause_evaluation():
+            return False
+        else:
+            return True
+    
+    def get_clause_evaluation(self, input_vector):
+        """ Returns an array with the clause evaluations. """
+        result = []
+        for i in self._clauses:
+            result.append(i.evaluate(input_vector))
+        return result
+
+
+    def _set_unparsed_equation(self, eq_str):
+        """ Verifies and sets the unparsed equation attribute. """
+        if self._validate_string(eq_str):
+            self._unparsed_equation = eq_str
+        else:
+            raise AttributeError("The input string does not satisfy the validation requirements.")
+
 class Clause(object):
     """ A clause in the CNF boolean expression. """
     _first_node = None
@@ -64,6 +129,28 @@ class VariableNode(BooleanNode):
             raise AttributeError("A VariableNode cannot have its value set to None.")
         else:
             self._variable = variable
+
+class InversionNode(BooleanNode):
+    """ A node which inverts its child. """
+    _child = None
+
+    def __init__(self, child):
+        """ Instantiates a variable node which uses the variable character provided. """
+        self._set_child(child)
+    
+    def evaluate(self, input_vector):
+        """ Evaluates according to the value of the variable in input vector. """
+        if self._child is None:
+            raise AttributeError("_child cannot be none in an InversionNode.")
+        else:
+            return not (self._child.evaluate(input_vector))
+    
+    def _set_child(self, child):
+        """ Setter for the child of this node. """
+        if type(child) is BooleanNode:
+            self._child = child
+        else:
+            raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
 
 class CombinationOperatorNode(BooleanNode, ABC):
     """ An abstract node which carries out an operation on its children. """
