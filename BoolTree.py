@@ -1,5 +1,6 @@
 """ This module contains the classes required to make a boolean equation. """
 from abc import ABC, abstractmethod
+from enum import Enum
 
 class Symbols(Enum):
     LHS_BRACKET = '('
@@ -8,6 +9,14 @@ class Symbols(Enum):
     AND = '.'
     INVERSE = '¬'
     VARIABLES = ['A', 'B', 'C', 'D', 'E']
+
+class BooleanNode(ABC):
+    """ An abstract node which contains everything required to create a tree. """
+
+    @abstractmethod
+    def evaluate(self, input_vector):
+        """ To be implemented to evaluate according to node type. """
+        raise NotImplementedError
 
 class Equation(BooleanNode):
     """ Used to analyse an equation. """
@@ -41,8 +50,51 @@ class Equation(BooleanNode):
             i = i + 1
     
     def _generate_clause(self, clause):
-        """ Generates an initial node for a clause. """
-        pass
+        """ Generates an initial node for a clause. This method assumes "clause" is validated. """
+        node = None
+        if clause[0] in Symbols.VARIABLES:  # First items a variable
+            if clause[1] in [Symbols.AND, Symbols.OR]:
+                lhs = VariableNode(symbol)  # Generate a combining node with rest of clause.
+                rhs = self._generate_clause(clause[2:])
+                if clause[1] is Symbols.AND:
+                    return AndNode(lhs, rhs)    # It's an AND combination
+                else:
+                    return OrNode(lhs, rhs)     # It's an OR combination
+            elif len(clause) == 1:
+                return VariableNode(symbol)
+        elif clause[0] is Symbols.LHS_BRACKET:  # First item's a opening bracket:
+            # Find the end of this sub-clause
+            brack_count = 0
+            i = 0
+            for j in clause:
+                if j is Symbols.LHS_BRACKET:    # Found a new bracket opening
+                    brack_count = brack_count + 1
+                elif j is Symbols.RHS_BRACKET:  # Found a matching end bracket
+                    brack_count = brack_count - 1
+                    if brack_count is 0:    # Got to the end of the brackets
+                        lhs = self._generate_clause(clause[1:i])    # LHS in this clause
+                        rhs = self._generate_clause(clause[i+2:])   # RHS after operator
+                        if clause[i+1] is Symbols.AND:
+                            return AndNode(lhs, rhs)
+                        else:
+                            return OrNode(lhs, rhs)
+                i = i + 1
+        elif clause[0] is Symbols.INVERSE:  # Found an inversion
+            i = 0
+            while i < len(clause):
+                if clause[i] in [Symbols.AND, Symbols.Or]:
+                    lhs = InversionNode(self._generate_clause(clause[1:i+1]))   # Inverted part
+                    rhs = self._generate_clause(clause[i+1:])   # Bit after inversion
+                    if clause[i+1] is Symbols.AND:
+                        return AndNode(lhs, rhs)
+                    else:
+                        return OrNode(lhs, rhs)
+                i = i + 1
+            # Haven't found an operator so we will assume its a single clause
+            return InversionNode(self._generate_clause(clause[1:]))
+                
+
+
 
     def evaluate(self, input_vector):
         """ Evaluates the CNF equation through AND'ing the clauses. """
@@ -81,14 +133,6 @@ class Clause(object):
         else:
             raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
 
-class BooleanNode(ABC):
-    """ An abstract node which contains everything required to create a tree. """
-
-    @abstractmethod
-    def evaluate(self, input_vector):
-        """ To be implemented to evaluate according to node type. """
-        raise NotImplementedError
-
 class StaticValueNode(BooleanNode):
     """ A class which allows a true or false statement to appear in the tree. """
     _value = None
@@ -120,7 +164,7 @@ class VariableNode(BooleanNode):
         """ Evaluates according to the value of the variable in input vector. """
         if self._variable in input_vector:
             return input_vector[self._variable]
-         else:
+        else:
             raise Exception("The variable {} is not provided in input vector.".format(self._variable))
     
     def _set_variable(self, variable):
@@ -147,7 +191,7 @@ class InversionNode(BooleanNode):
     
     def _set_child(self, child):
         """ Setter for the child of this node. """
-        if type(child) is BooleanNode:
+        if issubclass(type(child), BooleanNode):
             self._child = child
         else:
             raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
