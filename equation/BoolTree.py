@@ -1,14 +1,5 @@
 """ This module contains the classes required to make a boolean equation. """
 from abc import ABC, abstractmethod
-from enum import Enum
-
-class Symbols(Enum):
-    LHS_BRACKET = '('
-    RHS_BRACKET = ')'
-    OR = '+'
-    AND = '.'
-    INVERSE = '¬'
-    VARIABLES = ['A', 'B', 'C', 'D', 'E']
 
 class BooleanNode(ABC):
     """ An abstract node which contains everything required to create a tree. """
@@ -38,54 +29,54 @@ class Equation(BooleanNode):
         bracket_count = 0
         i = 0
         for symbol in self._unparsed_equation:
-            if symbol is Symbols.LHS_BRACKET:
+            if symbol is '(':
                 if bracket_count is 0:
                     bracket_index = i   # We have found a new clause.
                 bracket_count = bracket_count + 1
-            elif symbol is Symbols.RHS_BRACKET:
+            elif symbol is ')':
                 bracket_count = bracket_count - 1
                 if bracket_count is 0:  # Have we found the end to a clause?
-                    new_clause = self._generate_clause(self._unparsed_equation[bracket_index-1:i])  # Only want to parse string not including brackets.
+                    new_clause = self._generate_clause(self._unparsed_equation[bracket_index+1:i])  # Only want to parse string not including brackets.
                     self._clauses.append(new_clause)
             i = i + 1
     
     def _generate_clause(self, clause):
         """ Generates an initial node for a clause. This method assumes "clause" is validated. """
         node = None
-        if clause[0] in Symbols.VARIABLES:  # First items a variable
-            if clause[1] in [Symbols.AND, Symbols.OR]:
-                lhs = VariableNode(symbol)  # Generate a combining node with rest of clause.
+        if clause[0] in ['A', 'B', 'C', 'D', 'E']:  # First items a variable
+            if len(clause) == 1:
+                return VariableNode(clause[0])
+            elif clause[1] in ['.', '+']:
+                lhs = VariableNode(clause[0])  # Generate a combining node with rest of clause.
                 rhs = self._generate_clause(clause[2:])
-                if clause[1] is Symbols.AND:
+                if clause[1] is '.':
                     return AndNode(lhs, rhs)    # It's an AND combination
                 else:
                     return OrNode(lhs, rhs)     # It's an OR combination
-            elif len(clause) == 1:
-                return VariableNode(symbol)
-        elif clause[0] is Symbols.LHS_BRACKET:  # First item's a opening bracket:
+        elif clause[0] is '(':  # First item's a opening bracket:
             # Find the end of this sub-clause
             brack_count = 0
             i = 0
             for j in clause:
-                if j is Symbols.LHS_BRACKET:    # Found a new bracket opening
+                if j is '(':    # Found a new bracket opening
                     brack_count = brack_count + 1
-                elif j is Symbols.RHS_BRACKET:  # Found a matching end bracket
+                elif j is ')':  # Found a matching end bracket
                     brack_count = brack_count - 1
                     if brack_count is 0:    # Got to the end of the brackets
                         lhs = self._generate_clause(clause[1:i])    # LHS in this clause
                         rhs = self._generate_clause(clause[i+2:])   # RHS after operator
-                        if clause[i+1] is Symbols.AND:
+                        if clause[i+1] is '.':
                             return AndNode(lhs, rhs)
                         else:
                             return OrNode(lhs, rhs)
                 i = i + 1
-        elif clause[0] is Symbols.INVERSE:  # Found an inversion
+        elif clause[0] is '¬':  # Found an inversion
             i = 0
-            while i < len(clause):
-                if clause[i] in [Symbols.AND, Symbols.Or]:
+            while i < len(clause) - 1:
+                if clause[i+1] in ['.', '+']:
                     lhs = InversionNode(self._generate_clause(clause[1:i+1]))   # Inverted part
-                    rhs = self._generate_clause(clause[i+1:])   # Bit after inversion
-                    if clause[i+1] is Symbols.AND:
+                    rhs = self._generate_clause(clause[i+2:])   # Bit after inversion
+                    if clause[i+1] is '.':
                         return AndNode(lhs, rhs)
                     else:
                         return OrNode(lhs, rhs)
