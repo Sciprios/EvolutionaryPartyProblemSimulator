@@ -1,14 +1,14 @@
-from unittest.mock import MagicMock, Mock, call
+from unittest.mock import MagicMock, Mock, call, patch
 from unittest import TestCase
 from equation.BoolTree import Equation, VariableNode, BooleanNode, CombinationOperatorNode, InversionNode, AndNode, OrNode
 
 
 class TestEquation(TestCase):
     """ Tests the Equation class. """
-
-    def test_evaluate(self):
+    @patch('equation.BoolTree.Equation._validate_string')
+    def test_evaluate(self, val):
         """ Ensures the evaluate class tests response for a False. """
-        nde = Equation('')
+        nde = Equation('(A)')
 
         rtn_val = [True, True, True]
         nde.get_clause_evaluation = MagicMock(return_value=rtn_val)
@@ -20,7 +20,7 @@ class TestEquation(TestCase):
     
     def test_gen_clause_list(self):
         """ Ensures the method generates the set of clauses. """
-        eq = Equation('')
+        eq = Equation('(A)')
         eq._generate_clause = MagicMock(return_value="FakeClause")  # Fake the generation of a clause node.
         
         eq._unparsed_equation = '(ABCD).(1234).(9876)'  # Setup some fake clauses
@@ -46,7 +46,7 @@ class TestEquation(TestCase):
     
     def test_gen_clause(self):
         """ Ensures the clause generation method creates the correct tree structure. """
-        eq = Equation('')
+        eq = Equation('(A)')
 
         # Non-sub clause check
         rslt = eq._generate_clause('A.B.C')
@@ -108,7 +108,7 @@ class TestEquation(TestCase):
 
     def test_clausal_evaluation(self):
         """ Tests the evaluation of a selection of clauses. """
-        eq = Equation('')   # Equation object to test.
+        eq = Equation('(A)')   # Equation object to test.
         fke_clause_true = Mock()    # Fake clause to return true
         fke_clause_true.evaluate = MagicMock(return_value=True)
         fke_clause_false = Mock()   # Fake clause to return false
@@ -125,3 +125,56 @@ class TestEquation(TestCase):
         eq._clauses = [fke_clause_false, fke_clause_false, fke_clause_false]
         res = eq.get_clause_evaluation({})
         assert not (res[0] or res[1] or res[2])
+
+    def test_str_validation(self):
+        """ Ensures the string validation method validates strings correctly. """
+        test_cases = self.gen_validation_cases()
+        eq = Equation('(A)')
+        for case in test_cases:
+            self.assertTrue(eq._validate_string(case['str']) == case['exp'], case)
+
+    def gen_validation_cases(self):
+        """ Returns some string test cases for validation. """
+        return [
+            {
+                'str': 'A.B',
+                'exp': False
+            },
+            {
+                'str': '(A).(B)',
+                'exp': True
+            },
+            {
+                'str': '(A)',
+                'exp': True
+            },
+            {
+                'str': '(A)+(B)',
+                'exp': False
+            },
+            {
+                'str': '(A+C+D).(B+D)',
+                'exp': True
+            },
+            {
+                'str': '(A+C+D).(B+D).(A)',
+                'exp': True
+            },
+            {
+                'str': '(AC)',
+                'exp': False
+            },
+            {
+                'str': '(+A).(D)',
+                'exp': False
+            }
+            ,
+            {
+                'str': '(A¬)',
+                'exp': False
+            },
+            {
+                'str': '(¬A)',
+                'exp': True
+            }
+        ]

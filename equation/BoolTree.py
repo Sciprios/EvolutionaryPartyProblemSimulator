@@ -21,7 +21,62 @@ class Equation(BooleanNode):
     
     def _validate_string(self, eq_str):
         """ Validates the input string for this equation. """
-        return True
+        valid = True
+        brack_count = 0
+        i = 0
+        # Only brackets and operators allowed not in a clause
+        for symbol in eq_str:
+            if symbol in ['A', 'B', 'C', 'D', 'E']: # Vars must be part of a clause
+                if brack_count is 0:
+                    valid = False
+                    break
+                if i < (len(eq_str) - 1):
+                    if eq_str[i+1] not in ['.', '+', ')']: # Check the next symbol is good to be next to.
+                        valid = False
+                        break
+                if i > 0:
+                    if eq_str[i-1] not in ['.', '+', '(', '¬']: # Check the previous symbol is good to be next to.
+                        valid = False
+                        break
+            elif symbol is ')':     # Brackets must be balanced
+                if brack_count is 0:
+                    valid = False
+                    break
+                else:
+                    brack_count = brack_count - 1
+            elif symbol is '(':
+                brack_count = brack_count + 1
+            elif symbol in ['+', '.']:  # Must have either a clause or variable next to it.
+                if i is (len(eq_str) - 1):   # Is it the last character
+                    valid = False
+                    break
+                elif i is 0:    # An operator cannot be the first item
+                    valid = False
+                    break
+                if eq_str[i+1] not in ['A', 'B', 'C', 'D', 'E', '(']:
+                    valid = False
+                    break
+                elif eq_str[i-1] not in ['A', 'B', 'C', 'D', 'E', ')']:
+                    valid = False
+                    break
+                if brack_count is 0:    # Cannot combine clauses using OR
+                    if symbol is '+':
+                        valid = False
+                        print(1)
+                        break
+            elif symbol is '¬':
+                if i is (len(eq_str) - 1):  # Cannot be the last item
+                    valid = False
+                    break
+                if eq_str[i+1] not in ['A', 'B', 'C', 'D', 'E']:
+                    valid = False
+                    break
+            i = i + 1
+        
+        if brack_count is not 0:
+            valid = False
+
+        return valid
     
     def _generate_clauses(self):
         """ Creates a clause array from the _unparsed_equation attribute. """
