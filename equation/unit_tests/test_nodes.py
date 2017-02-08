@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, Mock
 from unittest import TestCase
-from equation.BoolTree import VariableNode, BooleanNode, CombinationOperatorNode, InversionNode, AndNode, OrNode, Clause
+from equation.BoolTree import VariableNode, BooleanNode, CombinationOperatorNode, InversionNode, AndNode, OrNode
 
 class NotABooleanNode(object):
     """ This class is not a boolean node. """
@@ -212,36 +212,3 @@ class TestOrNode(TestCombinationNode):
         nde._lhs_child = fake_false_child
         nde._rhs_child = fake_true_child
         self.assertTrue(nde.evaluate({}))
-
-class TestClause(TestCase):
-    """ Tests the Clause class. """
-
-    def test_setting_of_node(self):
-        """ Tests the validation of its node. """
-        bool_nde = aBooleanNode()
-        comb_node = CombNode()
-        not_bool_nde = NotABooleanNode()
-
-        # Try boolean node
-        try:
-            nde = Clause(bool_nde)
-        except AttributeError:
-            assert False
-        else:
-            assert True
-        
-        # Try comb node
-        try:
-            nde = Clause(comb_node)
-        except AttributeError:
-            assert False
-        else:
-            assert True
-        
-        # Try non-valid node
-        try:
-            nde = Clause(not_bool_nde)
-        except AttributeError:
-            assert True
-        else:
-            assert False

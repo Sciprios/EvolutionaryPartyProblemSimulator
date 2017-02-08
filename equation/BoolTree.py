@@ -5,7 +5,7 @@ class BooleanNode(ABC):
     """ An abstract node which contains everything required to create a tree. """
 
     @abstractmethod
-    def evaluate(self, input_vector):
+    def evaluate(self, input_vector):   #pragma: no cover
         """ To be implemented to evaluate according to node type. """
         raise NotImplementedError
 
@@ -37,6 +37,7 @@ class Equation(BooleanNode):
                 bracket_count = bracket_count - 1
                 if bracket_count is 0:  # Have we found the end to a clause?
                     new_clause = self._generate_clause(self._unparsed_equation[bracket_index+1:i])  # Only want to parse string not including brackets.
+                    print(self._unparsed_equation[bracket_index+1:i])
                     self._clauses.append(new_clause)
             i = i + 1
     
@@ -45,7 +46,8 @@ class Equation(BooleanNode):
         node = None
         if clause[0] in ['A', 'B', 'C', 'D', 'E']:  # First items a variable
             if len(clause) == 1:
-                return VariableNode(clause[0])
+                nde = VariableNode(clause[0])
+                return nde
             elif clause[1] in ['.', '+']:
                 lhs = VariableNode(clause[0])  # Generate a combining node with rest of clause.
                 rhs = self._generate_clause(clause[2:])
@@ -109,40 +111,6 @@ class Equation(BooleanNode):
         else:
             raise AttributeError("The input string does not satisfy the validation requirements.")
 
-class Clause(object):
-    """ A clause in the CNF boolean expression. """
-    _first_node = None
-
-    def __init__(self, node):
-        """ Initialises a clause with an initial node. """
-        self._set_first_node(node)
-
-    def _set_first_node(self, node):
-        """ Sets the first node value of this object. """
-        if issubclass(type(node), BooleanNode) or issubclass(type(node), CombinationOperatorNode):
-            self._first_node = node
-        else:
-            raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
-
-class StaticValueNode(BooleanNode):
-    """ A class which allows a true or false statement to appear in the tree. """
-    _value = None
-
-    def __init__(self, value):
-        """ Initialises the value for this node. """
-        self._set_value(value)
-    
-    def evaluate(self, input_vector):
-        """ This evaluates to the value given in _value. """
-        return _value
-    
-    def _set_value(self, new_val):
-        """ Sets the value of the node. """
-        if new_val in [True, False]:
-            self._value = new_val
-        else:
-            raise AttributeError("The value of a StaticValueNode myst be set to True or False.")
-    
 class VariableNode(BooleanNode):
     """ A node which evaluates as a variable. """
     _variable = None

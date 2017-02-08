@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, Mock, call
 from unittest import TestCase
-from equation.BoolTree import Equation, VariableNode, BooleanNode, CombinationOperatorNode, InversionNode, AndNode, OrNode, Clause
+from equation.BoolTree import Equation, VariableNode, BooleanNode, CombinationOperatorNode, InversionNode, AndNode, OrNode
 
 
 class TestEquation(TestCase):
@@ -27,16 +27,22 @@ class TestEquation(TestCase):
         expected_calls = [call('ABCD'), call('1234'), call('9876')]
         eq._generate_clauses()
         eq._generate_clause.assert_has_calls(expected_calls)
+        self.assertTrue(len(eq._clauses) == 3)
 
+        eq._clauses = []    # Reset clauses
         eq._unparsed_equation = '(ABCD)'  # Setup a fake clause
         expected_calls = [call('ABCD')]
         eq._generate_clauses()
         eq._generate_clause.assert_has_calls(expected_calls)
+        print(len(eq._clauses))
+        self.assertTrue(len(eq._clauses) == 1)
 
+        eq._clauses = []    # Reset clauses
         eq._unparsed_equation = ''  # Setup no fake clauses
         expected_calls = []
         eq._generate_clauses()
         eq._generate_clause.assert_has_calls(expected_calls)
+        self.assertTrue(len(eq._clauses) == 0)
     
     def test_gen_clause(self):
         """ Ensures the clause generation method creates the correct tree structure. """
@@ -58,15 +64,15 @@ class TestEquation(TestCase):
         self.assertFalse(rslt.evaluate(vec))
 
         # With inversion?
-        rslt = eq._generate_clause('¬A.B')
-        assert type(rslt) is AndNode    # Check the node types
+        rslt = eq._generate_clause('¬A+(B)+B')
+        assert type(rslt) is OrNode    # Check the node types
         assert type(rslt._lhs_child) is InversionNode
-        assert type(rslt._rhs_child) is VariableNode
+        assert type(rslt._rhs_child) is OrNode
 
         vec = {'A': True, 'B': True}
-        self.assertFalse(rslt.evaluate(vec))   # Check some evaluations.
-        vec = {'A': False, 'B': True}
-        self.assertTrue(rslt.evaluate(vec))
+        self.assertTrue(rslt.evaluate(vec))   # Check some evaluations.
+        vec = {'A': True, 'B': False}
+        self.assertFalse(rslt.evaluate(vec))
 
         # Sub Clause check
         rslt = eq._generate_clause('A.(B+C).D')
@@ -99,3 +105,23 @@ class TestEquation(TestCase):
         self.assertFalse(rslt.evaluate(vec))
         vec = {'A': False, 'B': False, 'C': False, 'D': True}
         self.assertFalse(rslt.evaluate(vec))
+
+    def test_clausal_evaluation(self):
+        """ Tests the evaluation of a selection of clauses. """
+        eq = Equation('')   # Equation object to test.
+        fke_clause_true = Mock()    # Fake clause to return true
+        fke_clause_true.evaluate = MagicMock(return_value=True)
+        fke_clause_false = Mock()   # Fake clause to return false
+        fke_clause_false.evaluate = MagicMock(return_value=False)
+
+        eq._clauses = [fke_clause_true, fke_clause_false, fke_clause_true]
+        res = eq.get_clause_evaluation({})
+        assert (res[0] and (not res[1]) and res[2])
+
+        eq._clauses = [fke_clause_true, fke_clause_true, fke_clause_true]
+        res = eq.get_clause_evaluation({})
+        assert (res[0] and res[1] and res[2])
+
+        eq._clauses = [fke_clause_false, fke_clause_false, fke_clause_false]
+        res = eq.get_clause_evaluation({})
+        assert not (res[0] or res[1] or res[2])
