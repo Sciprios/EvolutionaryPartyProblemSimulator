@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, Mock
 from unittest import TestCase
-from BoolTree import VariableNode, BooleanNode, CombinationOperatorNode, InversionNode, AndNode, OrNode, Clause
+from equation.BoolTree import VariableNode, BooleanNode, CombinationOperatorNode, InversionNode, AndNode, OrNode, Clause
 
 class NotABooleanNode(object):
     """ This class is not a boolean node. """

@@ -30,10 +30,10 @@ class Equation(BooleanNode):
     
     def _validate_string(self, eq_str):
         """ Validates the input string for this equation. """
-        pass
+        return True
     
-    def _generate_tree(self):
-        """ Creates a tree from the _unparsed_equation attribute. """
+    def _generate_clauses(self):
+        """ Creates a clause array from the _unparsed_equation attribute. """
         bracket_index = 0
         bracket_count = 0
         i = 0
