@@ -78,7 +78,7 @@ class Equation(BooleanNode):
 
         return valid
     
-    def _generate_clauses(self):
+    def generate_clauses(self):
         """ Creates a clause array from the _unparsed_equation attribute. """
         bracket_index = 0
         bracket_count = 0
