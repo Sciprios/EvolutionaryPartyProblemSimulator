@@ -63,7 +63,6 @@ class Equation(BooleanNode):
                 if brack_count is 0:    # Cannot combine clauses using OR
                     if symbol is '+':
                         valid = False
-                        print(1)
                         break
             elif symbol is '¬':
                 if i is (len(eq_str) - 1):  # Cannot be the last item
@@ -93,7 +92,6 @@ class Equation(BooleanNode):
                 bracket_count = bracket_count - 1
                 if bracket_count is 0:  # Have we found the end to a clause?
                     new_clause = self._generate_clause(self._unparsed_equation[bracket_index+1:i])  # Only want to parse string not including brackets.
-                    print(self._unparsed_equation[bracket_index+1:i])
                     self._clauses.append(new_clause)
             i = i + 1
     
