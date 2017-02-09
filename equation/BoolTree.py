@@ -17,6 +17,7 @@ class Equation(BooleanNode):
     def __init__(self, input_string):
         """ Initialises an eqaution by interpreting the input string. """
         self._set_unparsed_equation(input_string)
+        self.generate_clauses()
 
     
     def _validate_string(self, eq_str):
@@ -143,7 +144,7 @@ class Equation(BooleanNode):
                 
     def evaluate(self, input_vector):
         """ Evaluates the CNF equation through AND'ing the clauses. """
-        if False in self.get_clause_evaluation():
+        if False in self.get_clause_evaluation(input_vector):
             return False
         else:
             return True

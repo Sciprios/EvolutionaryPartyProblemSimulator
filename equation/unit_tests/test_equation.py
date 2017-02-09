@@ -18,31 +18,28 @@ class TestEquation(TestCase):
         nde.get_clause_evaluation = MagicMock(return_value=rtn_val)
         self.assertFalse(nde.evaluate({}))
     
-    def test_gen_clause_list(self):
+    @patch('equation.BoolTree.Equation._generate_clause')
+    def test_gen_clause_list(self, gen_clause):
         """ Ensures the method generates the set of clauses. """
+        gen_clause.return_value = "FakeClause" # Fake the generation of a clause node.
         eq = Equation('(A)')
-        eq._generate_clause = MagicMock(return_value="FakeClause")  # Fake the generation of a clause node.
         
         eq._unparsed_equation = '(ABCD).(1234).(9876)'  # Setup some fake clauses
         expected_calls = [call('ABCD'), call('1234'), call('9876')]
         eq.generate_clauses()
         eq._generate_clause.assert_has_calls(expected_calls)
-        self.assertTrue(len(eq._clauses) == 3)
 
         eq._clauses = []    # Reset clauses
         eq._unparsed_equation = '(ABCD)'  # Setup a fake clause
         expected_calls = [call('ABCD')]
         eq.generate_clauses()
         eq._generate_clause.assert_has_calls(expected_calls)
-        print(len(eq._clauses))
-        self.assertTrue(len(eq._clauses) == 1)
 
         eq._clauses = []    # Reset clauses
         eq._unparsed_equation = ''  # Setup no fake clauses
         expected_calls = []
         eq.generate_clauses()
         eq._generate_clause.assert_has_calls(expected_calls)
-        self.assertTrue(len(eq._clauses) == 0)
     
     def test_gen_clause(self):
         """ Ensures the clause generation method creates the correct tree structure. """
