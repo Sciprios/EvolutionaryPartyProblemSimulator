@@ -141,9 +141,6 @@ class Equation(BooleanNode):
             # Haven't found an operator so we will assume its a single clause
             return InversionNode(self._generate_clause(clause[1:]))
                 
-
-
-
     def evaluate(self, input_vector):
         """ Evaluates the CNF equation through AND'ing the clauses. """
         if False in self.get_clause_evaluation():

@@ -25,14 +25,14 @@ class TestEquation(TestCase):
         
         eq._unparsed_equation = '(ABCD).(1234).(9876)'  # Setup some fake clauses
         expected_calls = [call('ABCD'), call('1234'), call('9876')]
-        eq._generate_clauses()
+        eq.generate_clauses()
         eq._generate_clause.assert_has_calls(expected_calls)
         self.assertTrue(len(eq._clauses) == 3)
 
         eq._clauses = []    # Reset clauses
         eq._unparsed_equation = '(ABCD)'  # Setup a fake clause
         expected_calls = [call('ABCD')]
-        eq._generate_clauses()
+        eq.generate_clauses()
         eq._generate_clause.assert_has_calls(expected_calls)
         print(len(eq._clauses))
         self.assertTrue(len(eq._clauses) == 1)
@@ -40,7 +40,7 @@ class TestEquation(TestCase):
         eq._clauses = []    # Reset clauses
         eq._unparsed_equation = ''  # Setup no fake clauses
         expected_calls = []
-        eq._generate_clauses()
+        eq.generate_clauses()
         eq._generate_clause.assert_has_calls(expected_calls)
         self.assertTrue(len(eq._clauses) == 0)
     

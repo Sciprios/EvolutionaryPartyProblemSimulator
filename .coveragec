@@ -1,2 +1,2 @@
 [run]
-omit = equation/unit_tests/*
+omit = */unit_tests/*

@@ -2,12 +2,12 @@ from unittest.mock import MagicMock, Mock
 from unittest import TestCase
 from equation.BoolTree import VariableNode, BooleanNode, CombinationOperatorNode, InversionNode, AndNode, OrNode
 
-class NotABooleanNode(object):
+class NotABooleanNode(object):  # pragma: no cover
     """ This class is not a boolean node. """
     def say(self):
         type(self)
 
-class aBooleanNode(BooleanNode):
+class aBooleanNode(BooleanNode):  # pragma: no cover
     """ This class is a boolean node. """
     def say(self):
         return type(self)
@@ -102,12 +102,12 @@ class TestCombinationNode(TestCase):
         # Hopefully no errors
         try:
             nde = AndNode(bool_nde, bool_nde)
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             assert False    # Oh no it failed for the AND node!
         else:
             try:
                 nde = OrNode(bool_nde, bool_nde)
-            except AttributeError:
+            except AttributeError:  # pragma: no cover
                 assert False    # Oh no it failed for the AND node!
             else:
                 assert True # No errors is a good thing!
@@ -115,12 +115,12 @@ class TestCombinationNode(TestCase):
         # Hopefully no errors with a combination node.
         try:
             nde = AndNode(comb_node, comb_node)
-        except AttributeError:
+        except AttributeError:  # pragma: no cover
             assert False    # Oh no it failed for the AND node!
         else:
             try:
                 nde = OrNode(comb_node, comb_node)
-            except AttributeError:
+            except AttributeError:  # pragma: no cover
                 assert False    # Oh no it failed for the AND node!
             else:
                 assert True # No errors is a good thing!
@@ -133,9 +133,9 @@ class TestCombinationNode(TestCase):
                 nde = OrNode(not_bool_nde, bool_nde)
             except AttributeError:
                 assert True # Got an error
-            else:
+            else:  # pragma: no cover
                 assert False    # No error
-        else:
+        else:  # pragma: no cover
             assert False    # No error
 
         # Try forcing errors (rhs node)
@@ -146,9 +146,9 @@ class TestCombinationNode(TestCase):
                 nde = OrNode(bool_nde, not_bool_nde)
             except AttributeError:
                 assert True # Got an error!
-            else:
+            else:  # pragma: no cover
                 assert False    # No error
-        else:
+        else:  # pragma: no cover
             assert False    # No error
 
 class TestAndNode(TestCombinationNode):
