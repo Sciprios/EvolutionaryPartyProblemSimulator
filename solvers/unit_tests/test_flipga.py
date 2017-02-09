@@ -45,7 +45,7 @@ class TestFlipGA(TestCase):
     def test_evaluation(self):
         """ Tests the evaluation method. """
         eq = Mock()
-        eq.evaluate = Mock(return_value=5)  # Standard value to check for
+        eq.get_clause_evaluation = Mock(return_value=[True, True, True, True, True])  # Standard value to check for
         vars = Mock()
         ga = FlipGA(eq, vars)
         ga.population = [1,1,1,1,1,1,1,1,1,1]   # Population of 10

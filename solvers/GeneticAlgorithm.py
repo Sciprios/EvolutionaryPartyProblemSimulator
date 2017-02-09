@@ -33,6 +33,7 @@ class GeneticAlgorithm(object):
                 else:
                     val = True
                 org[v] = val
+            cnt = cnt + 1
             self.population.append(org)
     
     def _evaluation(self):
@@ -53,7 +54,9 @@ class GeneticAlgorithm(object):
     
     def _repopulate(self, new_pop):
         """ Places the new population into the instance population. """
-        raise NotImplementedError("The mutation method has not been inherited by the base class {}".format(type(self)))
+        self.population.clear()
+        for i in new_pop:
+            self.population.append(i)
     
     def _calc_clausal_score(self, org):
         """ Calculates the clausal score for this organism. """
@@ -66,7 +69,7 @@ class GeneticAlgorithm(object):
 
     def get_best_org(self):
         """ Returns the best organism in the population. """
-        if self.finished:
+        if len(self.fitness_values) > 0:
             i = self.fitness_values.index(max(self.fitness_values)) # Get the index of best organism
             return {'org': self.population[i], 'fitness': self.fitness_values[i]}
         else:

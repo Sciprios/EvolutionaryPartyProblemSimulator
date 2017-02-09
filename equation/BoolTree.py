@@ -1,6 +1,8 @@
 """ This module contains the classes required to make a boolean equation. """
 from abc import ABC, abstractmethod
 
+VARIABLES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+
 class BooleanNode(ABC):
     """ An abstract node which contains everything required to create a tree. """
 
@@ -27,7 +29,7 @@ class Equation(BooleanNode):
         i = 0
         # Only brackets and operators allowed not in a clause
         for symbol in eq_str:
-            if symbol in ['A', 'B', 'C', 'D', 'E']: # Vars must be part of a clause
+            if symbol in VARIABLES: # Vars must be part of a clause
                 if brack_count is 0:
                     valid = False
                     break
@@ -68,7 +70,7 @@ class Equation(BooleanNode):
                 if i is (len(eq_str) - 1):  # Cannot be the last item
                     valid = False
                     break
-                if eq_str[i+1] not in ['A', 'B', 'C', 'D', 'E']:
+                if eq_str[i+1] not in VARIABLES:
                     valid = False
                     break
             i = i + 1
@@ -98,7 +100,7 @@ class Equation(BooleanNode):
     def _generate_clause(self, clause):
         """ Generates an initial node for a clause. This method assumes "clause" is validated. """
         node = None
-        if clause[0] in ['A', 'B', 'C', 'D', 'E']:  # First items a variable
+        if clause[0] in VARIABLES:  # First items a variable
             if len(clause) == 1:
                 nde = VariableNode(clause[0])
                 return nde
@@ -118,13 +120,16 @@ class Equation(BooleanNode):
                     brack_count = brack_count + 1
                 elif j is ')':  # Found a matching end bracket
                     brack_count = brack_count - 1
-                    if brack_count is 0:    # Got to the end of the brackets
-                        lhs = self._generate_clause(clause[1:i])    # LHS in this clause
-                        rhs = self._generate_clause(clause[i+2:])   # RHS after operator
-                        if clause[i+1] is '.':
-                            return AndNode(lhs, rhs)
-                        else:
-                            return OrNode(lhs, rhs)
+                    if i < len(clause) - 1: # Not the last symbol
+                        if brack_count is 0:    # Got to the end of the brackets
+                            lhs = self._generate_clause(clause[1:i])    # LHS in this clause
+                            rhs = self._generate_clause(clause[i+2:])   # RHS after operator
+                            if clause[i+1] is '.':
+                                return AndNode(lhs, rhs)
+                            else:
+                                return OrNode(lhs, rhs)
+                    else:
+                        break
                 i = i + 1
         elif clause[0] is '¬':  # Found an inversion
             i = 0
