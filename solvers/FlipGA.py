@@ -1,4 +1,4 @@
-from GeneticAlgorithm import GeneticAlgorithm
+from solvers.GeneticAlgorithm import GeneticAlgorithm
 import random
 
 class FlipGA(GeneticAlgorithm):
@@ -20,8 +20,9 @@ class FlipGA(GeneticAlgorithm):
             while improve > 0:  # Keep flipping until we stop improving the solution
                 improve = 0
                 i = 0
-                while i < len(org): # For all variables
+                while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
+                    print("{} - {}".format(self._variables[i], prev_res))
                     prev_val = org[self._variables[i]]
                     if prev_val: # Flip the gene
                         org[self._variables[i]] = False
@@ -32,6 +33,7 @@ class FlipGA(GeneticAlgorithm):
                         improve = improve + (new_res - prev_res)
                     else:
                         org[self._variables[i]] = prev_val  # The flip didn't help so reset
+                    i = i + 1
     
     def _evaluation(self):
         """ Populates the fitness_value instance variable with the pop's values. """
@@ -42,28 +44,29 @@ class FlipGA(GeneticAlgorithm):
     def _parent_selection(self, fitness_values):
         """ Selects the number of parents required given the organisms fitness values. """
         parents = []
-        cnt = 0
         used = []
-        while cnt < self._NUM_PARENTS:
-            i = 0
+        while len(used) < self._NUM_PARENTS:
+            i = -1
             max_i = 0
             while i < len(fitness_values):
-                if (self.fitness_values[i] > self.fitness_values[max_i]) and (i not in used):
+                if ((fitness_values[i] > fitness_values[max_i]) or (i == -1)) and (i not in used):
                     max_i = i
                 i = i + 1
-            parents.append(self.population[i])
+            parents.append(self.population[max_i])
             used.append(max_i)
+        return parents
 
     def _reproduction(self, parents):
         """ Generates children from the provided parents using a randomly chosen split value. """
-        r = random.randint(0, len(self._variables) - 1) # Generate a random point for swapping
+        r = random.randint(0, len(self._variables)) # Generate a random point for swapping
 
         # First child takes first part of first parent
         child_a = {}
         child_b = {}
         i = 0
         for v in self._variables:   # Determine the child's value for each variable
-            if i <= r:
+            if i < r:
+                print(r)
                 child_a[v] = parents[0][v]
                 child_b[v] = parents[1][v]
             else:
@@ -77,10 +80,10 @@ class FlipGA(GeneticAlgorithm):
         for i in cur_pop:
             r = random.random()
             if r < self._MUTATION_RATE: # Do we mutate the organism?
-                r = random.randint(0, len(self._variables) - 1)
-                i[self._variables[r]] = not i[self._variables[r]]   # Invert the variable
+                r = random.randint(0, len(self._variables) - 1) # Which random variable to mutate
+                i[self._variables[r]] = not i[self._variables[r]]   # Invert it
 
-    def run(self):
+    def run(self):  # pragma: no cover
         """ Executes the genetic algorithm. """
         self.finished = False
         self.generation = 0
@@ -88,7 +91,7 @@ class FlipGA(GeneticAlgorithm):
         self._local_search(self.population)
         self._evaluation()
         # Carry on until we run out of generations or we found a solution
-        while (len(self._variables) not in self.fitness_values) and (self.generation =< self._MAX_GENERATIONS):
+        while (len(self._variables) not in self.fitness_values) and (self.generation <= self._MAX_GENERATIONS):
             self.next_generation = []
             self.generation = self.generation + 1
             while len(next_generation) < self._POP_SIZE:    # Generate a new population

@@ -49,7 +49,7 @@ class GeneticAlgorithm(object):
     
     def _mutation(self, cur_pop):
         """ Mutates the provided population. """
-         raise NotImplementedError("The mutation method has not been inherited by the base class {}".format(type(self)))
+        raise NotImplementedError("The mutation method has not been inherited by the base class {}".format(type(self)))
     
     def _repopulate(self, new_pop):
         """ Places the new population into the instance population. """
