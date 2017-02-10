@@ -10,7 +10,7 @@ class FlipGA(GeneticAlgorithm):
         self._NUM_PARENTS = 2
         self._EQUATION = eq
         self._MUTATION_RATE = 0.5
-        self._POP_SIZE = 10
+        self._POP_SIZE = 3
         self._MAX_GENERATIONS = 50
         self._variables = vars
     
@@ -92,20 +92,18 @@ class FlipGA(GeneticAlgorithm):
         self._evaluation()
         #self._flip_children(self.population)
         # Carry on until we run out of generations or we found a solution
-        while (len(self._variables) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
+        while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
             self.generation = self.generation + 1
-            print("Generation: {}".format(self.generation))
             while len(self.next_generation) < self._POP_SIZE:    # Generate a new population
                 parents = self._parent_selection(self.fitness_values)
                 children = self._reproduction(parents)
                 self._mutation(children)
-                #self._flip_children(children)
+               # self._flip_children(children)
                 self.next_generation.extend(children)
                 
             self._repopulate(self.next_generation)
             self._evaluation()
-            print(self.get_best_org())
-            print("Finished Generation {}".format(self.generation))
+            print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
         print("Best organism: {}".format(self.get_best_org()))

@@ -1,7 +1,7 @@
 """ This module contains the classes required to make a boolean equation. """
 from abc import ABC, abstractmethod
 
-VARIABLES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+VARIABLES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 
 class BooleanNode(ABC):
     """ An abstract node which contains everything required to create a tree. """
@@ -56,10 +56,10 @@ class Equation(BooleanNode):
                 elif i is 0:    # An operator cannot be the first item
                     valid = False
                     break
-                if eq_str[i+1] not in ['A', 'B', 'C', 'D', 'E', '(']:
+                if (eq_str[i+1] not in VARIABLES) and (eq_str[i+1] not in ['(', '¬']):
                     valid = False
                     break
-                elif eq_str[i-1] not in ['A', 'B', 'C', 'D', 'E', ')']:
+                elif (eq_str[i-1] not in VARIABLES) and (eq_str[i-1] not in [')']):
                     valid = False
                     break
                 if brack_count is 0:    # Cannot combine clauses using OR
