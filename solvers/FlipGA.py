@@ -13,7 +13,7 @@ class FlipGA(GeneticAlgorithm):
         self._NUM_PARENTS = 2
         self._EQUATION = eq
         self._MUTATION_RATE = 0.5
-        self._POP_SIZE = 3
+        self._POP_SIZE = 10
         self._MAX_GENERATIONS = 50
         self._variables = vars
     
