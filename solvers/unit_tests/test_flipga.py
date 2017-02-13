@@ -18,7 +18,7 @@ class TestFlipGA(TestCase):
         assert ga._variables is vars
     
     @patch('solvers.FlipGA.random')
-    def test_flip_children(self, rand_mock):
+    def test_heuristic_method(self, rand_mock):
         """ Ensures the algorithm flips children correctly. """
         eq = Mock()
         vars = Mock()
@@ -29,7 +29,7 @@ class TestFlipGA(TestCase):
         children = [{'A':    False}]    # A child who is wrong, to be flipped
         ga._calc_clausal_score = Mock()
         ga._calc_clausal_score.return_value = 1
-        ga._flip_children(children)
+        ga._heuristic_method(children)
         assert children[0]['A'] # Should now be true
 
         ga = FlipGA(eq, ['A', 'B'])
@@ -38,7 +38,7 @@ class TestFlipGA(TestCase):
         ga._calc_clausal_score = Mock()
         ga._calc_clausal_score.return_value = 2
 
-        ga._flip_children(children)
+        ga._heuristic_method(children)
         self.assertTrue(children[0]['A']) # Should now be true
         self.assertFalse(children[0]['B'])  # Should not have been flipped
 
