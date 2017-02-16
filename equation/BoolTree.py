@@ -1,8 +1,6 @@
 """ This module contains the classes required to make a boolean equation. """
 from abc import ABC, abstractmethod
 
-VARIABLES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
 class BooleanNode(ABC):
     """ An abstract node which contains everything required to create a tree. """
 
@@ -51,19 +49,28 @@ class Equation(BooleanNode):
                         valid = False
                         break
                 in_var = False
-            elif symbol in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+            elif symbol in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
                 if not in_var:
                     valid = False
                     break
             elif symbol is ')':     # Brackets must be balanced
+                if in_var:
+                    valid = False
+                    break
                 if brack_count is 0:
                     valid = False
                     break
                 else:
                     brack_count = brack_count - 1
             elif symbol is '(':
+                if in_var:
+                    valid = False
+                    break
                 brack_count = brack_count + 1
             elif symbol in ['+', '.']:  # Must have either a clause or variable next to it.
+                if in_var:
+                    valid = False
+                    break
                 if i is (len(eq_str) - 1):   # Is it the last character
                     valid = False
                     break
@@ -81,6 +88,9 @@ class Equation(BooleanNode):
                         valid = False
                         break
             elif symbol is '¬':
+                if in_var:
+                    valid = False
+                    break
                 if i is (len(eq_str) - 1):  # Cannot be the last item
                     valid = False
                     break
