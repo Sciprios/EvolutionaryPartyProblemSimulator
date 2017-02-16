@@ -1,11 +1,11 @@
-from solvers.HeuristicAlgorithm import HeuristicAlgorithm
+from solvers.GeneticAlgorithm import GeneticAlgorithm
 from pprint import PrettyPrinter
 from collections import Counter
 import random
 
 printer = PrettyPrinter(indent=4)
 
-class FlipGA(HeuristicAlgorithm):
+class BlindGA(GeneticAlgorithm):
     """ An implementation of the FlipGA Algorithm. """
 
     def __init__(self, eq, vars):
@@ -20,24 +20,23 @@ class FlipGA(HeuristicAlgorithm):
     def _heuristic_method(self, population):
         """ Perform the flip heuristic on the children provided. """
         for org in population:
-            rand_perm = list(range(0, len(self._variables)))  # Random permutations for flipping
-            random.shuffle(rand_perm)
+            rand_perm = random.shuffle(list(range(0, len(self._variables))))  # Random permutations for flipping
             improve = 1
             while improve > 0:  # Keep flipping until we stop improving the solution
                 improve = 0
                 i = 0
                 while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
-                    prev_val = org[self._variables[rand_perm[i]]]
+                    prev_val = org[self._variables[i]]
                     if prev_val: # Flip the gene
-                        org[self._variables[rand_perm[i]]] = False
+                        org[self._variables[i]] = False
                     else:
-                        org[self._variables[rand_perm[i]]] = True
+                        org[self._variables[i]] = True
                     new_res = self._calc_clausal_score(org)
                     if new_res >= prev_res:
                         improve = improve + (new_res - prev_res)
                     else:
-                        org[self._variables[rand_perm[i]]] = prev_val  # The flip didn't help so reset
+                        org[self._variables[i]] = prev_val  # The flip didn't help so reset
                     i = i + 1
     
     def _evaluation(self):
@@ -94,7 +93,7 @@ class FlipGA(HeuristicAlgorithm):
         self.generation = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
-        self._heuristic_method(self.population)
+        print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         # Carry on until we run out of generations or we found a solution
         while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
@@ -103,12 +102,12 @@ class FlipGA(HeuristicAlgorithm):
                 parents = self._parent_selection(self.fitness_values)
                 children = self._reproduction(parents)
                 self._mutation(children)
-                self._heuristic_method(children)
                 self.next_generation.extend(children)
                 
             self._repopulate(self.next_generation)
             self._evaluation()
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
-        printer.pprint("Best organism: {}".format(self.get_best_org()))
-        #printer.pprint(self.get_best_org())
+        print("Completed in generation: {}".format(self.generation))
+        printer.pprint("Best organism:")
+        printer.pprint(self.get_best_org())

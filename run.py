@@ -1,15 +1,34 @@
+
 if __name__ == '__main__': # pragma : no cover
     from equation.BoolTree import Equation
     from solvers.FlipGA import FlipGA
     from solvers.EvoSAP import EvoSAP
+    from solvers.BlindGA import BlindGA
+    from pprint import PrettyPrinter
+    import examples.interpreter as interpreter
 
-    # Define problem
-    equation = '(A+B+D).(A+B+D).(A+E+C).(F+B+C).(D+I+H).(A+H+G).(G+J+C).(G+B+I).(E+H+J).(I+J+F).(K+I+M).(K+H+L).(K+G+D).(K+J+N).(M+B+D).(N+E+L).(N+C+D).(L+A+O).(M+I+J).(O+G+K).'
-    equation = equation + '(¬A+¬B+¬D).(¬A+¬B+¬D).(¬A+¬E+¬C).(¬F+¬B+¬C).(¬D+¬I+¬H).(¬A+¬H+¬G).(¬G+¬J+¬C).(¬G+¬B+¬I).(¬E+¬H+¬J).(¬I+¬J+¬F).'
-    equation = equation + '(¬K+¬I+¬M).(¬K+¬H+¬L).(¬K+¬G+¬D).(¬K+¬J+¬N).(¬M+¬B+¬D).(¬N+¬E+¬L).(¬N+¬C+¬D).(¬L+¬A+¬O).(¬M+¬I+¬J).(¬O+¬G+¬K)'
+    printer = PrettyPrinter(indent=4)   # Setup something which can print dictionaries
 
+    # Load test set with 449 clauses to be made correct
+    contents = interpreter.interpret_file("examples/CBS_k3_n100_m449_b70_238.cnf")
+    equation_string = contents[0]
+    variables = contents[1]
+    
     print("Generating Equation")
-    eq = Equation(equation)
-    print("Instantiating Algorithm")
-    ga = FlipGA(eq, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'])
+    eq = Equation(equation_string)
+
+    print("Instantiating Algorithm (BlindGA)")
+    ga = BlindGA(eq, variables)
+    ga.run()
+
+    print("\n\n\n")
+
+    print("Instantiating Algorithm (FlipGA)")
+    ga = FlipGA(eq, variables)
+    ga.run()
+    
+    print("\n\n\n")
+    
+    print("Instantiating Algorithm (EvoSAP)")
+    ga = EvoSAP(eq, variables)
     ga.run()
