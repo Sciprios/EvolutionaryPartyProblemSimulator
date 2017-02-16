@@ -12,7 +12,7 @@ class TestFlipGA(TestCase):
         vars = Mock()
         ga = FlipGA(eq, vars)
         assert ga._NUM_PARENTS == 2
-        assert ga._MUTATION_RATE == 0.5
+        assert ga._MUTATION_RATE == 0.9
         assert ga._POP_SIZE == 10
         assert ga._EQUATION is eq
         assert ga._variables is vars

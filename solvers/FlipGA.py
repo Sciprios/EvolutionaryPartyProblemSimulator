@@ -12,31 +12,32 @@ class FlipGA(HeuristicAlgorithm):
         """ Initialise the constant variables. """
         self._NUM_PARENTS = 2
         self._EQUATION = eq
-        self._MUTATION_RATE = 0.5
+        self._MUTATION_RATE = 0.9
         self._POP_SIZE = 10
-        self._MAX_GENERATIONS = 500
+        self._MAX_GENERATIONS = 5000
         self._variables = vars
     
     def _heuristic_method(self, population):
         """ Perform the flip heuristic on the children provided. """
         for org in population:
-            rand_perm = random.shuffle(list(range(0, len(self._variables))))  # Random permutations for flipping
+            rand_perm = list(range(0, len(self._variables)))  # Random permutations for flipping
+            random.shuffle(rand_perm)
             improve = 1
             while improve > 0:  # Keep flipping until we stop improving the solution
                 improve = 0
                 i = 0
                 while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
-                    prev_val = org[self._variables[i]]
+                    prev_val = org[self._variables[rand_perm[i]]]
                     if prev_val: # Flip the gene
-                        org[self._variables[i]] = False
+                        org[self._variables[rand_perm[i]]] = False
                     else:
-                        org[self._variables[i]] = True
+                        org[self._variables[rand_perm[i]]] = True
                     new_res = self._calc_clausal_score(org)
                     if new_res >= prev_res:
                         improve = improve + (new_res - prev_res)
                     else:
-                        org[self._variables[i]] = prev_val  # The flip didn't help so reset
+                        org[self._variables[rand_perm[i]]] = prev_val  # The flip didn't help so reset
                     i = i + 1
     
     def _evaluation(self):
@@ -109,5 +110,5 @@ class FlipGA(HeuristicAlgorithm):
             self._evaluation()
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
-        printer.pprint("Best organism:")
-        printer.pprint(self.get_best_org())
+        printer.pprint("Best organism: {}".format(self.get_best_org()))
+        #printer.pprint(self.get_best_org())

@@ -12,9 +12,9 @@ class EvoSAP(HeuristicAlgorithm):
         """ Instantiates the instance variables. """
         self._NUM_PARENTS = 1
         self._EQUATION = eq
-        self._MUTATION_RATE = 0.5
+        self._MUTATION_RATE = 0.9
         self._POP_SIZE = 1
-        self._MAX_GENERATIONS = 50
+        self._MAX_GENERATIONS = 500
         self._variables = vars
     
     def run(self):  # pragma: no cover
@@ -42,8 +42,8 @@ class EvoSAP(HeuristicAlgorithm):
             self._evaluation()
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
-        print("Completed in generation {} with organism:".format(self.generation))
-        printer.pprint(self.get_best_org())
+        print("Completed in generation {}.".format(self.generation))
+        #printer.pprint(self.get_best_org())
     
     def _evaluation(self, org=None):
         """ Populates the fitness_value instance variable with the pop's values. """
@@ -78,23 +78,24 @@ class EvoSAP(HeuristicAlgorithm):
     def _heuristic_method(self, population):
         """ Performs a determined heuristic on the population. """
         for org in population:
-            rand_perm = random.shuffle(list(range(0, len(self._variables))))  # Random permutations for flipping
+            rand_perm = list(range(0, len(self._variables)))  # Random permutations for flipping
+            random.shuffle(rand_perm)
             improve = 1
             while improve > 0:  # Keep flipping until we stop improving the solution
                 improve = 0
                 i = 0
                 while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
-                    prev_val = org[self._variables[i]]
+                    prev_val = org[self._variables[rand_perm[i]]]
                     if prev_val: # Flip the gene
-                        org[self._variables[i]] = False
+                        org[self._variables[rand_perm[i]]] = False
                     else:
-                        org[self._variables[i]] = True
+                        org[self._variables[rand_perm[i]]] = True
                     new_res = self._calc_clausal_score(org)
                     if new_res >= prev_res:
                         improve = improve + (new_res - prev_res)
                     else:
-                        org[self._variables[i]] = prev_val  # The flip didn't help so reset
+                        org[self._variables[rand_perm[i]]] = prev_val  # The flip didn't help so reset
                     i = i + 1
                 
     def _reproduction(self, parents):
