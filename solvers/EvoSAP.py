@@ -12,13 +12,12 @@ class EvoSAP(HeuristicAlgorithm):
         """ Instantiates the instance variables. """
         self._NUM_PARENTS = 1
         self._EQUATION = eq
-        self._MUTATION_RATE = 0.
+        self._MUTATION_RATE = 0.5
         self._POP_SIZE = 1
         self._MAX_GENERATIONS = 50
-        self._TABLE_SIZE = 10   # Var
         self._variables = vars
     
-    def run(self):
+    def run(self):  # pragma: no cover
         """ Executes the genetic algorithm. """
         self.finished = False
         self.generation = 0
