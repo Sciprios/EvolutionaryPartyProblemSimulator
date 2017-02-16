@@ -12,9 +12,9 @@ class BlindGA(GeneticAlgorithm):
         """ Initialise the constant variables. """
         self._NUM_PARENTS = 2
         self._EQUATION = eq
-        self._MUTATION_RATE = 0.5
+        self._MUTATION_RATE = 0.9
         self._POP_SIZE = 10
-        self._MAX_GENERATIONS = 500
+        self._MAX_GENERATIONS = 5000
         self._variables = vars
     
     def _heuristic_method(self, population):
@@ -93,6 +93,7 @@ class BlindGA(GeneticAlgorithm):
         self.generation = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
+        print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         # Carry on until we run out of generations or we found a solution
         while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
@@ -107,5 +108,6 @@ class BlindGA(GeneticAlgorithm):
             self._evaluation()
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
+        print("Completed in generation: {}".format(self.generation))
         printer.pprint("Best organism:")
         printer.pprint(self.get_best_org())
