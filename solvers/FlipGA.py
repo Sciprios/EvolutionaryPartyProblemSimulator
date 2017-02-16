@@ -1,11 +1,11 @@
-from solvers.GeneticAlgorithm import GeneticAlgorithm
+from solvers.HeuristicAlgorithm import HeuristicAlgorithm
 from pprint import PrettyPrinter
 from collections import Counter
 import random
 
 printer = PrettyPrinter(indent=4)
 
-class FlipGA(GeneticAlgorithm):
+class FlipGA(HeuristicAlgorithm):
     """ An implementation of the FlipGA Algorithm. """
 
     def __init__(self, eq, vars):
@@ -14,12 +14,12 @@ class FlipGA(GeneticAlgorithm):
         self._EQUATION = eq
         self._MUTATION_RATE = 0.5
         self._POP_SIZE = 10
-        self._MAX_GENERATIONS = 50
+        self._MAX_GENERATIONS = 500
         self._variables = vars
     
-    def _flip_children(self, children):
+    def _heuristic_method(self, population):
         """ Perform the flip heuristic on the children provided. """
-        for org in children:
+        for org in population:
             rand_perm = random.shuffle(list(range(0, len(self._variables))))  # Random permutations for flipping
             improve = 1
             while improve > 0:  # Keep flipping until we stop improving the solution
@@ -93,7 +93,7 @@ class FlipGA(GeneticAlgorithm):
         self.generation = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
-        self._flip_children(self.population)
+        self._heuristic_method(self.population)
         # Carry on until we run out of generations or we found a solution
         while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
@@ -102,7 +102,7 @@ class FlipGA(GeneticAlgorithm):
                 parents = self._parent_selection(self.fitness_values)
                 children = self._reproduction(parents)
                 self._mutation(children)
-                self._flip_children(children)
+                self._heuristic_method(children)
                 self.next_generation.extend(children)
                 
             self._repopulate(self.next_generation)
