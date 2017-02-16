@@ -1,8 +1,6 @@
 """ This module contains the classes required to make a boolean equation. """
 from abc import ABC, abstractmethod
 
-VARIABLES = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
-
 class BooleanNode(ABC):
     """ An abstract node which contains everything required to create a tree. """
 
@@ -26,40 +24,63 @@ class Equation(BooleanNode):
         """ Validates the input string for this equation. """
         valid = True
         brack_count = 0
+        in_var = False
         i = 0
         # Only brackets and operators allowed not in a clause
         for symbol in eq_str:
-            if symbol in VARIABLES: # Vars must be part of a clause
+            if symbol is '{': # Start of a variable
+                if in_var:
+                    valid = False
+                    break
                 if brack_count is 0:
+                    valid = False
+                    break
+                if i > 0:
+                    if eq_str[i-1] not in ['.', '+', '(', '¬']: # Check the previous symbol is good to be next to.
+                        valid = False
+                        break
+                in_var = True
+            elif symbol is '}': # End of variable
+                if not in_var:
                     valid = False
                     break
                 if i < (len(eq_str) - 1):
                     if eq_str[i+1] not in ['.', '+', ')']: # Check the next symbol is good to be next to.
                         valid = False
                         break
-                if i > 0:
-                    if eq_str[i-1] not in ['.', '+', '(', '¬']: # Check the previous symbol is good to be next to.
-                        valid = False
-                        break
+                in_var = False
+            elif symbol in ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:
+                if not in_var:
+                    valid = False
+                    break
             elif symbol is ')':     # Brackets must be balanced
+                if in_var:
+                    valid = False
+                    break
                 if brack_count is 0:
                     valid = False
                     break
                 else:
                     brack_count = brack_count - 1
             elif symbol is '(':
+                if in_var:
+                    valid = False
+                    break
                 brack_count = brack_count + 1
             elif symbol in ['+', '.']:  # Must have either a clause or variable next to it.
+                if in_var:
+                    valid = False
+                    break
                 if i is (len(eq_str) - 1):   # Is it the last character
                     valid = False
                     break
                 elif i is 0:    # An operator cannot be the first item
                     valid = False
                     break
-                if (eq_str[i+1] not in VARIABLES) and (eq_str[i+1] not in ['(', '¬']):
+                if (eq_str[i+1] is not '{') and (eq_str[i+1] not in ['(', '¬']):
                     valid = False
                     break
-                elif (eq_str[i-1] not in VARIABLES) and (eq_str[i-1] not in [')']):
+                elif (eq_str[i-1] is not '}') and (eq_str[i-1] not in [')']):
                     valid = False
                     break
                 if brack_count is 0:    # Cannot combine clauses using OR
@@ -67,10 +88,13 @@ class Equation(BooleanNode):
                         valid = False
                         break
             elif symbol is '¬':
+                if in_var:
+                    valid = False
+                    break
                 if i is (len(eq_str) - 1):  # Cannot be the last item
                     valid = False
                     break
-                if eq_str[i+1] not in VARIABLES:
+                if eq_str[i+1] is not '{':
                     valid = False
                     break
             i = i + 1
@@ -100,37 +124,43 @@ class Equation(BooleanNode):
     def _generate_clause(self, clause):
         """ Generates an initial node for a clause. This method assumes "clause" is validated. """
         node = None
-        if clause[0] in VARIABLES:  # First items a variable
-            if len(clause) == 1:
-                nde = VariableNode(clause[0])
-                return nde
-            elif clause[1] in ['.', '+']:
-                lhs = VariableNode(clause[0])  # Generate a combining node with rest of clause.
-                rhs = self._generate_clause(clause[2:])
-                if clause[1] is '.':
-                    return AndNode(lhs, rhs)    # It's an AND combination
-                else:
-                    return OrNode(lhs, rhs)     # It's an OR combination
-        elif clause[0] is '(':  # First item's a opening bracket:
-            # Find the end of this sub-clause
-            brack_count = 0
-            i = 0
-            for j in clause:
-                if j is '(':    # Found a new bracket opening
-                    brack_count = brack_count + 1
-                elif j is ')':  # Found a matching end bracket
-                    brack_count = brack_count - 1
-                    if i < len(clause) - 1: # Not the last symbol
-                        if brack_count is 0:    # Got to the end of the brackets
-                            lhs = self._generate_clause(clause[1:i])    # LHS in this clause
-                            rhs = self._generate_clause(clause[i+2:])   # RHS after operator
-                            if clause[i+1] is '.':
-                                return AndNode(lhs, rhs)
-                            else:
-                                return OrNode(lhs, rhs)
+        #print(clause)
+        if clause[0] is '{':  # First items a VariableNode
+            cnt = 0
+            while cnt < len(clause):    # Get the end of the variable
+                if clause[cnt] is '}':
+                    break
+                cnt = cnt + 1
+            nde = VariableNode(clause[0:cnt + 1])
+            if len(clause) is not cnt + 1:
+                if clause[cnt + 1] in ['.', '+']: # If there's more to this clause deal with it
+                    rhs = self._generate_clause(clause[cnt + 2:]) # Generate the rhs
+                    if clause[cnt + 1] is '.':
+                        return AndNode(nde, rhs)    # It's an AND combination
                     else:
-                        break
-                i = i + 1
+                        return OrNode(nde, rhs)     # It's an OR combination
+            else:
+                return nde  # This is just a variable
+        #elif clause[0] is '(':  # First item's a opening bracket:
+        #    # Find the end of this sub-clause
+        #    brack_count = 0
+        #    i = 0
+        #    for j in clause:
+        #        if j is '(':    # Found a new bracket opening
+        #            brack_count = brack_count + 1
+        #        elif j is ')':  # Found a matching end bracket
+        #            brack_count = brack_count - 1
+        #            if i < len(clause) - 1: # Not the last symbol
+        #                if brack_count is 0:    # Got to the end of the brackets
+        #                    lhs = self._generate_clause(clause[1:i])    # LHS in this clause
+        #                    rhs = self._generate_clause(clause[i+2:])   # RHS after operator
+        #                    if clause[i+1] is '.':
+        #                        return AndNode(lhs, rhs)
+        #                    else:
+        #                        return OrNode(lhs, rhs)
+        #            else:
+        #                break
+        #        i = i + 1
         elif clause[0] is '¬':  # Found an inversion
             i = 0
             while i < len(clause) - 1:
