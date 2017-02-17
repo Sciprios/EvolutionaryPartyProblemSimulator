@@ -14,7 +14,7 @@ class FlipGA(HeuristicAlgorithm):
         self._EQUATION = eq
         self._MUTATION_RATE = 0.9
         self._POP_SIZE = 10
-        self._MAX_GENERATIONS = 5000
+        self._MAX_GENERATIONS = 500
         self._variables = vars
     
     def _heuristic_method(self, population):

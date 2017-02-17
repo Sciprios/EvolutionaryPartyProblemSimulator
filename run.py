@@ -17,7 +17,7 @@ if __name__ == '__main__': # pragma : no cover
 
     # Test
     cnt = 0
-    while cnt <= 25:  # For each data set
+    while cnt <= 5:  # For each data set
         i = 0
         contents = interpreter.interpret_file("examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf")
         equation_string = contents[0]
@@ -38,7 +38,7 @@ if __name__ == '__main__': # pragma : no cover
 
             # Output
             trial_res = {'aes': ga._eval_count, 'solved': False} # Trial results
-            if ga.generation < 5000:
+            if ga.generation < 500:
                 trial_res['solved'] = True
             res.append(trial_res)
             i = i + 1
