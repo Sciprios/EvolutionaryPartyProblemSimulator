@@ -4,7 +4,7 @@ import random
 
 class FlipGA_AES(FlipGA):
     """ FlipGA Class which counts fitness evaluations. """
-    eval_count = 0
+    _eval_count = 0
 
     def _heuristic_method(self, population):
         """ Perform the flip heuristic on the children provided. """
@@ -18,7 +18,7 @@ class FlipGA_AES(FlipGA):
                 while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
                     prev_val = org[self._variables[rand_perm[i]]]
-                    self.eval_count = self.eval_count + 1   # Increment Counter
+                    self._eval_count = self._eval_count + 1   # Increment Counter
                     if prev_val: # Flip the gene
                         org[self._variables[rand_perm[i]]] = False
                     else:
@@ -35,7 +35,7 @@ class FlipGA_AES(FlipGA):
         self.fitness_values.clear() # Empty fitness values
         for o in self.population:   # Add each organisms fitness value
             cnt = Counter(self._EQUATION.get_clause_evaluation(o))
-            self.eval_count = self.eval_count + 1
+            self._eval_count = self._eval_count + 1
             self.fitness_values.append(cnt[True])
     
 
@@ -85,5 +85,5 @@ class FlipGA_3(FlipGA_AES):
                             i[var] = not i[var]
                     cnter = Counter(self._EQUATION.get_clause_evaluation(i))
                     new_fitness = cnter[True]
-                    self.eval_count = self.eval_count + 1   # Need to increment counter
+                    self._eval_count = self._eval_count + 1   # Need to increment counter
             cnt = cnt + 1
