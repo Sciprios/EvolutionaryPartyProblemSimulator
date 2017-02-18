@@ -1,71 +1,64 @@
+from equation.BoolTree import Equation
+from solvers.FlipGA import FlipGA
+from solvers.EvoSAP import EvoSAP
+from solvers.BlindGA import BlindGA
+from collections import Counter
+from pprint import PrettyPrinter
+from threading import Thread
+from solvers.experimental.FlipGA import FlipGA_1, FlipGA_2, FlipGA_3
+import examples.interpreter as interpreter
 
-if __name__ == '__main__': # pragma : no cover
-    from equation.BoolTree import Equation
-    from solvers.FlipGA import FlipGA
-    from solvers.EvoSAP import EvoSAP
-    from solvers.BlindGA import BlindGA
-    from pprint import PrettyPrinter
-    import examples.interpreter as interpreter
+NO_TRIALS = 5
+
+def run_test(file_name, results):
+    """ Runs a test on the given file name. """
+    print("Collecting file - {}".format(file_name))
+    contents = interpreter.interpret_file(file_name)
+    equation_string = contents[0]
+    variables = contents[1]
+
+    print("Generating Equation")
+    eq = Equation(equation_string)
+
+    print("Generating & starting algorithm instances")
+    print("(This is done on seperate threads.)")
+    instances = []
+    threads = []
+    cnt = 0
+    while cnt < NO_TRIALS:
+        instances.append(FlipGA_1(eq, variables))
+        threads.append(Thread(target=instances[cnt].run))
+        threads[cnt].start()
+        cnt = cnt + 1
+    
+    cnt = 0
+    while cnt < NO_TRIALS:  # Wait for all threads to finish.
+        threads[cnt].join()
+        cnt = cnt + 1
+    print("All trials are complete.")
+    
+    print("Calculating Results")    # Total results
+    trial_results = {'SR': 0, 'AES': 0}
+    for i in instances:
+        if i.get_best_org()['fitness'] >= len(i._EQUATION._clauses):  # Did the algorithm solve it?
+            trial_results['SR'] = trial_results['SR'] + 1
+        else:
+            trial_results['SR'] = trial_results['SR'] + 0
+        trial_results['AES'] = trial_results['AES'] + i._eval_count
+    
+    # Average scores accross instances
+    results.append({'Test Case': file_name, 'AES': trial_results['AES']/NO_TRIALS, 'SR': trial_results['SR']/NO_TRIALS})
+
+
+if __name__ == '__main__': # pragma : no cover   
 
     printer = PrettyPrinter(indent=4)   # Setup something which can print dictionaries
 
-    # Get experimental class
-    from solvers.experimental.FlipGA import FlipGA_1, FlipGA_2, FlipGA_3
-
-    # Setup variable to hold results
     results = []
-
-    # Test
     cnt = 0
-    while cnt <= 5:  # For each data set
-        i = 0
-        contents = interpreter.interpret_file("examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf")
-        equation_string = contents[0]
-        variables = contents[1]
-        print("Generating Equation")
-        eq = Equation(equation_string)
-        res = []
-        av_res = {
-            'Test Case': "CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf",
-            'AES': None,
-            'SR': None
-        }
-
-        while i <= 5:   # Do it 5 times
-            print("Instantiating Algorithm (FlipGA_1)")
-            ga = FlipGA_1(eq, variables)
-            ga.run()
-
-            # Output
-            trial_res = {'aes': ga._eval_count, 'solved': False} # Trial results
-            if ga.generation < 500:
-                trial_res['solved'] = True
-            res.append(trial_res)
-            i = i + 1
-        
-        # Calculate test set results
-        for r in res:
-            if av_res['AES'] is not None:   # AES
-                av_res['AES'] = av_res['AES'] + r['aes']
-            else:
-                av_res['AES'] = r['aes']           
-            if av_res['SR'] is not None:    # SR
-                if r['solved']:
-                    av_res['SR'] = av_res['SR'] + 1
-            else:
-                if r['solved']:
-                    av_res['SR'] = 1
-        # Averages
-        av_res['AES'] = av_res['AES'] / i
-        av_res['SR'] = av_res['SR'] / i
-        results.append(av_res)
-
-        # Output
-        print("FINISHED TRAINING SET: examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf")
-        printer.pprint(av_res)
-
+    while cnt < 2: # Run for first 10 instances
+        file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
+        run_test(file_name, results)
         cnt = cnt + 1
-    
-    # Output results
-    for r in results:
-        print("{}\t{}\t{}".format(r['Test Case'], r['AES'], r['SR']))
+
+    printer.pprint(results)

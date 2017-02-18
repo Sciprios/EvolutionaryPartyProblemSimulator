@@ -4,18 +4,21 @@ import random
 class GeneticAlgorithm(object):
     """ An abstract genetic algorithm for implementation. """
 
-    _MAX_GENERATIONS = 1000     # Allocate a maximum number of generations for the program to run for
-    _POP_SIZE = 10              # Size of the initial population
-    _NUM_PARENTS = 2            # The number of parents to be selected
-    _EQUATION = None            # The equation being assessed
-    _MUTATION_RATE = 0          # The mutation rate
-    _variables = []             # List of variables allowed
-    population = []             # List of organisms
-    fitness_values = []         # Fitness values in the same order as the population
-    generation = 0              # Current generation
-    next_generation = []        # Holds the next generation
-    finished = False            # Flag determines whether algorithm has finished or not
-    best_org = {}               # A dictionary containing the best organism and relevant fitness value
+    def __init__(self):
+        """ Instantiates instance variables. """
+        self._MAX_GENERATIONS = 1000     # Allocate a maximum number of generations for the program to run for
+        self._POP_SIZE = 10              # Size of the initial population
+        self._NUM_PARENTS = 2            # The number of parents to be selected
+        self._EQUATION = None            # The equation being assessed
+        self._MUTATION_RATE = 0          # The mutation rate
+        self._variables = []             # List of variables allowed
+        self.population = []             # List of organisms
+        self.fitness_values = []         # Fitness values in the same order as the population
+        self.generation = 0              # Current generation
+        self.next_generation = []        # Holds the next generation
+        self.finished = False            # Flag determines whether algorithm has finished or not
+        self.best_org = {}               # A dictionary containing the best organism and relevant fitness value
+        self._eval_count = 0             # Counts the amount of times the fitness has been evaluated.
 
     def run(self):
         """ Executes the genetic algorithm. """
@@ -23,6 +26,7 @@ class GeneticAlgorithm(object):
 
     def initialisation(self):
         """ Initialises a population. """
+        self.population.clear()
         cnt = 0
         while cnt < self._POP_SIZE:
             org = {}

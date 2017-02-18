@@ -10,6 +10,7 @@ class FlipGA(HeuristicAlgorithm):
 
     def __init__(self, eq, vars):
         """ Initialise the constant variables. """
+        super().__init__()
         self._NUM_PARENTS = 2
         self._EQUATION = eq
         self._MUTATION_RATE = 0.9
@@ -91,6 +92,7 @@ class FlipGA(HeuristicAlgorithm):
     def run(self):  # pragma: no cover
         """ Executes the genetic algorithm. """
         self.finished = False
+        self.fitness_values = []
         self.generation = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
@@ -113,9 +115,8 @@ class FlipGA(HeuristicAlgorithm):
                 best['fit'] = self.get_best_org()['fitness']
                 best['gen'] = self.generation
             else:
-                if self.generation > best['gen'] + 10:
+                if self.generation > best['gen'] + 20:
                     break
-            print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
+            print("Generation: {} - Best Fitness: {} - Fitness Evaluations: {}".format(self.generation, self.get_best_org()['fitness'], self._eval_count))
         self.finished = True
-        printer.pprint("Best organism: {}".format(self.get_best_org()))
-        #printer.pprint(self.get_best_org())
+        #printer.pprint("Best organism: {}".format(self.get_best_org()))

@@ -44,7 +44,7 @@ def interpret_file(file_name):
     equation = ""
     with open(file_name, mode='r') as cnf_file: # Extract each clause from the 
         lines = cnf_file.readlines()
-        lines = lines [:-1]
+        #lines = lines [:-1]
         for line in lines:
             if line[0] == 'c':  # This is a comment
                 pass

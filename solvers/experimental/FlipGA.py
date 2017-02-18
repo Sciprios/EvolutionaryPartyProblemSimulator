@@ -4,7 +4,6 @@ import random
 
 class FlipGA_AES(FlipGA):
     """ FlipGA Class which counts fitness evaluations. """
-    _eval_count = 0
 
     def _heuristic_method(self, population):
         """ Perform the flip heuristic on the children provided. """
@@ -24,6 +23,7 @@ class FlipGA_AES(FlipGA):
                     else:
                         org[self._variables[rand_perm[i]]] = True
                     new_res = self._calc_clausal_score(org)
+                    self._eval_count = self._eval_count + 1   # Increment Counter
                     if new_res >= prev_res:
                         improve = improve + (new_res - prev_res)
                     else:
