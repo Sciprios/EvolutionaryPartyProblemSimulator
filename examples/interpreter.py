@@ -3,7 +3,7 @@ def _convert_line(line):
     """ Converts the given line into a clause. """
     line = line.replace('-', '¬') # Replace all minuses with inversion operators
     line = line[:-3]
-    line = line.replace(' ', '+') # Replace all spaces with OR operators
+    line = line.replace('  ', '+') # Replace all spaces with OR operators
     # Ensure variables are wrapped in curlies
     prev_num = False
     new_str = ""
@@ -24,7 +24,7 @@ def _convert_line(line):
         cnt = cnt + 1
 
     # All strings end on a number
-    new_str = new_str + "}"
+    #new_str = new_str + "}"
     return new_str
 
 
@@ -43,7 +43,9 @@ def interpret_file(file_name):
     vars = []
     equation = ""
     with open(file_name, mode='r') as cnf_file: # Extract each clause from the 
-        for line in cnf_file:
+        lines = cnf_file.readlines()
+        #lines = lines [:-1]
+        for line in lines:
             if line[0] == 'c':  # This is a comment
                 pass
             elif line[0] == 'p':    # This determines the number of variables and clauses.
@@ -52,7 +54,7 @@ def interpret_file(file_name):
             else:
                 new_clause = _convert_line(line)
                 # DEBUG: print("Extracted Clause: {}".format(new_clause))
-                clauses.append(new_clause)
+                clauses.append(new_clause[:-1])
                 
     # Now combine the clauses into a single formula
     i = 0

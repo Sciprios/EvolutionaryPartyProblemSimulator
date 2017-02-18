@@ -1,34 +1,65 @@
+from equation.BoolTree import Equation
+from solvers.FlipGA import FlipGA
+from solvers.EvoSAP import EvoSAP
+from solvers.BlindGA import BlindGA
+from collections import Counter
+from pprint import PrettyPrinter
+from threading import Thread
+from solvers.experimental.FlipGA import FlipGA_1, FlipGA_2, FlipGA_3
+import examples.interpreter as interpreter
 
-if __name__ == '__main__': # pragma : no cover
-    from equation.BoolTree import Equation
-    from solvers.FlipGA import FlipGA
-    from solvers.EvoSAP import EvoSAP
-    from solvers.BlindGA import BlindGA
-    from pprint import PrettyPrinter
-    import examples.interpreter as interpreter
+NO_TRIALS = 10
 
-    printer = PrettyPrinter(indent=4)   # Setup something which can print dictionaries
-
-    # Load test set with 449 clauses to be made correct
-    contents = interpreter.interpret_file("examples/CBS_k3_n100_m449_b70_238.cnf")
+def run_test(file_name, results):
+    """ Runs a test on the given file name. """
+    print("Collecting file - {}".format(file_name))
+    contents = interpreter.interpret_file(file_name)
     equation_string = contents[0]
     variables = contents[1]
-    
+
     print("Generating Equation")
     eq = Equation(equation_string)
 
-    print("Instantiating Algorithm (BlindGA)")
-    ga = BlindGA(eq, variables)
-    ga.run()
-
-    print("\n\n\n")
-
-    print("Instantiating Algorithm (FlipGA)")
-    ga = FlipGA(eq, variables)
-    ga.run()
+    print("Generating & starting algorithm instances")
+    print("(This is done on seperate threads.)")
+    instances = []
+    threads = []
+    cnt = 0
+    while cnt < NO_TRIALS:
+        instances.append(FlipGA_3(eq, variables))
+        threads.append(Thread(target=instances[cnt].run))
+        threads[cnt].start()
+        cnt = cnt + 1
     
-    print("\n\n\n")
+    cnt = 0
+    while cnt < NO_TRIALS:  # Wait for all threads to finish.
+        threads[cnt].join()
+        cnt = cnt + 1
+    print("All trials are complete.")
     
-    print("Instantiating Algorithm (EvoSAP)")
-    ga = EvoSAP(eq, variables)
-    ga.run()
+    print("Calculating Results")    # Total results
+    trial_results = {'SR': 0, 'AES': 0}
+    for i in instances:
+        if i.get_best_org()['fitness'] >= len(i._EQUATION._clauses):  # Did the algorithm solve it?
+            trial_results['SR'] = trial_results['SR'] + 1
+        else:
+            trial_results['SR'] = trial_results['SR'] + 0
+        trial_results['AES'] = trial_results['AES'] + i._eval_count
+    
+    # Average scores accross instances
+    results.append({'Test Case': file_name, 'AES': trial_results['AES']/NO_TRIALS, 'SR': trial_results['SR']/NO_TRIALS})
+
+
+if __name__ == '__main__': # pragma : no cover   
+
+    printer = PrettyPrinter(indent=4)   # Setup something which can print dictionaries
+
+    results = []
+    cnt = 10
+    while cnt < 20: # Run for first 10 instances (Method 1)
+        file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
+        run_test(file_name, results)
+        cnt = cnt + 1
+
+    for r in results:
+        print("{}\t\t{}\t\t{}".format(r['Test Case'], r['AES'], r['SR']))

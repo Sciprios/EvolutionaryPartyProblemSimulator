@@ -11,11 +11,11 @@ class BooleanNode(ABC):
 
 class Equation(BooleanNode):
     """ Used to analyse an equation. """
-    _unparsed_equation = None
-    _clauses = []
-
+    
     def __init__(self, input_string):
         """ Initialises an eqaution by interpreting the input string. """
+        self._unparsed_equation = None
+        self._clauses = []
         self._set_unparsed_equation(input_string)
         self.generate_clauses()
 
