@@ -56,9 +56,10 @@ if __name__ == '__main__': # pragma : no cover
 
     results = []
     cnt = 0
-    while cnt < 2: # Run for first 10 instances
+    while cnt < 10: # Run for first 10 instances
         file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
         run_test(file_name, results)
         cnt = cnt + 1
 
-    printer.pprint(results)
+    for r in results:
+        print("{}\t{}\t{}".format(r['Test Case'], r['AES'], r['SR']))
