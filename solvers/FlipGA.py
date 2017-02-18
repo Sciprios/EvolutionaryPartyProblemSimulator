@@ -95,6 +95,7 @@ class FlipGA(HeuristicAlgorithm):
         self.initialisation()   # Setup of initial population
         self._evaluation()
         self._heuristic_method(self.population)
+        best = {'gen': -1, 'fit': -1}
         # Carry on until we run out of generations or we found a solution
         while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
@@ -108,6 +109,12 @@ class FlipGA(HeuristicAlgorithm):
                 
             self._repopulate(self.next_generation)
             self._evaluation()
+            if best['fit'] < self.get_best_org()['fitness']:
+                best['fit'] = self.get_best_org()['fitness']
+                best['gen'] = self.generation
+            else:
+                if self.generation > best['gen'] + 10:
+                    break
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
         printer.pprint("Best organism: {}".format(self.get_best_org()))
