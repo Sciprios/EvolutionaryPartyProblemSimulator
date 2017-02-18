@@ -8,7 +8,7 @@ from threading import Thread
 from solvers.experimental.FlipGA import FlipGA_1, FlipGA_2, FlipGA_3
 import examples.interpreter as interpreter
 
-NO_TRIALS = 5
+NO_TRIALS = 10
 
 def run_test(file_name, results):
     """ Runs a test on the given file name. """
@@ -26,7 +26,7 @@ def run_test(file_name, results):
     threads = []
     cnt = 0
     while cnt < NO_TRIALS:
-        instances.append(FlipGA_1(eq, variables))
+        instances.append(FlipGA_3(eq, variables))
         threads.append(Thread(target=instances[cnt].run))
         threads[cnt].start()
         cnt = cnt + 1
@@ -55,11 +55,11 @@ if __name__ == '__main__': # pragma : no cover
     printer = PrettyPrinter(indent=4)   # Setup something which can print dictionaries
 
     results = []
-    cnt = 0
-    while cnt < 10: # Run for first 10 instances
+    cnt = 10
+    while cnt < 20: # Run for first 10 instances (Method 1)
         file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
         run_test(file_name, results)
         cnt = cnt + 1
 
     for r in results:
-        print("{}\t{}\t{}".format(r['Test Case'], r['AES'], r['SR']))
+        print("{}\t\t{}\t\t{}".format(r['Test Case'], r['AES'], r['SR']))

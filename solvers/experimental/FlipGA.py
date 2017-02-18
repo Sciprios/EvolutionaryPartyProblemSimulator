@@ -64,6 +64,7 @@ class FlipGA_2(FlipGA_AES):
                 cnt = 0
                 while cnt <= r: # Invert each variable up to r
                     i[self._variables[cnt]] = not i[self._variables[cnt]]   # Invert
+                    cnt = cnt + 1
 
 class FlipGA_3(FlipGA_AES):
     """ FlipGA mutation method three (Forced Positive). """
@@ -76,13 +77,15 @@ class FlipGA_3(FlipGA_AES):
             if r < self._MUTATION_RATE: # Do we mutate this organism?
                 fitness = self.fitness_values[cnt]
                 new_fitness = -1
-                while new_fitness < fitness:    # Do until we've made a positive change.
+                mut_cnt = 0
+                while (new_fitness < fitness) and (mut_cnt < 100):    # Do until we've made a positive change.
                     mutations_made = [] # Remember the mutations made
                     for var in self._variables: # Method 1 mutation
                         r = random.random()
                         if r < self._MUTATION_RATE: # Do we mutate this variable?
                             mutations_made.append(var)
                             i[var] = not i[var]
+                    mut_cnt = mut_cnt + 1
                     cnter = Counter(self._EQUATION.get_clause_evaluation(i))
                     new_fitness = cnter[True]
                     self._eval_count = self._eval_count + 1   # Need to increment counter
