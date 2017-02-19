@@ -6,38 +6,17 @@ import random
 printer = PrettyPrinter(indent=4)
 
 class BlindGA(GeneticAlgorithm):
-    """ An implementation of the FlipGA Algorithm. """
+    """ An implementation of the BlindGA Algorithm. """
 
     def __init__(self, eq, vars):
         """ Initialise the constant variables. """
+        super().__init__()
         self._NUM_PARENTS = 2
         self._EQUATION = eq
         self._MUTATION_RATE = 0.9
         self._POP_SIZE = 10
         self._MAX_GENERATIONS = 5000
         self._variables = vars
-    
-    def _heuristic_method(self, population):
-        """ Perform the flip heuristic on the children provided. """
-        for org in population:
-            rand_perm = random.shuffle(list(range(0, len(self._variables))))  # Random permutations for flipping
-            improve = 1
-            while improve > 0:  # Keep flipping until we stop improving the solution
-                improve = 0
-                i = 0
-                while i < len(self._variables): # For all variables
-                    prev_res = self._calc_clausal_score(org)    # Get clausal score currently
-                    prev_val = org[self._variables[i]]
-                    if prev_val: # Flip the gene
-                        org[self._variables[i]] = False
-                    else:
-                        org[self._variables[i]] = True
-                    new_res = self._calc_clausal_score(org)
-                    if new_res >= prev_res:
-                        improve = improve + (new_res - prev_res)
-                    else:
-                        org[self._variables[i]] = prev_val  # The flip didn't help so reset
-                    i = i + 1
     
     def _evaluation(self):
         """ Populates the fitness_value instance variable with the pop's values. """
