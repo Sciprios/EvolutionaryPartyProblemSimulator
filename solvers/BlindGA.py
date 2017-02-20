@@ -6,38 +6,17 @@ import random
 printer = PrettyPrinter(indent=4)
 
 class BlindGA(GeneticAlgorithm):
-    """ An implementation of the FlipGA Algorithm. """
+    """ An implementation of the BlindGA Algorithm. """
 
     def __init__(self, eq, vars):
         """ Initialise the constant variables. """
+        super().__init__()
         self._NUM_PARENTS = 2
         self._EQUATION = eq
         self._MUTATION_RATE = 0.9
         self._POP_SIZE = 10
         self._MAX_GENERATIONS = 5000
         self._variables = vars
-    
-    def _heuristic_method(self, population):
-        """ Perform the flip heuristic on the children provided. """
-        for org in population:
-            rand_perm = random.shuffle(list(range(0, len(self._variables))))  # Random permutations for flipping
-            improve = 1
-            while improve > 0:  # Keep flipping until we stop improving the solution
-                improve = 0
-                i = 0
-                while i < len(self._variables): # For all variables
-                    prev_res = self._calc_clausal_score(org)    # Get clausal score currently
-                    prev_val = org[self._variables[i]]
-                    if prev_val: # Flip the gene
-                        org[self._variables[i]] = False
-                    else:
-                        org[self._variables[i]] = True
-                    new_res = self._calc_clausal_score(org)
-                    if new_res >= prev_res:
-                        improve = improve + (new_res - prev_res)
-                    else:
-                        org[self._variables[i]] = prev_val  # The flip didn't help so reset
-                    i = i + 1
     
     def _evaluation(self):
         """ Populates the fitness_value instance variable with the pop's values. """
@@ -93,7 +72,7 @@ class BlindGA(GeneticAlgorithm):
         self.generation = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
-        print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
+        best = {'gen': -1, 'fit': -1}
         # Carry on until we run out of generations or we found a solution
         while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
@@ -102,12 +81,16 @@ class BlindGA(GeneticAlgorithm):
                 parents = self._parent_selection(self.fitness_values)
                 children = self._reproduction(parents)
                 self._mutation(children)
-                self.next_generation.extend(children)
-                
+                self.next_generation.extend(children)                
             self._repopulate(self.next_generation)
             self._evaluation()
+            # Determine if it's dwindling
+            if best['fit'] < self.get_best_org()['fitness']:
+                best['fit'] = self.get_best_org()['fitness']
+                best['gen'] = self.generation
+            else:
+                if self.generation > best['gen'] + 500:
+                    break
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
         print("Completed in generation: {}".format(self.generation))
-        printer.pprint("Best organism:")
-        printer.pprint(self.get_best_org())

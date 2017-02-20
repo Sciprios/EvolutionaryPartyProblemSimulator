@@ -10,6 +10,7 @@ class EvoSAP(HeuristicAlgorithm):
 
     def __init__(self, eq, vars):
         """ Instantiates the instance variables. """
+        super().__init__()
         self._NUM_PARENTS = 1
         self._EQUATION = eq
         self._MUTATION_RATE = 0.9
@@ -24,7 +25,7 @@ class EvoSAP(HeuristicAlgorithm):
         self.initialisation()   # Setup of initial population
         self._evaluation()
         self._heuristic_method(self.population)
-        print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
+        best = {'gen': -1, 'fit': -1}
         # Carry on until we run out of generations or we found a solution
         while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
@@ -38,7 +39,17 @@ class EvoSAP(HeuristicAlgorithm):
             # IF the new population is better swap with the old one.
             new_fitness = self._evaluation(org=self.next_generation[0])
             if self.fitness_values[0] <= new_fitness:
-                self._repopulate(self.next_generation)
+                self._repopulate(self.next_generation)    
+            else:
+                new_fitness = self.fitness_values[0]
+
+            # Determine if it's dwindling
+            if best['fit'] < new_fitness:
+                best['fit'] = new_fitness
+                best['gen'] = self.generation
+            else:
+                if self.generation > best['gen'] + 50:
+                    break
             self._evaluation()
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True

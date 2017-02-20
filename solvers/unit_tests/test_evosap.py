@@ -4,14 +4,14 @@ from unittest import TestCase
 from solvers.EvoSAP import EvoSAP
 
 class TestEvoSAP(TestCase):
-    """ Test class for the FlipGA class. """
+    """ Test class for the EvoSAP class. """
     def test_init(self):
         """ Ensure properties of the genetic algorithm are set properly. """
         eq = Mock()
         vars = Mock()
         ga = EvoSAP(eq, vars)
         assert ga._NUM_PARENTS == 1
-        assert ga._MUTATION_RATE == 0.5
+        assert ga._MUTATION_RATE == 0.9
         assert ga._POP_SIZE == 1
         assert ga._EQUATION is eq
         assert ga._variables is vars
@@ -26,7 +26,19 @@ class TestEvoSAP(TestCase):
         ga._evaluation()
         assert ga.fitness_values == [5]
     
-    @patch('solvers.FlipGA.random')
+    def test_initialisation(self):
+        """ Ensures population is initialised correctly. """
+        eq = Mock()
+        vars = ['1', '2', '3']
+        ga = EvoSAP(eq, vars)
+        ga.initialisation() # Call the method
+
+        assert len(ga.population) == 1
+        assert vars[0] in ga.population[0]
+        assert vars[1] in ga.population[0]
+        assert vars[2] in ga.population[0]
+    
+    @patch('solvers.EvoSAP.random')
     def test_heuristic_method(self, rand_mock):
         """ Ensures the algorithm flips children correctly. """
         eq = Mock()
