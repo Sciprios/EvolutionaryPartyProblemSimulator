@@ -7,11 +7,12 @@ from pprint import PrettyPrinter
 from threading import Thread
 from solvers.experimental.FlipGA import FlipGA_1, FlipGA_2, FlipGA_3
 from solvers.experimental.EvoSAP import EvoSAP_1, EvoSAP_2, EvoSAP_3
+from solvers.experimental.BlindGA import BlindGA_1, BlindGA_2, BlindGA_3
 import examples.interpreter as interpreter
 
 NO_TRIALS = 10
 
-def run_test(file_name, results):
+def run_test(file_name, results, cl_ga):
     """ Runs a test on the given file name. """
     print("Collecting file - {}".format(file_name))
     contents = interpreter.interpret_file(file_name)
@@ -27,7 +28,7 @@ def run_test(file_name, results):
     threads = []
     cnt = 0
     while cnt < NO_TRIALS:
-        instances.append(EvoSAP_3(eq, variables))
+        instances.append(cl_ga(eq, variables))
         threads.append(Thread(target=instances[cnt].run))
         threads[cnt].start()
         cnt = cnt + 1
@@ -54,12 +55,23 @@ def run_test(file_name, results):
 if __name__ == '__main__': # pragma : no cover   
 
     printer = PrettyPrinter(indent=4)   # Setup something which can print dictionaries
-
+    cnt_min = 20
+    cnt_max = 40
     results = []
-    cnt = 0
-    while cnt < 20: # Run for first 10 instances (Method 1)
+    cnt = cnt_min
+    while cnt < cnt_max: # Run for first 10 instances (Method 1)
         file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
-        run_test(file_name, results)
+        run_test(file_name, results, FlipGA_1)
+        cnt = cnt + 1
+    cnt = cnt_min
+    while cnt < cnt_max: # Run for first 10 instances (Method 2)
+        file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
+        run_test(file_name, results, FlipGA_2)
+        cnt = cnt + 1
+    cnt = cnt_min
+    while cnt < cnt_max: # Run for first 10 instances (Method 3)
+        file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
+        run_test(file_name, results, FlipGA_3)
         cnt = cnt + 1
 
     for r in results:

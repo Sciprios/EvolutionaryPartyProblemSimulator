@@ -72,7 +72,7 @@ class BlindGA(GeneticAlgorithm):
         self.generation = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
-        print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
+        best = {'gen': -1, 'fit': -1}
         # Carry on until we run out of generations or we found a solution
         while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
@@ -81,12 +81,16 @@ class BlindGA(GeneticAlgorithm):
                 parents = self._parent_selection(self.fitness_values)
                 children = self._reproduction(parents)
                 self._mutation(children)
-                self.next_generation.extend(children)
-                
+                self.next_generation.extend(children)                
             self._repopulate(self.next_generation)
             self._evaluation()
+            # Determine if it's dwindling
+            if best['fit'] < self.get_best_org()['fitness']:
+                best['fit'] = self.get_best_org()['fitness']
+                best['gen'] = self.generation
+            else:
+                if self.generation > best['gen'] + 500:
+                    break
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
         print("Completed in generation: {}".format(self.generation))
-        printer.pprint("Best organism:")
-        printer.pprint(self.get_best_org())

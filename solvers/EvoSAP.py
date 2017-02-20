@@ -48,7 +48,7 @@ class EvoSAP(HeuristicAlgorithm):
                 best['fit'] = new_fitness
                 best['gen'] = self.generation
             else:
-                if self.generation > best['gen'] + 20:
+                if self.generation > best['gen'] + 50:
                     break
             self._evaluation()
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
