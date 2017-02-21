@@ -73,7 +73,6 @@ if __name__ == '__main__': # pragma : no cover
         file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
         run_test(file_name, results, FlipGA_3)
         cnt = cnt + 1
-    results = [{'Test Case': 'B', 'AES': True, 'SR': 7}, {'Test Case': 'B', 'AES': True, 'SR': 7}, {'Test Case': 'B', 'AES': True, 'SR': 7}]
     with open('test.res', mode='w') as res_file: # Extract each clause from the 
         for r in results:
             res_file.write("{}\t\t\t{}\t\t\t{}\n".format(r['Test Case'], r['AES'], r['SR']))
