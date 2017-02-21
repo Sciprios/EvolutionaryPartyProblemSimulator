@@ -37,7 +37,7 @@ def run_test(file_name, results, cl_ga):
     while cnt < NO_TRIALS:  # Wait for all threads to finish.
         threads[cnt].join()
         cnt = cnt + 1
-    print("All trials are complete.")
+    print("All trials are complete with algorithm {}".format(cl_ga))
     
     print("Calculating Results")    # Total results
     trial_results = {'SR': 0, 'AES': 0}
@@ -73,6 +73,8 @@ if __name__ == '__main__': # pragma : no cover
         file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
         run_test(file_name, results, FlipGA_3)
         cnt = cnt + 1
-
-    for r in results:
-        print("{}\t\t{}\t\t{}".format(r['Test Case'], r['AES'], r['SR']))
+    results = [{'Test Case': 'B', 'AES': True, 'SR': 7}, {'Test Case': 'B', 'AES': True, 'SR': 7}, {'Test Case': 'B', 'AES': True, 'SR': 7}]
+    with open('test.res', mode='w') as res_file: # Extract each clause from the 
+        for r in results:
+            res_file.write("{}\t\t\t{}\t\t\t{}\n".format(r['Test Case'], r['AES'], r['SR']))
+            print("{}\t\t{}\t\t{}".format(r['Test Case'], r['AES'], r['SR']))
