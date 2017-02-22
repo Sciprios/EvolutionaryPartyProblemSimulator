@@ -55,21 +55,21 @@ def run_test(file_name, results, cl_ga):
 if __name__ == '__main__': # pragma : no cover   
 
     printer = PrettyPrinter(indent=4)   # Setup something which can print dictionaries
-    cnt_min = 20
-    cnt_max = 40
+    cnt_min = 0
+    cnt_max = 51
     results = []
     cnt = cnt_min
-    while cnt < cnt_max: # Run for first 10 instances (Method 1)
+    while cnt < cnt_max: # Run for instances (Method 1)
         file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
         run_test(file_name, results, FlipGA_1)
         cnt = cnt + 1
     cnt = cnt_min
-    while cnt < cnt_max: # Run for first 10 instances (Method 2)
+    while cnt < cnt_max: # Run for instances (Method 2)
         file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
         run_test(file_name, results, FlipGA_2)
         cnt = cnt + 1
     cnt = cnt_min
-    while cnt < cnt_max: # Run for first 10 instances (Method 3)
+    while cnt < cnt_max: # Run for instances (Method 3)
         file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
         run_test(file_name, results, FlipGA_3)
         cnt = cnt + 1

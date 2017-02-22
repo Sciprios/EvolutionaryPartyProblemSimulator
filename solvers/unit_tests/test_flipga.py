@@ -114,12 +114,11 @@ class TestFlipGA(TestCase):
             }
         ]
         rand_mock.random = Mock(return_value=0)     # Cause a mutation
-        rand_mock.randint = Mock(return_value=0)    # Mutate the A variable
         ga._mutation(pop)
         assert pop[0]['A'] is False
-        assert pop[0]['B'] is False
+        assert pop[0]['B'] is True
         assert pop[1]['A'] is True
-        assert pop[1]['B'] is False
+        assert pop[1]['B'] is True
 
         pop = [ # Repopulate
             {
@@ -132,7 +131,6 @@ class TestFlipGA(TestCase):
             }
         ]
         rand_mock.random = Mock(return_value=1)     # Don't mutate
-        rand_mock.randint = Mock(return_value=0)    # Mutate the A variable
         ga._mutation(pop)
         assert pop[0]['A'] is True
         assert pop[0]['B'] is False

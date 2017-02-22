@@ -85,11 +85,12 @@ class FlipGA(HeuristicAlgorithm):
         """ Mutates the provided population. """
         for i in cur_pop:
             r = random.random()
+            print(r)
             if r < self._MUTATION_RATE: # Do we mutate the organism? (Based on mutation rate which should be 90%)
                 for v in self._variables:
                     r = random.random() # Do we mutate this gene? (Prob of 50%)
                     if r < 0.5:
-                        i[self._variables[r]] = not i[self._variables[r]]   # Invert it
+                        i[v] = not i[v]   # Invert it
 
     def run(self):  # pragma: no cover
         """ Executes the genetic algorithm. """
