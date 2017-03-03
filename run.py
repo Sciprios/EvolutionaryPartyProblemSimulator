@@ -59,21 +59,12 @@ if __name__ == '__main__': # pragma : no cover
     cnt_max = 51
     results = []
     cnt = cnt_min
-    while cnt < cnt_max: # Run for instances (Method 1)
+    while cnt < cnt_max: # Run for instances (Original Method)
         file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
-        run_test(file_name, results, FlipGA_1)
+        run_test(file_name, results, FlipGA)
         cnt = cnt + 1
     cnt = cnt_min
-    while cnt < cnt_max: # Run for instances (Method 2)
-        file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
-        run_test(file_name, results, FlipGA_2)
-        cnt = cnt + 1
-    cnt = cnt_min
-    while cnt < cnt_max: # Run for instances (Method 3)
-        file_name  = "examples/data/CBS_k3_n100_m449_b70_" + str(cnt) + ".cnf"
-        run_test(file_name, results, FlipGA_3)
-        cnt = cnt + 1
-    with open('test.res', mode='w') as res_file: # Extract each clause from the 
+    with open('test_FlipGA.res', mode='w') as res_file: # Extract each clause from the 
         for r in results:
             res_file.write("{}\t\t\t{}\t\t\t{}\n".format(r['Test Case'], r['AES'], r['SR']))
             print("{}\t\t{}\t\t{}".format(r['Test Case'], r['AES'], r['SR']))

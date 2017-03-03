@@ -199,10 +199,10 @@ class Equation(BooleanNode):
 
 class VariableNode(BooleanNode):
     """ A node which evaluates as a variable. """
-    _variable = None
 
     def __init__(self, var_char):
         """ Instantiates a variable node which uses the variable character provided. """
+        self._variable = None
         self._set_variable(var_char)
     
     def evaluate(self, input_vector):
@@ -221,10 +221,10 @@ class VariableNode(BooleanNode):
 
 class InversionNode(BooleanNode):
     """ A node which inverts its child. """
-    _child = None
 
     def __init__(self, child):
         """ Instantiates a variable node which uses the variable character provided. """
+        self._child = None
         self._set_child(child)
     
     def evaluate(self, input_vector):
@@ -243,11 +243,11 @@ class InversionNode(BooleanNode):
 
 class CombinationOperatorNode(BooleanNode, ABC):
     """ An abstract node which carries out an operation on its children. """
-    _lhs_child = None
-    _rhs_child = None
 
     def __init__(self, lhs_child, rhs_child):
         """ Instantiates an operator node with two children. """
+        self._lhs_child = None
+        self._rhs_child = None
         self._set_lhs_child(lhs_child)
         self._set_rhs_child(rhs_child)
     

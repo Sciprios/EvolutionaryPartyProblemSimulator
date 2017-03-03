@@ -90,3 +90,4 @@ ENV/
 
 # Example data stuff
 *.cnf
+*.res

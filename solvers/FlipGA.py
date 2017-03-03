@@ -29,6 +29,7 @@ class FlipGA(HeuristicAlgorithm):
                 i = 0
                 while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
+                    self._eval_count = self._eval_count + 1   # Increment Counter
                     prev_val = org[self._variables[rand_perm[i]]]
                     if prev_val: # Flip the gene
                         org[self._variables[rand_perm[i]]] = False
@@ -47,6 +48,7 @@ class FlipGA(HeuristicAlgorithm):
         for o in self.population:   # Add each organisms fitness value
             cnt = Counter(self._EQUATION.get_clause_evaluation(o))
             self.fitness_values.append(cnt[True])
+            self._eval_count = self._eval_count + 1   # Increment Counter
 
     def _parent_selection(self, fitness_values):
         """ Selects the number of parents required given the organisms fitness values. """
@@ -85,7 +87,6 @@ class FlipGA(HeuristicAlgorithm):
         """ Mutates the provided population. """
         for i in cur_pop:
             r = random.random()
-            print(r)
             if r < self._MUTATION_RATE: # Do we mutate the organism? (Based on mutation rate which should be 90%)
                 for v in self._variables:
                     r = random.random() # Do we mutate this gene? (Prob of 50%)
@@ -97,6 +98,7 @@ class FlipGA(HeuristicAlgorithm):
         self.finished = False
         self.fitness_values = []
         self.generation = 0
+        self._eval_count = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
         self._heuristic_method(self.population)
