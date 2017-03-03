@@ -10,11 +10,12 @@ class FlipGA(HeuristicAlgorithm):
 
     def __init__(self, eq, vars):
         """ Initialise the constant variables. """
+        super().__init__()
         self._NUM_PARENTS = 2
         self._EQUATION = eq
         self._MUTATION_RATE = 0.9
         self._POP_SIZE = 10
-        self._MAX_GENERATIONS = 5000
+        self._MAX_GENERATIONS = 500
         self._variables = vars
     
     def _heuristic_method(self, population):
@@ -28,6 +29,7 @@ class FlipGA(HeuristicAlgorithm):
                 i = 0
                 while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
+                    self._eval_count = self._eval_count + 1   # Increment Counter
                     prev_val = org[self._variables[rand_perm[i]]]
                     if prev_val: # Flip the gene
                         org[self._variables[rand_perm[i]]] = False
@@ -46,6 +48,7 @@ class FlipGA(HeuristicAlgorithm):
         for o in self.population:   # Add each organisms fitness value
             cnt = Counter(self._EQUATION.get_clause_evaluation(o))
             self.fitness_values.append(cnt[True])
+            self._eval_count = self._eval_count + 1   # Increment Counter
 
     def _parent_selection(self, fitness_values):
         """ Selects the number of parents required given the organisms fitness values. """
@@ -84,17 +87,22 @@ class FlipGA(HeuristicAlgorithm):
         """ Mutates the provided population. """
         for i in cur_pop:
             r = random.random()
-            if r < self._MUTATION_RATE: # Do we mutate the organism?
-                r = random.randint(0, len(self._variables) - 1) # Which random variable to mutate
-                i[self._variables[r]] = not i[self._variables[r]]   # Invert it
+            if r < self._MUTATION_RATE: # Do we mutate the organism? (Based on mutation rate which should be 90%)
+                for v in self._variables:
+                    r = random.random() # Do we mutate this gene? (Prob of 50%)
+                    if r < 0.5:
+                        i[v] = not i[v]   # Invert it
 
     def run(self):  # pragma: no cover
         """ Executes the genetic algorithm. """
         self.finished = False
+        self.fitness_values = []
         self.generation = 0
+        self._eval_count = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
         self._heuristic_method(self.population)
+        best = {'gen': -1, 'fit': -1}
         # Carry on until we run out of generations or we found a solution
         while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
@@ -108,7 +116,12 @@ class FlipGA(HeuristicAlgorithm):
                 
             self._repopulate(self.next_generation)
             self._evaluation()
-            print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
+            if best['fit'] < self.get_best_org()['fitness']:
+                best['fit'] = self.get_best_org()['fitness']
+                best['gen'] = self.generation
+            else:
+                if self.generation > best['gen'] + 100:
+                    break
+            print("Generation: {} - Best Fitness: {} - Fitness Evaluations: {}".format(self.generation, self.get_best_org()['fitness'], self._eval_count))
         self.finished = True
-        printer.pprint("Best organism: {}".format(self.get_best_org()))
-        #printer.pprint(self.get_best_org())
+        #printer.pprint("Best organism: {}".format(self.get_best_org()))
