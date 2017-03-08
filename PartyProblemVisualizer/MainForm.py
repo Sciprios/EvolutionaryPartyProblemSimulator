@@ -3,7 +3,7 @@ from  math import sin, cos
 import tkinter as tk
 import pygubu
 
-class MainForm:
+class MainForm(object):
     def __init__(self, master):
         # Create a builder
         self.builder = builder = pygubu.Builder()
@@ -75,8 +75,8 @@ class MainForm:
             self._vertices.append((x, y))
             cur_deg = cur_deg + deg_increment
 
-if __name__ == '__main__':
-    root = tk.Tk()
-    app = MainForm(root)
-    root.resizable(width=False, height=False)
-    root.mainloop()
+#if __name__ == '__main__':
+#    root = tk.Tk()
+#    app = MainForm(root)
+#    root.resizable(width=False, height=False)
+#    root.mainloop()

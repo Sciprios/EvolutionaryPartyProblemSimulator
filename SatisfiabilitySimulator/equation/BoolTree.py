@@ -141,26 +141,6 @@ class Equation(BooleanNode):
                         return OrNode(nde, rhs)     # It's an OR combination
             else:
                 return nde  # This is just a variable
-        #elif clause[0] is '(':  # First item's a opening bracket:
-        #    # Find the end of this sub-clause
-        #    brack_count = 0
-        #    i = 0
-        #    for j in clause:
-        #        if j is '(':    # Found a new bracket opening
-        #            brack_count = brack_count + 1
-        #        elif j is ')':  # Found a matching end bracket
-        #            brack_count = brack_count - 1
-        #            if i < len(clause) - 1: # Not the last symbol
-        #                if brack_count is 0:    # Got to the end of the brackets
-        #                    lhs = self._generate_clause(clause[1:i])    # LHS in this clause
-        #                    rhs = self._generate_clause(clause[i+2:])   # RHS after operator
-        #                    if clause[i+1] is '.':
-        #                        return AndNode(lhs, rhs)
-        #                    else:
-        #                        return OrNode(lhs, rhs)
-        #            else:
-        #                break
-        #        i = i + 1
         elif clause[0] is '¬':  # Found an inversion
             i = 0
             while i < len(clause) - 1:
