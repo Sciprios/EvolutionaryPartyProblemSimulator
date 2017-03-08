@@ -1,4 +1,4 @@
-class Subject(object):
+class GraphSubject(object):
     """ A subscribable object which can notify GraphObservers. """
     def __init__(self):
         """ Initialises a subscriber list. """
@@ -14,6 +14,7 @@ class Subject(object):
         if observer in self._observers:
             self._observers.remove(observer)
     
-    def _notify_observers(self):
+    def _notify_observers(self, edges, gen, evals, fin):
         """ Notifies observers that something has happened. """
-        raise NotImplementedError("The _notify_observers method has not been inherited by the base class {}".format(type(self)))
+        for o in self._observers:
+            o._update(edges, gen, evals, fin)

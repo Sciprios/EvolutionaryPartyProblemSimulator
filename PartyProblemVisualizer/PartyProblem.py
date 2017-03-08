@@ -1,8 +1,11 @@
-from Subject import Subject
+from GraphSubject import GraphSubject
 from itertools import combinations
+from threading import Thread
+from time import sleep
+from ..SatisfiabilitySimulator.solvers.GeneticAlgorithm import GeneticAlgorithm
 from ..SatisfiabilitySimulator.equation.BoolTree import Equation
 
-class PartyProblem(Subject):
+class PartyProblem(GraphSubject):
     """ A party problem which controls the party problem visualiser. """
 
     def __init__(self, clique_size, graph_size, algorithm):
@@ -12,6 +15,10 @@ class PartyProblem(Subject):
         self._edges = self._generate_edges(graph_size)              # The edges present and their corresponding vertices.
         self.equation = None                                        # The equation generated from this graph problem.
         self._method = algorithm                                    # The algorithm to be used in order to solve the equation.
+    
+    def run(self):
+        """ Runs this simulation. """
+
             
     def _generate_vertices(self, graph_size):
         """ Generates the vertices based on the intended size of this graph. """
@@ -58,3 +65,41 @@ class PartyProblem(Subject):
         # Generate tree equation
         eq = Equation(bln_str)
         return eq
+
+    def _set_algorithm(self, method):
+        """ Sets the method to be used on this problem. """
+        if method is not None:
+            if issubclass(type(method), GeneticAlgorithm):
+                self._method = method
+    
+    def _check_progress(self):
+        """ Polls the genetic algorithm and updates observers until it is finished. """
+        while not self._method.finished:
+            edges = []
+            # Get best organism
+            best_org = self._method.get_best_org()['org']
+            # Generate edges to pass to view
+            for edge in self._edges:
+                if best_org["{" + edge['id'] + "}"]:    # If this edge is here
+                    view_edge = (edge["vertex_one"], edge["vertex_two"])
+                    edges.append(view_edge)
+            # Get other details
+            gen = self._method.generation
+            evals = self._method.eval_count
+            # Call observers to update
+            self._notify_observers(edges, gen, evals, False)
+            sleep(2)
+        # Show the best organism if it has finished
+        edges = []
+        # Get best organism
+        best_org = self._method.get_best_org()['org']
+        # Generate edges to pass to view
+        for edge in self._edges:
+            if best_org["{" + edge['id'] + "}"]:    # If this edge is here
+                view_edge = (edge["vertex_one"], edge["vertex_two"])
+                edges.append(view_edge)
+        # Get other details
+        gen = self._method.generation
+        evals = self._method.eval_count
+        # Call observers to update
+        self._notify_observers(edges, gen, evals, True)
