@@ -52,26 +52,6 @@ class Graph(object):
                     if (e.initial_vertex == vertex) or (e.end_vertex == vertex):
                         self._edges.remove(e)
     
-    def get_vertex(self, id):
-        """ Retrieves a vertex with the given id. """
-        vertex = None
-        if isinstance(id, int):
-            for v in self._vertices:
-                if v.get_id() == id:
-                    vertex = v
-                    break
-        return vertex
-
-    def get_edge(self, id):
-        """ Retrieves an edge with the given id. """
-        edge = None
-        if isinstance(id, int):
-            for e in self._edges:
-                if e.get_id() == id:
-                    edge = e
-                    break
-        return edge
-    
     def get_edges(self):
         """ Retrieves all edges. """
         return self._edges
@@ -79,3 +59,11 @@ class Graph(object):
     def get_vertices(self):
         """ Retrieves all vertices. """
         return self._vertices
+    
+    def get_edges_between(self, vertices):
+        edges = None
+        edges = []
+        for e in self._edges:   # Check all edges for ones within the vertices
+            if (e.get_initial_vertex() in vertices) and (e.get_end_vertex() in vertices):
+                edges.append(e)
+        return edges
