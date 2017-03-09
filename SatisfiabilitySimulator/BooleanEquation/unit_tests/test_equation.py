@@ -1,11 +1,15 @@
 from unittest.mock import MagicMock, Mock, call, patch
 from unittest import TestCase
-from equation.BoolTree import Equation, VariableNode, BooleanNode, CombinationOperatorNode, InversionNode, AndNode, OrNode
+from SatisfiabilitySimulator.BooleanEquation.Equation import Equation
+from SatisfiabilitySimulator.BooleanEquation.VariableNode import VariableNode
+from SatisfiabilitySimulator.BooleanEquation.AndNode import AndNode
+from SatisfiabilitySimulator.BooleanEquation.OrNode import OrNode
+from SatisfiabilitySimulator.BooleanEquation.InversionNode import InversionNode
 
 
 class TestEquation(TestCase):
     """ Tests the Equation class. """
-    @patch('equation.BoolTree.Equation._validate_string')
+    @patch('SatisfiabilitySimulator.BooleanEquation.Equation.Equation._validate_string')
     def test_evaluate(self, val):
         """ Ensures the evaluate class tests response for a False. """
         nde = Equation('({1})')
@@ -18,7 +22,7 @@ class TestEquation(TestCase):
         nde.get_clause_evaluation = MagicMock(return_value=rtn_val)
         self.assertFalse(nde.evaluate({}))
     
-    @patch('equation.BoolTree.Equation._generate_clause')
+    @patch('SatisfiabilitySimulator.BooleanEquation.Equation.Equation._generate_clause')
     def test_gen_clause_list(self, gen_clause):
         """ Ensures the method generates the set of clauses. """
         gen_clause.return_value = "Fake3lause" # Fake the generation of a clause node.

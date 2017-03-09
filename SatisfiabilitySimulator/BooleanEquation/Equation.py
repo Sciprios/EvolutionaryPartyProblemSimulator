@@ -1,13 +1,8 @@
-""" This module contains the classes required to make a boolean equation. """
-from abc import ABC, abstractmethod
-
-class BooleanNode(ABC):
-    """ An abstract node which contains everything required to create a tree. """
-
-    @abstractmethod
-    def evaluate(self, input_vector):   #pragma: no cover
-        """ To be implemented to evaluate according to node type. """
-        raise NotImplementedError
+from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
+from SatisfiabilitySimulator.BooleanEquation.VariableNode import VariableNode
+from SatisfiabilitySimulator.BooleanEquation.AndNode import AndNode
+from SatisfiabilitySimulator.BooleanEquation.OrNode import OrNode
+from SatisfiabilitySimulator.BooleanEquation.InversionNode import InversionNode
 
 class Equation(BooleanNode):
     """ Used to analyse an equation. """
@@ -176,85 +171,3 @@ class Equation(BooleanNode):
             self._unparsed_equation = eq_str
         else:
             raise AttributeError("The input string does not satisfy the validation requirements.")
-
-class VariableNode(BooleanNode):
-    """ A node which evaluates as a variable. """
-
-    def __init__(self, var_char):
-        """ Instantiates a variable node which uses the variable character provided. """
-        self._variable = None
-        self._set_variable(var_char)
-    
-    def evaluate(self, input_vector):
-        """ Evaluates according to the value of the variable in input vector. """
-        if self._variable in input_vector:
-            return input_vector[self._variable]
-        else:
-            raise Exception("The variable {} is not provided in input vector.".format(self._variable))
-    
-    def _set_variable(self, variable):
-        """ Setter for the variable of this node. """
-        if variable is None:
-            raise AttributeError("A VariableNode cannot have its value set to None.")
-        else:
-            self._variable = variable
-
-class InversionNode(BooleanNode):
-    """ A node which inverts its child. """
-
-    def __init__(self, child):
-        """ Instantiates a variable node which uses the variable character provided. """
-        self._child = None
-        self._set_child(child)
-    
-    def evaluate(self, input_vector):
-        """ Evaluates according to the value of the variable in input vector. """
-        if self._child is None:
-            raise AttributeError("_child cannot be none in an InversionNode.")
-        else:
-            return not (self._child.evaluate(input_vector))
-    
-    def _set_child(self, child):
-        """ Setter for the child of this node. """
-        if issubclass(type(child), BooleanNode):
-            self._child = child
-        else:
-            raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
-
-class CombinationOperatorNode(BooleanNode, ABC):
-    """ An abstract node which carries out an operation on its children. """
-
-    def __init__(self, lhs_child, rhs_child):
-        """ Instantiates an operator node with two children. """
-        self._lhs_child = None
-        self._rhs_child = None
-        self._set_lhs_child(lhs_child)
-        self._set_rhs_child(rhs_child)
-    
-    def _set_lhs_child(self, child):
-        """ Sets the reference of the left hand side child. """
-        if issubclass(type(child), BooleanNode) or issubclass(type(child), CombinationOperatorNode):
-            self._lhs_child = child
-        else:
-            raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
-    
-    def _set_rhs_child(self, child):
-        """ Sets the reference of the right hand side child. """
-        if issubclass(type(child), BooleanNode) or issubclass(type(child), CombinationOperatorNode):
-            self._rhs_child = child
-        else:
-            raise AttributeError("The child of an OperatorNode must be a descendent of a BooleanNode.")
-
-class AndNode(CombinationOperatorNode):
-    """ This class allows two child nodes to be AND'ed together. """
-
-    def evaluate(self, input_vector):
-        """ And's two child nodes to produce an output. """
-        return (self._lhs_child.evaluate(input_vector) and self._rhs_child.evaluate(input_vector))
-
-class OrNode(CombinationOperatorNode):
-    """ This class allows two child nodes to be OR'ed together. """
-
-    def evaluate(self, input_vector):
-        """ Or's two child nodes to produce an output. """
-        return (self._lhs_child.evaluate(input_vector) or self._rhs_child.evaluate(input_vector))

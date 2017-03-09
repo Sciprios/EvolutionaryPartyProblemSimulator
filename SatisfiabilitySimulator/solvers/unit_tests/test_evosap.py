@@ -1,7 +1,7 @@
 """ Modules containing tests for the flipga class. """
 from unittest.mock import MagicMock, Mock, patch
 from unittest import TestCase
-from solvers.EvoSAP import EvoSAP
+from SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
 
 class TestEvoSAP(TestCase):
     """ Test class for the EvoSAP class. """
@@ -38,7 +38,7 @@ class TestEvoSAP(TestCase):
         assert vars[1] in ga.population[0]
         assert vars[2] in ga.population[0]
     
-    @patch('solvers.EvoSAP.random')
+    @patch('SatisfiabilitySimulator.Solvers.EvoSAP.random')
     def test_heuristic_method(self, rand_mock):
         """ Ensures the algorithm flips children correctly. """
         eq = Mock()
