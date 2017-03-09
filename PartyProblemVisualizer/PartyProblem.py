@@ -70,11 +70,7 @@ class PartyProblem(GraphSubject):
         eq = Equation(bln_str)
         return eq
 
-    def _set_algorithm(self, method):
-        """ Sets the method to be used on this problem. """
-        if method is not None:
-            if issubclass(type(method), GeneticAlgorithm):
-                self._method = method
+
     
     def _check_progress(self):
         """ Polls the genetic algorithm and updates observers until it is finished. """
