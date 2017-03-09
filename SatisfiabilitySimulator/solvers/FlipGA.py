@@ -29,7 +29,7 @@ class FlipGA(HeuristicAlgorithm):
                 i = 0
                 while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
-                    self._eval_count = self._eval_count + 1   # Increment Counter
+                    self.eval_count = self.eval_count + 1   # Increment Counter
                     prev_val = org[self._variables[rand_perm[i]]]
                     if prev_val: # Flip the gene
                         org[self._variables[rand_perm[i]]] = False
@@ -48,7 +48,7 @@ class FlipGA(HeuristicAlgorithm):
         for o in self.population:   # Add each organisms fitness value
             cnt = Counter(self._EQUATION.get_clause_evaluation(o))
             self.fitness_values.append(cnt[True])
-            self._eval_count = self._eval_count + 1   # Increment Counter
+            self.eval_count = self.eval_count + 1   # Increment Counter
 
     def _parent_selection(self, fitness_values):
         """ Selects the number of parents required given the organisms fitness values. """
@@ -98,7 +98,7 @@ class FlipGA(HeuristicAlgorithm):
         self.finished = False
         self.fitness_values = []
         self.generation = 0
-        self._eval_count = 0
+        self.eval_count = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
         self._heuristic_method(self.population)
@@ -122,6 +122,6 @@ class FlipGA(HeuristicAlgorithm):
             else:
                 if self.generation > best['gen'] + 100:
                     break
-            print("Generation: {} - Best Fitness: {} - Fitness Evaluations: {}".format(self.generation, self.get_best_org()['fitness'], self._eval_count))
+            print("Generation: {} - Best Fitness: {} - Fitness Evaluations: {}".format(self.generation, self.get_best_org()['fitness'], self.eval_count))
         self.finished = True
         #printer.pprint("Best organism: {}".format(self.get_best_org()))

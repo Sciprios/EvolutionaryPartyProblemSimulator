@@ -8,12 +8,12 @@ class BlindGA_AES(BlindGA):
     def _evaluation(self, org=None):
         """ Populates the fitness_value instance variable with the pop's values. """
         if org:
-            self._eval_count = self._eval_count + 1
+            self.eval_count = self.eval_count + 1
             return Counter(self._EQUATION.get_clause_evaluation(org))[True]
         else:
             self.fitness_values.clear() # Empty fitness values
             for o in self.population:   # Add each organisms fitness value
-                self._eval_count = self._eval_count + 1
+                self.eval_count = self.eval_count + 1
                 cnt = Counter(self._EQUATION.get_clause_evaluation(o))
                 self.fitness_values.append(cnt[True])
     
@@ -67,5 +67,5 @@ class BlindGA_3(BlindGA_AES):
                     mut_cnt = mut_cnt + 1
                     cnter = Counter(self._EQUATION.get_clause_evaluation(i))
                     new_fitness = cnter[True]
-                    self._eval_count = self._eval_count + 1   # Need to increment counter
+                    self.eval_count = self.eval_count + 1   # Need to increment counter
             cnt = cnt + 1

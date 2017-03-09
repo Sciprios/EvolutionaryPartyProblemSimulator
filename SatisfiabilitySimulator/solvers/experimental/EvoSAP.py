@@ -17,13 +17,13 @@ class EvoSAP_AES(EvoSAP):
                 while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
                     prev_val = org[self._variables[rand_perm[i]]]
-                    self._eval_count = self._eval_count + 1   # Increment Counter
+                    self.eval_count = self.eval_count + 1   # Increment Counter
                     if prev_val: # Flip the gene
                         org[self._variables[rand_perm[i]]] = False
                     else:
                         org[self._variables[rand_perm[i]]] = True
                     new_res = self._calc_clausal_score(org)
-                    self._eval_count = self._eval_count + 1   # Increment Counter
+                    self.eval_count = self.eval_count + 1   # Increment Counter
                     if new_res >= prev_res:
                         improve = improve + (new_res - prev_res)
                     else:
@@ -33,12 +33,12 @@ class EvoSAP_AES(EvoSAP):
     def _evaluation(self, org=None):
         """ Populates the fitness_value instance variable with the pop's values. """
         if org:
-            self._eval_count = self._eval_count + 1
+            self.eval_count = self.eval_count + 1
             return Counter(self._EQUATION.get_clause_evaluation(org))[True]
         else:
             self.fitness_values.clear() # Empty fitness values
             for o in self.population:   # Add each organisms fitness value
-                self._eval_count = self._eval_count + 1
+                self.eval_count = self.eval_count + 1
                 cnt = Counter(self._EQUATION.get_clause_evaluation(o))
                 self.fitness_values.append(cnt[True])
     
@@ -92,5 +92,5 @@ class EvoSAP_3(EvoSAP_AES):
                     mut_cnt = mut_cnt + 1
                     cnter = Counter(self._EQUATION.get_clause_evaluation(i))
                     new_fitness = cnter[True]
-                    self._eval_count = self._eval_count + 1   # Need to increment counter
+                    self.eval_count = self.eval_count + 1   # Need to increment counter
             cnt = cnt + 1

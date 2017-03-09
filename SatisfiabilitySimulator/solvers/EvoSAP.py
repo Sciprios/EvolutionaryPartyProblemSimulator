@@ -21,7 +21,7 @@ class EvoSAP(HeuristicAlgorithm):
     def run(self):  # pragma: no cover
         """ Executes the genetic algorithm. """
         self.finished = False
-        self._eval_count = 0
+        self.eval_count = 0
         self.generation = 0
         self.initialisation()   # Setup of initial population
         self._evaluation()
@@ -66,7 +66,7 @@ class EvoSAP(HeuristicAlgorithm):
             for o in self.population:   # Add each organisms fitness value
                 cnt = Counter(self._EQUATION.get_clause_evaluation(o))
                 self.fitness_values.append(cnt[True])
-                self._eval_count = self._eval_count + 1   # Increment Counter
+                self.eval_count = self.eval_count + 1   # Increment Counter
     
     def initialisation(self):
         """ Instantiates the organism. """
@@ -99,7 +99,7 @@ class EvoSAP(HeuristicAlgorithm):
                 i = 0
                 while i < len(self._variables): # For all variables
                     prev_res = self._calc_clausal_score(org)    # Get clausal score currently
-                    self._eval_count = self._eval_count + 1   # Increment Counter
+                    self.eval_count = self.eval_count + 1   # Increment Counter
                     prev_val = org[self._variables[rand_perm[i]]]
                     if prev_val: # Flip the gene
                         org[self._variables[rand_perm[i]]] = False

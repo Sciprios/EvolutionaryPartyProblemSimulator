@@ -30,7 +30,7 @@ class TestGeneticAlgorithm(TestCase):
         assert ga.next_generation == []
         assert ga.finished == False
         assert ga.best_org == {}
-        assert ga._eval_count == 0
+        assert ga.eval_count == 0
     
     def test_initialisation(self):
         """ Tests the initialisation of the population. """
