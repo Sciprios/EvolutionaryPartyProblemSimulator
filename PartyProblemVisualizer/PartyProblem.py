@@ -1,4 +1,4 @@
-from GraphSubject import GraphSubject
+from .GraphSubject import GraphSubject
 from itertools import combinations
 from threading import Thread
 from time import sleep
@@ -11,15 +11,19 @@ class PartyProblem(GraphSubject):
     def __init__(self, clique_size, graph_size, algorithm):
         """ Initialises the instances variables required. """
         super().__init__()
-        self._vertices = self._generate_vertices(graph_size)        # The vertices present in this graph.
-        self._edges = self._generate_edges(graph_size)              # The edges present and their corresponding vertices.
-        self.equation = None                                        # The equation generated from this graph problem.
-        self._method = algorithm                                    # The algorithm to be used in order to solve the equation.
+        self._vertices = self._generate_vertices(graph_size)                # The vertices present in this graph.
+        self._edges = self._generate_edges(graph_size)                      # The edges present and their corresponding vertices.
+        self.equation = self._generate_equation(clique_size)                # The equation generated from this graph problem.
+        self._method = algorithm(self.equation, self._get_edge_labels())    # The algorithm to be used in order to solve the equation.
     
     def run(self):
         """ Runs this simulation. """
+        execution_thread = Thread(target=self._method.run)
+        progress_thread = Thread(target=self._check_progress)
+        # Start checking progress first
+        progress_thread.start()
+        execution_thread.start()
 
-            
     def _generate_vertices(self, graph_size):
         """ Generates the vertices based on the intended size of this graph. """
         vertices = []
@@ -103,3 +107,9 @@ class PartyProblem(GraphSubject):
         evals = self._method.eval_count
         # Call observers to update
         self._notify_observers(edges, gen, evals, True)
+    def _get_edge_labels(self):
+        """ Returns the id's of each variable. """
+        vars = []
+        for e in self._edges:
+            vars.append("{" + e['id'] + "}")
+        return vars
