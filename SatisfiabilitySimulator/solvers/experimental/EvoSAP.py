@@ -1,5 +1,5 @@
 from collections import Counter
-from solvers.EvoSAP import EvoSAP
+from SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
 import random
 
 class EvoSAP_AES(EvoSAP):
