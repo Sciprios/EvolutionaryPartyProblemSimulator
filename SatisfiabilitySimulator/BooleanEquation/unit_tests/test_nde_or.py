@@ -1,8 +1,16 @@
 from unittest.mock import MagicMock, Mock
 from unittest import TestCase
-from BooleanEquation.OrNode import OrNode
+from SatisfiabilitySimulator.BooleanEquation.OrNode import OrNode
+from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
 
-class TestOrNode(TestCombinationNode):
+class aBooleanNode(BooleanNode):  # pragma: no cover
+    """ This class is a boolean node. """
+    def say(self):
+        return type(self)
+    def evaluate(self, input_vector):
+        return True
+
+class TestOrNode(TestCase):
     """ Tests the OrNode class. """
 
     def test_evaluation(self):

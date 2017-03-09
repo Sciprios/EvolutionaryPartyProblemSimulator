@@ -1,4 +1,4 @@
-from CombinationNode import CombinationNode
+from SatisfiabilitySimulator.BooleanEquation.CombinationNode import CombinationNode
 
 class AndNode(CombinationNode):
     """ This class allows two child nodes to be AND'ed together. """

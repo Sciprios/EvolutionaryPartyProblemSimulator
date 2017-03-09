@@ -1,8 +1,9 @@
 from unittest.mock import MagicMock, Mock
 from unittest import TestCase
-from BooleanEquation.CombinationNode import CombinationNode
-from BooleanEquation.AndNode import AndNode
-from BooleanEquation.OrNode import OrNode
+from SatisfiabilitySimulator.BooleanEquation.CombinationNode import CombinationNode
+from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
+from SatisfiabilitySimulator.BooleanEquation.AndNode import AndNode
+from SatisfiabilitySimulator.BooleanEquation.OrNode import OrNode
 
 class NotABooleanNode(object):  # pragma: no cover
     """ This class is not a boolean node. """

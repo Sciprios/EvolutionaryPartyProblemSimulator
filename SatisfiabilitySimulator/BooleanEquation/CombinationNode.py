@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from BooleanNode import BooleanNode
+from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
 
 class CombinationNode(BooleanNode, ABC):
     """ An abstract node which carries out an operation on its children. """

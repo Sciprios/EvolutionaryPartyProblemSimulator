@@ -1,4 +1,4 @@
-from BooleanNode import BooleanNode
+from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
 
 class VariableNode(BooleanNode):
     """ A node which evaluates as a variable. """
@@ -21,3 +21,5 @@ class VariableNode(BooleanNode):
             raise AttributeError("A VariableNode cannot have its value set to None.")
         else:
             self._variable = variable
+
+print("YAY")

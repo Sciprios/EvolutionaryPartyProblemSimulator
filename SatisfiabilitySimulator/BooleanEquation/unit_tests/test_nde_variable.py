@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, Mock
 from unittest import TestCase
-from BooleanEquation.VariableNode import VariableNode
+from SatisfiabilitySimulator.BooleanEquation.VariableNode import VariableNode
 
 class TestVariableNode(TestCase):
     """ Tests the VariableNode class. """

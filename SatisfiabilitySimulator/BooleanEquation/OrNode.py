@@ -1,6 +1,6 @@
-from CombinationNode import CombinationNode
+from SatisfiabilitySimulator.BooleanEquation.CombinationNode import CombinationNode
 
-class OrNode(CombinationOperatorNode):
+class OrNode(CombinationNode):
     """ This class allows two child nodes to be OR'ed together. """
 
     def evaluate(self, input_vector):

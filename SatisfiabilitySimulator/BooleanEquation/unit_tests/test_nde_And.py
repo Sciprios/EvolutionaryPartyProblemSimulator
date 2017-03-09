@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, Mock
 from unittest import TestCase
-from BooleanEquation.AndNode import AndNode
+from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
+from SatisfiabilitySimulator.BooleanEquation.AndNode import AndNode
 
 class aBooleanNode(BooleanNode):  # pragma: no cover
     """ This class is a boolean node. """
@@ -9,7 +10,7 @@ class aBooleanNode(BooleanNode):  # pragma: no cover
     def evaluate(self, input_vector):
         return True
 
-class TestAndNode(TestCombinationNode):
+class TestAndNode(TestCase):
     """ Tests the AndNode class. """
 
     def test_evaluation(self):
