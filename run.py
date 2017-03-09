@@ -1,21 +1,21 @@
-from equation.BoolTree import Equation
-from solvers.FlipGA import FlipGA
-from solvers.EvoSAP import EvoSAP
-from solvers.BlindGA import BlindGA
+from SatisfiabilitySimulator.BooleanEquation.Equation import Equation
+from SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
+from SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
+from SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
+from SatisfiabilitySimulator.Solvers.Experimental.FlipGA import FlipGA_1, FlipGA_2, FlipGA_3
+from SatisfiabilitySimulator.Solvers.Experimental.EvoSAP import EvoSAP_1, EvoSAP_2, EvoSAP_3
+from SatisfiabilitySimulator.Solvers.Experimental.BlindGA import BlindGA_1, BlindGA_2, BlindGA_3
+from SatisfiabilitySimulator.Examples import Interpreter
 from collections import Counter
 from pprint import PrettyPrinter
 from threading import Thread
-from solvers.experimental.FlipGA import FlipGA_1, FlipGA_2, FlipGA_3
-from solvers.experimental.EvoSAP import EvoSAP_1, EvoSAP_2, EvoSAP_3
-from solvers.experimental.BlindGA import BlindGA_1, BlindGA_2, BlindGA_3
-import examples.interpreter as interpreter
 
 NO_TRIALS = 10
 
 def run_test(file_name, results, cl_ga):
     """ Runs a test on the given file name. """
     print("Collecting file - {}".format(file_name))
-    contents = interpreter.interpret_file(file_name)
+    contents = Interpreter.interpret_file(file_name)
     equation_string = contents[0]
     variables = contents[1]
 

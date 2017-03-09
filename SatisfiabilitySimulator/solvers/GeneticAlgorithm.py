@@ -18,7 +18,7 @@ class GeneticAlgorithm(object):
         self.next_generation = []        # Holds the next generation
         self.finished = False            # Flag determines whether algorithm has finished or not
         self.best_org = {}               # A dictionary containing the best organism and relevant fitness value
-        self._eval_count = 0             # Counts the amount of times the fitness has been evaluated.
+        self.eval_count = 0             # Counts the amount of times the fitness has been evaluated.
 
     def run(self):
         """ Executes the genetic algorithm. """
