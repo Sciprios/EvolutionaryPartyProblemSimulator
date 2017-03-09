@@ -1,4 +1,4 @@
-from solvers.HeuristicAlgorithm import HeuristicAlgorithm
+from SatisfiabilitySimulator.Solvers.HeuristicAlgorithm import HeuristicAlgorithm
 from pprint import PrettyPrinter
 from collections import Counter
 import random

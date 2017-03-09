@@ -1,8 +1,8 @@
 """ Tests the abstract classes. """
 from unittest.mock import MagicMock, Mock, patch
 from unittest import TestCase
-from solvers.GeneticAlgorithm import GeneticAlgorithm
-from solvers.HeuristicAlgorithm import HeuristicAlgorithm
+from SatisfiabilitySimulator.Solvers.GeneticAlgorithm import GeneticAlgorithm
+from SatisfiabilitySimulator.Solvers.HeuristicAlgorithm import HeuristicAlgorithm
 
 class TestHeuristicAlgo(TestCase):
     """ Ensures no methods are implemented and throw errors. """

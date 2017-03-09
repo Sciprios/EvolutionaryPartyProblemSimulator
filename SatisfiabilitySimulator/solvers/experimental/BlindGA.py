@@ -1,5 +1,5 @@
 from collections import Counter
-from solvers.BlindGA import BlindGA
+from SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
 import random
 
 class BlindGA_AES(BlindGA):
