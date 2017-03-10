@@ -1,15 +1,15 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from Graphing.Edge import Edge
-from Graphing.Vertex import Vertex
-from Graphing.Graph import Graph
-from Graphing.ConnectedGraph import ConnectedGraph
+from Visualizer.Graphing.Edge import Edge
+from Visualizer.Graphing.Vertex import Vertex
+from Visualizer.Graphing.Graph import Graph
+from Visualizer.Graphing.ConnectedGraph import ConnectedGraph
 
 class TestConnectedGraph(TestCase):
     """ Tests the connected graph class. """
 
-    @patch('Graphing.ConnectedGraph.ConnectedGraph._generate_vertices')
-    @patch('Graphing.ConnectedGraph.ConnectedGraph._generate_edges')
+    @patch('Visualizer.Graphing.ConnectedGraph.ConnectedGraph._generate_vertices')
+    @patch('Visualizer.Graphing.ConnectedGraph.ConnectedGraph._generate_edges')
     def test_init(self, gen_edg, gen_ver):
         """ Ensures the graph is instantiated through the right methods. """
         cg = ConnectedGraph(333)
@@ -17,14 +17,14 @@ class TestConnectedGraph(TestCase):
         assert gen_ver.call_count == 1
         gen_ver.assert_called_with(333)
     
-    @patch('Graphing.ConnectedGraph.ConnectedGraph._generate_edges')
+    @patch('Visualizer.Graphing.ConnectedGraph.ConnectedGraph._generate_edges')
     def test_gen_vertices(self, gen_edg):
         """ Tests the generation of all vertices. """
         cg = ConnectedGraph(333)
         assert len(cg._vertices) == 333
 
-    @patch('Graphing.ConnectedGraph.Edge')
-    @patch('Graphing.ConnectedGraph.ConnectedGraph._generate_vertices')
+    @patch('Visualizer.Graphing.ConnectedGraph.Edge')
+    @patch('Visualizer.Graphing.ConnectedGraph.ConnectedGraph._generate_vertices')
     def test_gen_edges(self, gen_ver, edge):
         """ Test the generation of all possible edges. """
         cg = ConnectedGraph(3)
