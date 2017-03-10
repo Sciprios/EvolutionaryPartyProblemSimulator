@@ -12,17 +12,21 @@ class TestEdge(TestCase):
 
     @patch('Graphing.Edge.Edge._set_origin')
     @patch('Graphing.Edge.Edge._set_target')
-    def test_init(self, set_tar, set_or):
+    @patch('Graphing.Edge.Edge.set_colour')
+    def test_init(self, set_col, set_tar, set_or):
         """ Tests the initialisation of an Edge. """
         edge = Edge(self.vertex, self.vertex)
         set_or.assert_called_with(self.vertex)
         set_tar.assert_called_with(self.vertex)
+        set_col.assert_called_with(0)
 
         o = "Origin"
         t = "Target"
-        edge = Edge(origin=o, target=t)
+        c = "Colour"
+        edge = Edge(origin=o, target=t, colour=c)
         set_or.assert_called_with(o)
         set_tar.assert_called_with(t)
+        set_col.assert_called_with(c)
     
     @patch('Graphing.Edge.Edge._set_target')
     def test_set_origin(self, set_tar):
@@ -34,9 +38,9 @@ class TestEdge(TestCase):
         edge._set_origin(self.vertex)
         assert edge._origin == self.vertex
 
-        try:    # When not passing an integer an error should be thrown.
+        try:    # When not passing a vertex an error should be thrown.
             edge._origin = None
-            edge._set_origin("Not an integer")
+            edge._set_origin("Not an vertex")
             assert False
         except TypeError:
             assert True
@@ -51,9 +55,23 @@ class TestEdge(TestCase):
         edge._set_target(self.vertex)
         assert edge._target == self.vertex
 
-        try:    # When not passing an integer an error should be thrown.
+        try:    # When not passing a vertex an error should be thrown.
             edge._target = None
             edge._set_target("Not an vertex")
+            assert False
+        except TypeError:
+            assert True
+    
+    @patch('Graphing.Edge.Edge._set_origin')
+    @patch('Graphing.Edge.Edge._set_target')
+    def test_set_colour(self, set_tar, set_or):
+        edge = Edge(None, None)
+
+        edge.set_colour(555)
+        assert edge._colour == 555
+
+        try:    # When not passing an integer an error should be thrown.
+            edge.set_colour("Not an integer")
             assert False
         except TypeError:
             assert True
