@@ -1,17 +1,17 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from Graphing.Component import Component
+from Visualizer.Graphing.Component import Component
 
 class TestComponent(TestCase):
     """ Ensures s component meets the requirements. """
 
-    @patch('Graphing.Component.Component._set_id')
+    @patch('Visualizer.Graphing.Component.Component._set_id')
     def test_init(self, set_id):
         """ Ensure the constructor initialises this components id. """
         c = Component(5)
         set_id.assert_called_with(5)
 
-    @patch('Graphing.Component.Component._set_id')
+    @patch('Visualizer.Graphing.Component.Component._set_id')
     def test_get_id(self, set_id):
         """ Tests the retrieval of the id. """
         component = Component(None)

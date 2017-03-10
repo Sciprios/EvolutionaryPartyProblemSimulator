@@ -1,6 +1,6 @@
-from Graphing.Graph import Graph
-from Graphing.Vertex import Vertex
-from Graphing.Edge import Edge
+from Visualizer.Graphing.Graph import Graph
+from Visualizer.Graphing.Vertex import Vertex
+from Visualizer.Graphing.Edge import Edge
 from itertools import combinations
 
 class ConnectedGraph(Graph):

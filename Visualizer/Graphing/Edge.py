@@ -1,5 +1,5 @@
-from Graphing.Vertex import Vertex
-from Graphing.Component import Component
+from Visualizer.Graphing.Vertex import Vertex
+from Visualizer.Graphing.Component import Component
 
 class Edge(Component):
     """ An edge joining two vertices. """

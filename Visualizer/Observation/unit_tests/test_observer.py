@@ -1,6 +1,6 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from Observation.Observer import Observer
+from Visualizer.Observation.Observer import Observer
 
 class TestObserver(TestCase):
     """ Ensures the observer object throws an error if unimplemented. """

@@ -1,7 +1,7 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from Observation.Subject import Subject
-from Observation.Observer import Observer
+from Visualizer.Observation.Subject import Subject
+from Visualizer.Observation.Observer import Observer
 
 class TestSubject(TestCase):
     """ Ensures the subject object's methods. """
