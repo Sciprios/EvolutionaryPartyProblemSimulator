@@ -1,10 +1,12 @@
 from Graphing.Vertex import Vertex
+from Graphing.Component import Component
 
-class Edge(object):
+class Edge(Component):
     """ An edge joining two vertices. """
 
-    def __init__(self, origin, target, colour=0):
+    def __init__(self, identifier, origin, target, colour=0):
         """ Initializes this edge with an origin and a target. """
+        super().__init__(identifier)
         self._set_origin(origin)
         self._set_target(target)
         self.set_colour(colour)

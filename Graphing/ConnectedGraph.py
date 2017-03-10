@@ -17,7 +17,7 @@ class ConnectedGraph(Graph):
         count = 0
         while count < n_vertices:
             new_vertex = Vertex(count)
-            self._add_vertex(new_vertex)
+            self.add_vertex(new_vertex)
             count = count + 1
     
     def _generate_edges(self):
@@ -25,4 +25,4 @@ class ConnectedGraph(Graph):
         combs = combinations(self.get_vertices(), 2)    # Create all possible combinations
         for combination in combs:
             new_edge = Edge(combination[0], combination[1])
-            self._add_edge(new_edge)
+            self.add_edge(new_edge)

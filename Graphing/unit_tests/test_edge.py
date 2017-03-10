@@ -15,7 +15,7 @@ class TestEdge(TestCase):
     @patch('Graphing.Edge.Edge.set_colour')
     def test_init(self, set_col, set_tar, set_or):
         """ Tests the initialisation of an Edge. """
-        edge = Edge(self.vertex, self.vertex)
+        edge = Edge(0, self.vertex, self.vertex)
         set_or.assert_called_with(self.vertex)
         set_tar.assert_called_with(self.vertex)
         set_col.assert_called_with(0)
@@ -23,7 +23,7 @@ class TestEdge(TestCase):
         o = "Origin"
         t = "Target"
         c = "Colour"
-        edge = Edge(origin=o, target=t, colour=c)
+        edge = Edge(0, origin=o, target=t, colour=c)
         set_or.assert_called_with(o)
         set_tar.assert_called_with(t)
         set_col.assert_called_with(c)
@@ -31,7 +31,7 @@ class TestEdge(TestCase):
     @patch('Graphing.Edge.Edge._set_target')
     def test_set_origin(self, set_tar):
         """ Ensures the origin instance variable is protected. """
-        edge = Edge(self.vertex, None)
+        edge = Edge(0, self.vertex, None)
         assert edge._origin == self.vertex
 
         edge._origin = None # Reset
@@ -48,7 +48,7 @@ class TestEdge(TestCase):
     @patch('Graphing.Edge.Edge._set_origin')
     def test_set_target(self, set_or):
         """ Ensures the target instance variable is protected. """
-        edge = Edge(None, self.vertex)
+        edge = Edge(0, None, self.vertex)
         assert edge._target == self.vertex
 
         edge._target = None # Reset
@@ -65,7 +65,7 @@ class TestEdge(TestCase):
     @patch('Graphing.Edge.Edge._set_origin')
     @patch('Graphing.Edge.Edge._set_target')
     def test_set_colour(self, set_tar, set_or):
-        edge = Edge(None, None)
+        edge = Edge(0, None, None)
 
         edge.set_colour(555)
         assert edge._colour == 555

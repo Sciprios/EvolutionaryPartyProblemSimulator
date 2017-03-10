@@ -32,6 +32,6 @@ class TestConnectedGraph(TestCase):
         v2 = Vertex(1)
         v3 = Vertex(2)
         cg._vertices = [v1, v2, v3]
-        edge.return_value = Edge(v1, v2)
+        edge.return_value = Edge(0, v1, v2)
         cg._generate_edges()
         assert len(cg._edges) == 3
