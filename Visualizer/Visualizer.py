@@ -92,7 +92,7 @@ class Visualizer(Subject, Observer):
         clique_size = int(self._builder.get_object("tb_clique_size").get())
         graph_size = int(self._builder.get_object("tb_graph_size").get())
 
-        update_argument = {"clique_size": clique_size, "graph_size": graph_size}
+        update_argument = {"clique_size": clique_size, "graph_size": graph_size}    # Argument to update observers with
 
         for o in self._observers:
             o.update(update_argument)
@@ -103,7 +103,7 @@ class Visualizer(Subject, Observer):
             new_graph = args['graph']
             self._draw_graph(new_graph)
         
-        # TEST
+        # TEST IF IN DOUBT
         #from Visualizer.Graphing.Graph import Graph
         #from Visualizer.Graphing.Vertex import Vertex
         #from Visualizer.Graphing.Edge import Edge
