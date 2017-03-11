@@ -23,6 +23,7 @@ class BlindGA(GeneticAlgorithm):
         self.fitness_values.clear() # Empty fitness values
         for o in self.population:   # Add each organisms fitness value
             cnt = Counter(self._EQUATION.get_clause_evaluation(o))
+            self.eval_count = self.eval_count + 1   # Increment Counter
             self.fitness_values.append(cnt[True])
 
     def _parent_selection(self, fitness_values):
