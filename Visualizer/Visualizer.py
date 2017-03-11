@@ -13,6 +13,7 @@ class Visualizer(Subject, Observer):
         self._builder = Builder()   # Setup form from build file
         self._builder.add_from_file("Visualizer/gui.ui")
         self.mainwindow = self._builder.get_object("frm_main")
+        self._builder.get_object("cnv_display").config(width=500, height=500)
         self._setup_eventhandlers()
 
     def _setup_eventhandlers(self): # pragma : no cover
@@ -63,9 +64,10 @@ class Visualizer(Subject, Observer):
         # Draw vertices
         vertex_offset = vertex_size / 2
         center_canvas = (cnv_display.winfo_width() / 2, cnv_display.winfo_height() / 2)
-        distance = 125
+        distance = center_canvas[0] / 1.5 #Quater of the screen
         degrees = 360 / len(graph.get_vertices())
         for vertex in graph.get_vertices():
+            # Calculate a new location for the vertex on canvas
             center_x = center_canvas[0] + ((distance) * sin(degrees * vertex.get_id()))
             center_y = center_canvas[1] + ((distance) * cos(degrees * vertex.get_id()))
             vertex.set_location(x=center_x, y=center_y)

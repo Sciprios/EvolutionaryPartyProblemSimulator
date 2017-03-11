@@ -1,6 +1,7 @@
 from SatisfiabilitySimulator.BooleanEquation.Equation import Equation
 from SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
 from SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
+from SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
 from Visualizer.Observation.Observer import Observer
 from Visualizer.Observation.Subject import Subject
 from Visualizer.Graphing.ConnectedGraph import ConnectedGraph
@@ -44,7 +45,7 @@ class Simulator(Subject, Observer):
         var_set = result[1]
         self._goal_fitness = len(equation._clauses)
         # Generate a method to solve equation
-        self._method = FlipGA(equation, var_set)
+        self._method = BlindGA(equation, var_set)
         # Run algorithm on a seperate thread
         self._algo_thread = Thread(target=self._method.run)
         # Run poller on seperate thread
@@ -54,20 +55,25 @@ class Simulator(Subject, Observer):
 
     def _poll(self):
         """ Polls the algorithm, updating observers when required. """
+        cur_fit = -1
         while not self._method.finished:
-            if self._method.get_best_org() is not None:
+            fit = self._method.get_best_org()['fitness']
+            if cur_fit < fit:   # Only update if an improvement was made
+                cur_fit = fit
                 # Update graph
                 self._generate_graph()
                 # Update observers
                 self._notify_observers()
-            sleep(1)
+            else:
+                sleep(1)
         # Update when finished
-        if self._method.get_best_org() is not None:
-            self._notify_observers()
+        self._generate_graph()
+        self._notify_observers()
 
     def _generate_graph(self):
         """ Generates a graph based on current state of method's best orgnism. """
         truth_assignments = self._method.get_best_org()['org']
+        print(self._method.get_best_org()['org'])
         for variable in truth_assignments: # For each variable (edge)
             edge_id = int(variable[1:-1])
             if truth_assignments[variable]:
@@ -89,8 +95,8 @@ class Simulator(Subject, Observer):
                 if (edge.get_origin() in combination) and (edge.get_target() in combination):
                     edge_id = str(edge.get_id())    # Found an edge in this combination
                     var_id = "{" + edge_id + "}"
-                    clause_one = clause_one + "." + var_id + ""
-                    clause_two = clause_two + ".¬" + var_id + ""
+                    clause_one = clause_one + "+¬" + var_id + ""
+                    clause_two = clause_two + "+" + var_id + ""
                     var_set.append(var_id)
             # Format clause
             clause_one = "(" + clause_one[1:] + ")" # The substring removes the first redundant "AND" symbol
