@@ -43,7 +43,7 @@ class Visualizer(Subject, Observer):
         
         try:
             clique_size = int(clique_size)
-            if clique_size < 1:
+            if (clique_size < 1) and (clique_size <= graph_size:
                 raise Exception()
         except Exception:
             valid = False
