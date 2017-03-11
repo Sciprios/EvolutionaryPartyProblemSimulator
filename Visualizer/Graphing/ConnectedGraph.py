@@ -16,7 +16,7 @@ class ConnectedGraph(Graph):
         """ Generates n vertices. """
         count = 0
         while count < n_vertices:
-            new_vertex = Vertex(count)
+            new_vertex = Vertex(count, location_x=0, location_y=0)
             self.add_vertex(new_vertex)
             count = count + 1
     
