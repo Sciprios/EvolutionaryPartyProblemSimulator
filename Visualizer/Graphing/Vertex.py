@@ -11,9 +11,9 @@ class Vertex(Component):
     
     def set_location(self, x=0, y=0):
         """ Sets the location of this vertex on a graph; defaults to (0,0) """
-        if not isinstance(x, float):
+        if (not isinstance(x, float)) and (not isinstance(x, int)):
             x = 0
-        if not isinstance(y, float):
+        if (not isinstance(y, float)) and (not isinstance(y, int)):
             y = 0
         self._location = (x, y)
     

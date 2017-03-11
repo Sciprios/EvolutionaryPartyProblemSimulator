@@ -1,5 +1,6 @@
 from SatisfiabilitySimulator.BooleanEquation.Equation import Equation
 from SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
+from SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
 from Visualizer.Observation.Observer import Observer
 from Visualizer.Observation.Subject import Subject
 from Visualizer.Graphing.ConnectedGraph import ConnectedGraph
@@ -41,8 +42,9 @@ class Simulator(Subject, Observer):
         result = self._generate_equation(clique_size)
         equation = result[0]
         var_set = result[1]
+        self._goal_fitness = len(equation._clauses)
         # Generate a method to solve equation
-        self._method = BlindGA(equation, var_set)
+        self._method = FlipGA(equation, var_set)
         # Run algorithm on a seperate thread
         self._algo_thread = Thread(target=self._method.run)
         # Run poller on seperate thread
@@ -58,7 +60,7 @@ class Simulator(Subject, Observer):
                 self._generate_graph()
                 # Update observers
                 self._notify_observers()
-            sleep(5)
+            sleep(1)
         # Update when finished
         if self._method.get_best_org() is not None:
             self._notify_observers()
@@ -107,6 +109,7 @@ class Simulator(Subject, Observer):
                 "generation": self._method.generation,
                 "evals": self._method.eval_count,
                 "best_fitness": self._method.get_best_org()['fitness'],
+                "ideal_fitness": self._goal_fitness,
                 "graph": self._graph,
                 "finished": self._method.finished
             }
