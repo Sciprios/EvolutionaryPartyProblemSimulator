@@ -73,7 +73,6 @@ class Simulator(Subject, Observer):
     def _generate_graph(self):
         """ Generates a graph based on current state of method's best orgnism. """
         truth_assignments = self._method.get_best_org()['org']
-        print(self._method.get_best_org()['org'])
         for variable in truth_assignments: # For each variable (edge)
             edge_id = int(variable[1:-1])
             if truth_assignments[variable]:
