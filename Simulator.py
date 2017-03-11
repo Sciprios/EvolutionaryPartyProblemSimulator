@@ -47,8 +47,8 @@ class Simulator(Subject, Observer):
         self._algo_thread = Thread(target=self._method.run)
         # Run poller on seperate thread
         self._poll_thread = Thread(target=self._poll)
-        self._poll_thread.start()
         self._algo_thread.start()
+        self._poll_thread.start()
 
     def _poll(self):
         """ Polls the algorithm, updating observers when required. """
@@ -58,7 +58,7 @@ class Simulator(Subject, Observer):
                 self._generate_graph()
                 # Update observers
                 self._notify_observers()
-            sleep(1)
+            sleep(5)
         # Update when finished
         if self._method.get_best_org() is not None:
             self._notify_observers()
