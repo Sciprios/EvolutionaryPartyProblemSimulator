@@ -43,6 +43,15 @@ class Graph(object):
         """ Retrieves the vertices. """
         return self._vertices
     
+    def get_vertex(self, id):
+        """ Retrieves a vertex based on the id provided. """
+        vertex = None
+        for v in self.get_vertices():
+            if v.get_id() == id:
+                vertex = v
+                break
+        return vertex
+
     def get_edges(self):
         """ Retrieves the edges. """
         return self._edges
