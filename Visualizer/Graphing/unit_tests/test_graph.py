@@ -67,6 +67,16 @@ class TestGraph(TestCase):
         g = Graph()
         g._edges = [edge]
         assert g.get_edges() == [edge]
+
+    def test_get_edge(self):
+        """ Ensure the correct edge is returned with given id. """
+        vertex_one = Vertex(0)
+        vertex_two = Vertex(1)
+        edge_one = Edge(0, vertex_one, vertex_two)
+        edge_two = Edge(500, vertex_one, vertex_two)
+        g = Graph()
+        g._edges = [edge_one, edge_two]
+        assert g.get_edge(500) is edge_two
     
     def test_get_vertex_edges(self):
         """ Ensures the graph can return only edges connected to a distinct vertex. """

@@ -47,6 +47,15 @@ class Graph(object):
         """ Retrieves the edges. """
         return self._edges
     
+    def get_edge(self, id):
+        """ Retrieves an edge based on the id provided. """
+        edge = None
+        for e in self.get_edges():
+            if e.get_id() == id:
+                edge = e
+                break
+        return edge
+    
     def get_vertex_edges(self, vertex):
         """ Retrieves all edges connected to the given edge. """
         edges = []
