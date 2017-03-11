@@ -118,6 +118,21 @@ class TestGraph(TestCase):
         assert vertex_two in g.get_vertices()
         assert rm_edge.called_with(edge_one)    # Ensure remove edge was called
 
+    def test_clear_edges(self):
+        """ Ensures all edges are removed. """
+        vertex_one = Vertex(0)  # Create some components
+        vertex_two = Vertex(1)
+        edge_one = Edge(0, vertex_one, vertex_two)
+        edge_two = Edge(0, vertex_one, vertex_two)
+        g = Graph()             # Create graph
+        g.add_vertex(vertex_one)
+        g.add_vertex(vertex_two)
+        g.add_edge(edge_one)
+        g.add_edge(edge_two)
+        g.clear_edges() # Clear edges
+        assert edge_one not in g.get_edges()
+        assert edge_two not in g.get_edges()
+
     def test_remove_edge(self):
         """ Ensures edges can be removed correctly. """
         vertex_one = Vertex(0)  # Create some components

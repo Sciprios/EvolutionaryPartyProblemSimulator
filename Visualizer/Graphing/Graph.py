@@ -38,6 +38,10 @@ class Graph(object):
         """ Removes the given edge. """
         if edge in self.get_edges():
             self._edges.remove(edge)
+    
+    def clear_edges(self):
+        """ Removes all edges. """
+        self._edges.clear()
 
     def get_vertices(self):
         """ Retrieves the vertices. """
