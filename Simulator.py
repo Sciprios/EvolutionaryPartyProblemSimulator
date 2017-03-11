@@ -56,23 +56,25 @@ class Simulator(Subject, Observer):
     def _poll(self):
         """ Polls the algorithm, updating observers when required. """
         cur_fit = -1
+        org = None
         while not self._method.finished:
-            fit = self._method.get_best_org()['fitness']
-            if cur_fit < fit:   # Only update if an improvement was made
-                cur_fit = fit
-                # Update graph
-                self._generate_graph()
-                # Update observers
-                self._notify_observers()
-            else:
-                sleep(1)
+            org = self._method.get_best_org()
+            if org is not None:
+                fit = org['fitness']
+                if cur_fit < fit:   # Only update if an improvement was made
+                    cur_fit = fit
+                    # Update graph
+                    self._generate_graph(org)
+                    # Update observers
+                    self._notify_observers(org)
         # Update when finished
-        self._generate_graph()
-        self._notify_observers()
+        org = self._method.get_best_org()
+        self._generate_graph(org)
+        self._notify_observers(org)
 
-    def _generate_graph(self):
+    def _generate_graph(self, org):
         """ Generates a graph based on current state of method's best orgnism. """
-        truth_assignments = self._method.get_best_org()['org']
+        truth_assignments = org['org']
         for variable in truth_assignments: # For each variable (edge)
             edge_id = int(variable[1:-1])
             if truth_assignments[variable]:
@@ -107,13 +109,13 @@ class Simulator(Subject, Observer):
         # Generate equation object
         return (Equation(bln_eq_str), var_set)
 
-    def _notify_observers(self):
+    def _notify_observers(self, org):
         """ Notifies observers of genetic parameters and graph. """
         if self._method.get_best_org() is not None:
             args = {
                 "generation": self._method.generation,
                 "evals": self._method.eval_count,
-                "best_fitness": self._method.get_best_org()['fitness'],
+                "best_fitness": org['fitness'],
                 "ideal_fitness": self._goal_fitness,
                 "graph": self._graph,
                 "finished": self._method.finished
