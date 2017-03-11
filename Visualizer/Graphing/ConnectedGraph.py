@@ -24,5 +24,5 @@ class ConnectedGraph(Graph):
         """ Generates edges between all vertices. """
         combs = combinations(self.get_vertices(), 2)    # Create all possible combinations
         for combination in combs:
-            new_edge = Edge(combination[0], combination[1])
+            new_edge = Edge(0, combination[0], combination[1])
             self.add_edge(new_edge)
