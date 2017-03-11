@@ -23,6 +23,8 @@ class ConnectedGraph(Graph):
     def _generate_edges(self):
         """ Generates edges between all vertices. """
         combs = combinations(self.get_vertices(), 2)    # Create all possible combinations
+        id_count = 0
         for combination in combs:
-            new_edge = Edge(0, combination[0], combination[1])
+            new_edge = Edge(id_count, combination[0], combination[1])
             self.add_edge(new_edge)
+            id_count = id_count + 1
