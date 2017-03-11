@@ -118,7 +118,7 @@ class TestVisualizer(TestCase):
     def test_update(self, draw_graph):
         """ Ensures the view updates if a graph is provided. """
         gui = Visualizer(None)
-        args = {"graph": "GRAPH"}   # Try with a graph
+        args = {"graph": "GRAPH", "generation": "gen", "evals": "evals", "best_fitness": "bf"}   # Try with a graph
         gui.update(args)
         draw_graph.assert_called_with("GRAPH")
         assert draw_graph.call_count == 1

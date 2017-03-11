@@ -99,8 +99,11 @@ class Visualizer(Subject, Observer):
 
     def update(self, args):
         """ Update details on form to show progress if required. """
-        if 'graph' in args:
+        if ('graph' and 'generation' and 'evals' and 'best_fitness') in args:
             new_graph = args['graph']
+            self._builder.get_object("lbl_generations").config(text="Generation: {}".format(args['generation']))
+            self._builder.get_object("lbl_eval_count").config(text="Eval Count: {}".format(args['evals']))
+            self._builder.get_object("lbl_best_fitness").config(text="Best Fitness: {}".format(args['best_fitness']))
             self._draw_graph(new_graph)
         
         # TEST IF IN DOUBT
