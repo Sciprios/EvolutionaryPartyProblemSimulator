@@ -56,7 +56,7 @@ class Simulator(Subject, Observer):
     def _determine_method(self, method):
         """ Returns the Genetic Algorithm class to be instantiated. """
         if method == "FlipGA":
-            return BlindGA
+            return FlipGA
         elif method == "EvoSAP":
             return EvoSAP
         else:
@@ -107,12 +107,16 @@ class Simulator(Subject, Observer):
                     var_id = "{" + edge_id + "}"
                     clause_one = clause_one + "+¬" + var_id + ""
                     clause_two = clause_two + "+" + var_id + ""
-                    var_set.append(var_id)
+                    
             # Format clause
             clause_one = "(" + clause_one[1:] + ")" # The substring removes the first redundant "AND" symbol
             clause_two = "(" + clause_two[1:] + ")"
             # Add clause to equation
             bln_eq_str = bln_eq_str + "." + clause_one + "." + clause_two
+        # Generate variables list
+        for edge in self._graph.get_edges():
+            var_id = "{" + str(edge.get_id()) + "}"
+            var_set.append(var_id)
         # Format Equation
         bln_eq_str = bln_eq_str[1:] # Removes redundant AND symbol
         # Generate equation object
