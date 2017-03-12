@@ -114,7 +114,7 @@ class TestVisualizer(TestCase):
         gui._builder.get_object.return_value = returnable
         gui._notify_observers()
 
-        observer.update.assert_called_with({"clique_size": 999, "graph_size": 999})
+        observer.update.assert_called_with({"method": "999", "clique_size": 999, "graph_size": 999})
 
     @patch('Visualizer.Visualizer.Visualizer._draw_graph')
     def test_update(self, draw_graph):
