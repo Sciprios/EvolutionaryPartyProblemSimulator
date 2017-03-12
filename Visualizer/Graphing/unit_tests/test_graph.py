@@ -67,7 +67,25 @@ class TestGraph(TestCase):
         g = Graph()
         g._edges = [edge]
         assert g.get_edges() == [edge]
+
+    def test_get_edge(self):
+        """ Ensure the correct edge is returned with given id. """
+        vertex_one = Vertex(0)
+        vertex_two = Vertex(1)
+        edge_one = Edge(0, vertex_one, vertex_two)
+        edge_two = Edge(500, vertex_one, vertex_two)
+        g = Graph()
+        g._edges = [edge_one, edge_two]
+        assert g.get_edge(500) is edge_two
     
+    def test_get_vertex(self):
+        """ Ensure the correct edge is returned with given id. """
+        vertex_one = Vertex(0)
+        vertex_two = Vertex(1)
+        g = Graph()
+        g._vertices = [vertex_one, vertex_two]
+        assert g.get_vertex(1) is vertex_two
+
     def test_get_vertex_edges(self):
         """ Ensures the graph can return only edges connected to a distinct vertex. """
         vertex_one = Vertex(0)
@@ -99,6 +117,21 @@ class TestGraph(TestCase):
         assert vertex_one not in g.get_vertices()
         assert vertex_two in g.get_vertices()
         assert rm_edge.called_with(edge_one)    # Ensure remove edge was called
+
+    def test_clear_edges(self):
+        """ Ensures all edges are removed. """
+        vertex_one = Vertex(0)  # Create some components
+        vertex_two = Vertex(1)
+        edge_one = Edge(0, vertex_one, vertex_two)
+        edge_two = Edge(0, vertex_one, vertex_two)
+        g = Graph()             # Create graph
+        g.add_vertex(vertex_one)
+        g.add_vertex(vertex_two)
+        g.add_edge(edge_one)
+        g.add_edge(edge_two)
+        g.clear_edges() # Clear edges
+        assert edge_one not in g.get_edges()
+        assert edge_two not in g.get_edges()
 
     def test_remove_edge(self):
         """ Ensures edges can be removed correctly. """

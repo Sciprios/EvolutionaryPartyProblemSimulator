@@ -21,5 +21,3 @@ class VariableNode(BooleanNode):
             raise AttributeError("A VariableNode cannot have its value set to None.")
         else:
             self._variable = variable
-
-print("YAY")
