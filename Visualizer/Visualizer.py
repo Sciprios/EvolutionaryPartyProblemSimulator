@@ -31,6 +31,7 @@ class Visualizer(Subject, Observer):
         valid = True
         clique_size = self._builder.get_object("tb_clique_size").get()
         graph_size = self._builder.get_object("tb_graph_size").get()
+        method = self._builder.get_object("cb_method").get()
 
         # Validation
         try:
@@ -48,6 +49,9 @@ class Visualizer(Subject, Observer):
         except Exception:
             valid = False
             self._builder.get_object("lbl_error").config(text="Clique size must be an integer > 1.")
+        
+        if method not in ["BlindGA", "EvoSAP", "FlipGA"]:
+            self._builder.get_object("lbl_error").config(text="Please select a method from the list provided.")
         
         if valid:   # Reset error label if entry is valid.
             self._builder.get_object("lbl_error").config(text="")
@@ -97,8 +101,9 @@ class Visualizer(Subject, Observer):
         """ Notifies observers. """
         clique_size = int(self._builder.get_object("tb_clique_size").get())
         graph_size = int(self._builder.get_object("tb_graph_size").get())
+        method = self._builder.get_object("cb_method").get()
 
-        update_argument = {"clique_size": clique_size, "graph_size": graph_size}    # Argument to update observers with
+        update_argument = {"clique_size": clique_size, "graph_size": graph_size, "method": method}    # Argument to update observers with
 
         for o in self._observers:
             o.update(update_argument)
