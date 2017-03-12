@@ -35,7 +35,7 @@ class Simulator(Subject, Observer):
         self.subscribe(self._gui) # Register gui to this
         root.mainloop()
 
-    def _solve(self, clique_size, graph_size):
+    def _solve(self, clique_size, graph_size, method):
         """ Solves the given clique problem. """
         # Generate a Graph
         self._graph = ConnectedGraph(graph_size)
@@ -45,13 +45,22 @@ class Simulator(Subject, Observer):
         var_set = result[1]
         self._goal_fitness = len(equation._clauses)
         # Generate a method to solve equation
-        self._method = BlindGA(equation, var_set)
+        self._method = self._determine_method(method)(equation, var_set)
         # Run algorithm on a seperate thread
         self._algo_thread = Thread(target=self._method.run)
         # Run poller on seperate thread
         self._poll_thread = Thread(target=self._poll)
         self._algo_thread.start()
         self._poll_thread.start()
+    
+    def _determine_method(self, method):
+        """ Returns the Genetic Algorithm class to be instantiated. """
+        if method == "FlipGA":
+            return BlindGA
+        elif method == "EvoSAP":
+            return EvoSAP
+        else:
+            return BlindGA
 
     def _poll(self):
         """ Polls the algorithm, updating observers when required. """
@@ -127,7 +136,8 @@ class Simulator(Subject, Observer):
         """ Get clique and graph size and begin simulation. """
         clique_size = args['clique_size']
         graph_size = args['graph_size']
-        self._solve(clique_size, graph_size)
+        method = args['method']
+        self._solve(clique_size, graph_size, method)
 
 if __name__ == '__main__':
     simulator = Simulator()

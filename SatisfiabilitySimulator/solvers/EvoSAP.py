@@ -20,6 +20,7 @@ class EvoSAP(HeuristicAlgorithm):
     
     def run(self):  # pragma: no cover
         """ Executes the genetic algorithm. """
+        print("EvoSAP commencing")
         self.finished = False
         self.eval_count = 0
         self.generation = 0
@@ -27,6 +28,7 @@ class EvoSAP(HeuristicAlgorithm):
         self._evaluation()
         self._heuristic_method(self.population)
         best = {'gen': -1, 'fit': -1}
+        print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         # Carry on until we run out of generations or we found a solution
         while (len(self._EQUATION._clauses) not in self.fitness_values) and (self.generation < self._MAX_GENERATIONS):
             self.next_generation = []
