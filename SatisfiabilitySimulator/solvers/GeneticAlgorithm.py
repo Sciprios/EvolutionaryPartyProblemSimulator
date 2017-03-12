@@ -74,7 +74,10 @@ class GeneticAlgorithm(object):
     def get_best_org(self):
         """ Returns the best organism in the population. """
         if len(self.fitness_values) > 0:
-            i = self.fitness_values.index(max(self.fitness_values)) # Get the index of best organism
-            return {'org': self.population[i], 'fitness': self.fitness_values[i]}
+            try:
+                i = self.fitness_values.index(max(self.fitness_values)) # Get the index of best organism
+                return {'org': self.population[i], 'fitness': self.fitness_values[i]}
+            except Exception:
+                return None
         else:
             return None

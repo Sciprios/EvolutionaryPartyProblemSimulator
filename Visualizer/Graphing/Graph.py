@@ -38,14 +38,36 @@ class Graph(object):
         """ Removes the given edge. """
         if edge in self.get_edges():
             self._edges.remove(edge)
+    
+    def clear_edges(self):
+        """ Removes all edges. """
+        self._edges.clear()
 
     def get_vertices(self):
         """ Retrieves the vertices. """
         return self._vertices
     
+    def get_vertex(self, id):
+        """ Retrieves a vertex based on the id provided. """
+        vertex = None
+        for v in self.get_vertices():
+            if v.get_id() == id:
+                vertex = v
+                break
+        return vertex
+
     def get_edges(self):
         """ Retrieves the edges. """
         return self._edges
+    
+    def get_edge(self, id):
+        """ Retrieves an edge based on the id provided. """
+        edge = None
+        for e in self.get_edges():
+            if e.get_id() == id:
+                edge = e
+                break
+        return edge
     
     def get_vertex_edges(self, vertex):
         """ Retrieves all edges connected to the given edge. """

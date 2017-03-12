@@ -23,6 +23,7 @@ class BlindGA(GeneticAlgorithm):
         self.fitness_values.clear() # Empty fitness values
         for o in self.population:   # Add each organisms fitness value
             cnt = Counter(self._EQUATION.get_clause_evaluation(o))
+            self.eval_count = self.eval_count + 1   # Increment Counter
             self.fitness_values.append(cnt[True])
 
     def _parent_selection(self, fitness_values):
@@ -89,7 +90,7 @@ class BlindGA(GeneticAlgorithm):
                 best['fit'] = self.get_best_org()['fitness']
                 best['gen'] = self.generation
             else:
-                if self.generation > best['gen'] + 500:
+                if self.generation > best['gen'] + 5000:
                     break
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
