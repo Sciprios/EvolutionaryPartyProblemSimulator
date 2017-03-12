@@ -90,7 +90,7 @@ class BlindGA(GeneticAlgorithm):
                 best['fit'] = self.get_best_org()['fitness']
                 best['gen'] = self.generation
             else:
-                if self.generation > best['gen'] + 5000:
+                if self.generation > best['gen'] + 200:
                     break
             print("Generation: {} - Best Fitness: {}".format(self.generation, self.get_best_org()['fitness']))
         self.finished = True
