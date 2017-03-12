@@ -120,4 +120,6 @@ class Visualizer(Subject, Observer):
             if args["finished"]:
                 self._builder.get_object("lbl_error").config(text="Finished!")
                 self._builder.get_object("btn_solve").config(state="normal")
+            else:
+                self._builder.get_object("lbl_error").config(text="Computing...")
             self._draw_graph(new_graph)
