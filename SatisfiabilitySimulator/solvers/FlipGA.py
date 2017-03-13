@@ -113,7 +113,6 @@ class FlipGA(HeuristicAlgorithm):
                 self._mutation(children)
                 self._heuristic_method(children)
                 self.next_generation.extend(children)
-                
             self._repopulate(self.next_generation)
             self._evaluation()
             if best['fit'] < self.get_best_org()['fitness']:
@@ -124,4 +123,4 @@ class FlipGA(HeuristicAlgorithm):
                     break
             print("Generation: {} - Best Fitness: {} - Fitness Evaluations: {}".format(self.generation, self.get_best_org()['fitness'], self.eval_count))
         self.finished = True
-        #printer.pprint("Best organism: {}".format(self.get_best_org()))
+        print("Completed in generation: {}".format(self.generation))

@@ -2,6 +2,8 @@ from SatisfiabilitySimulator.BooleanEquation.Equation import Equation
 from SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
 from SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
 from SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
+from SatisfiabilitySimulator.Solvers.Experimental.EvoSAP import EvoSAP_1, EvoSAP_2
+from SatisfiabilitySimulator.Solvers.Experimental.FlipGA import FlipGA_1, FlipGA_2
 from Visualizer.Observation.Observer import Observer
 from Visualizer.Observation.Subject import Subject
 from Visualizer.Graphing.ConnectedGraph import ConnectedGraph
@@ -56,10 +58,25 @@ class Simulator(Subject, Observer):
     def _determine_method(self, method):
         """ Returns the Genetic Algorithm class to be instantiated. """
         if method == "FlipGA":
+            print("FlipGA - Original")
             return FlipGA
+        elif method == "(Mut.1)-FlipGA":
+            print("FlipGA - Mutation 1")
+            return FlipGA_1
+        elif method == "(Mut.2)-FlipGA":
+            print("FlipGA - Mutation 2")
+            return FlipGA_2
         elif method == "EvoSAP":
+            print("EvoSAP - Original")
             return EvoSAP
+        elif method == "(Mut.1)-EvoSAP":
+            print("EvoSAP - Mutation 1")
+            return EvoSAP_1
+        elif method == "(Mut.2)-EvoSAP":
+            print("EvoSAP - Mutation 2")
+            return EvoSAP_2
         else:
+            print("BlindGA - Original")
             return BlindGA
 
     def _poll(self):
