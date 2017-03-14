@@ -1,5 +1,5 @@
-from PartyProblemSimulator.Visualizer.Observation.Observer import Observer
-from PartyProblemSimulator.Visualizer.Observation.Subject import Subject
+from PartyProblemSimulator.Observation.Observer import Observer
+from PartyProblemSimulator.Observation.Subject import Subject
 from pygubu import Builder
 from math import sin, cos
 
@@ -11,7 +11,7 @@ class Visualizer(Subject, Observer):
         Subject.__init__(self)  # Call parent constructors
         Observer.__init__(self)
         self._builder = Builder()   # Setup form from build file
-        self._builder.add_from_file("Visualizer/gui.ui")
+        self._builder.add_from_file("PartyProblemSimulator/Visualizer/gui.ui")
         self.mainwindow = self._builder.get_object("frm_main")
         self._builder.get_object("cnv_display").config(width=500, height=500)
         self._setup_eventhandlers()

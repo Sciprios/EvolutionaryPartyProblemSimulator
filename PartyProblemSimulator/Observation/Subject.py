@@ -1,4 +1,4 @@
-from PartyProblemSimulator.Visualizer.Observation.Observer import Observer
+from PartyProblemSimulator.Observation.Observer import Observer
 
 class Subject(object):
     """ A subject which can notify some observers of changes. """

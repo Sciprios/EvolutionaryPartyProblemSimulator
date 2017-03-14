@@ -1,5 +1,5 @@
-from PartyProblemSimulator.Visualizer.Graphing.Vertex import Vertex
-from PartyProblemSimulator.Visualizer.Graphing.Component import Component
+from PartyProblemSimulator.Graphing.Vertex import Vertex
+from PartyProblemSimulator.Graphing.Component import Component
 
 class Edge(Component):
     """ An edge joining two vertices. """

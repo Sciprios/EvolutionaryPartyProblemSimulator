@@ -1,17 +1,17 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from PartyProblemSimulator.Visualizer.Graphing.Component import Component
+from PartyProblemSimulator.Graphing.Component import Component
 
 class TestComponent(TestCase):
     """ Ensures s component meets the requirements. """
 
-    @patch('PartyProblemSimulator.Visualizer.Graphing.Component.Component._set_id')
+    @patch('PartyProblemSimulator.Graphing.Component.Component._set_id')
     def test_init(self, set_id):
         """ Ensure the constructor initialises this components id. """
         c = Component(5)
         set_id.assert_called_with(5)
 
-    @patch('PartyProblemSimulator.Visualizer.Graphing.Component.Component._set_id')
+    @patch('PartyProblemSimulator.Graphing.Component.Component._set_id')
     def test_get_id(self, set_id):
         """ Tests the retrieval of the id. """
         component = Component(None)

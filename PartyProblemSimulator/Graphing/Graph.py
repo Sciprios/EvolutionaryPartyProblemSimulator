@@ -1,5 +1,5 @@
-from PartyProblemSimulator.Visualizer.Graphing.Vertex import Vertex
-from PartyProblemSimulator.Visualizer.Graphing.Edge import Edge
+from PartyProblemSimulator.Graphing.Vertex import Vertex
+from PartyProblemSimulator.Graphing.Edge import Edge
 
 class Graph(object):
     """ This represents a graph consisting of edges and vertices. """

@@ -1,9 +1,9 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
 from PartyProblemSimulator.Visualizer.Visualizer import Visualizer
-from PartyProblemSimulator.Visualizer.Graphing.Graph import Graph
-from PartyProblemSimulator.Visualizer.Graphing.Vertex import Vertex
-from PartyProblemSimulator.Visualizer.Graphing.Edge import Edge
+from PartyProblemSimulator.Graphing.Graph import Graph
+from PartyProblemSimulator.Graphing.Vertex import Vertex
+from PartyProblemSimulator.Graphing.Edge import Edge
 
 class TestVisualizer(TestCase):
     """ Tests the visualizer for party problems. """

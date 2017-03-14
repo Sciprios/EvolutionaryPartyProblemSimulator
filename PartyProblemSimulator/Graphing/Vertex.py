@@ -1,4 +1,4 @@
-from PartyProblemSimulator.Visualizer.Graphing.Component import Component
+from PartyProblemSimulator.Graphing.Component import Component
 
 class Vertex(Component):
     """ A point within a graph. """

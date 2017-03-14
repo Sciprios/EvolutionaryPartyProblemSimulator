@@ -1,7 +1,7 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from PartyProblemSimulator.Visualizer.Observation.Subject import Subject
-from PartyProblemSimulator.Visualizer.Observation.Observer import Observer
+from PartyProblemSimulator.Observation.Subject import Subject
+from PartyProblemSimulator.Observation.Observer import Observer
 
 class TestSubject(TestCase):
     """ Ensures the subject object's methods. """

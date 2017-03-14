@@ -1,15 +1,15 @@
-from SatisfiabilitySimulator.BooleanEquation.Equation import Equation
-from SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
-from SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
-from SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
-from SatisfiabilitySimulator.Solvers.Experimental.EvoSAP import EvoSAP_1, EvoSAP_2
-from SatisfiabilitySimulator.Solvers.Experimental.FlipGA import FlipGA_1, FlipGA_2
-from Visualizer.Observation.Observer import Observer
-from Visualizer.Observation.Subject import Subject
-from Visualizer.Graphing.ConnectedGraph import ConnectedGraph
-from Visualizer.Graphing.Vertex import Vertex
-from Visualizer.Graphing.Edge import Edge
-from Visualizer.Visualizer import Visualizer
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.Equation import Equation
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.Experimental.EvoSAP import EvoSAP_1, EvoSAP_2
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.Experimental.FlipGA import FlipGA_1, FlipGA_2
+from PartyProblemSimulator.Observation.Observer import Observer
+from PartyProblemSimulator.Observation.Subject import Subject
+from PartyProblemSimulator.Graphing.ConnectedGraph import ConnectedGraph
+from PartyProblemSimulator.Graphing.Vertex import Vertex
+from PartyProblemSimulator.Graphing.Edge import Edge
+from PartyProblemSimulator.Visualizer.Visualizer import Visualizer
 from itertools import combinations
 from threading import Thread
 from tkinter import Tk
@@ -159,7 +159,3 @@ class Simulator(Subject, Observer):
         graph_size = args['graph_size']
         method = args['method']
         self._solve(clique_size, graph_size, method)
-
-if __name__ == '__main__':
-    simulator = Simulator()
-    simulator.start()
