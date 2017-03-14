@@ -1,4 +1,4 @@
-from SatisfiabilitySimulator.BooleanEquation.CombinationNode import CombinationNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.CombinationNode import CombinationNode
 
 class OrNode(CombinationNode):
     """ This class allows two child nodes to be OR'ed together. """

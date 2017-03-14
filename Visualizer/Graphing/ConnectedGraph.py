@@ -1,6 +1,6 @@
-from Visualizer.Graphing.Graph import Graph
-from Visualizer.Graphing.Vertex import Vertex
-from Visualizer.Graphing.Edge import Edge
+from PartyProblemSimulator.Visualizer.Graphing.Graph import Graph
+from PartyProblemSimulator.Visualizer.Graphing.Vertex import Vertex
+from PartyProblemSimulator.Visualizer.Graphing.Edge import Edge
 from itertools import combinations
 
 class ConnectedGraph(Graph):

@@ -1,7 +1,7 @@
 """ Modules containing tests for the BlindGA class. """
 from unittest.mock import MagicMock, Mock, patch
 from unittest import TestCase
-from SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
 
 class TestBlindGA(TestCase):
     """ Test class for the BlindGA class. """
@@ -45,7 +45,7 @@ class TestBlindGA(TestCase):
         assert b in parents
         assert c in parents
     
-    @patch('SatisfiabilitySimulator.Solvers.BlindGA.random')
+    @patch('PartyProblemSimulator.SatisfiabilitySimulator.Solvers.BlindGA.random')
     def test_reproduction(self, rand_mock):
         """ Tests the reproduction of the BlindGA. """
         ga = BlindGA(None, ['A', 'B']) # Instantiate algorithm
@@ -74,7 +74,7 @@ class TestBlindGA(TestCase):
         assert children[1]['A'] == parent_b['A']    # Child b should get all genes from parent b
         assert children[1]['B'] == parent_b['B']
     
-    @patch('SatisfiabilitySimulator.Solvers.BlindGA.random')
+    @patch('PartyProblemSimulator.SatisfiabilitySimulator.Solvers.BlindGA.random')
     def test_mutation(self, rand_mock):
         """ Tests the mutation method. """
         ga = BlindGA(None, ['A', 'B'])   # Instantiate Algorithm

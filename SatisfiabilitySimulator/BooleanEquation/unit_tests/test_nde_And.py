@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, Mock
 from unittest import TestCase
-from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
-from SatisfiabilitySimulator.BooleanEquation.AndNode import AndNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.AndNode import AndNode
 
 class aBooleanNode(BooleanNode):  # pragma: no cover
     """ This class is a boolean node. """

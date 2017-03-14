@@ -1,14 +1,17 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from Visualizer.Visualizer import Visualizer
+from PartyProblemSimulator.Visualizer.Visualizer import Visualizer
+from PartyProblemSimulator.Visualizer.Graphing.Graph import Graph
+from PartyProblemSimulator.Visualizer.Graphing.Vertex import Vertex
+from PartyProblemSimulator.Visualizer.Graphing.Edge import Edge
 
 class TestVisualizer(TestCase):
     """ Tests the visualizer for party problems. """
 
-    @patch('Visualizer.Visualizer.Subject.__init__')
-    @patch('Visualizer.Visualizer.Observer.__init__')
-    @patch('Visualizer.Visualizer.Visualizer._setup_eventhandlers')
-    @patch('Visualizer.Visualizer.Builder')
+    @patch('PartyProblemSimulator.Visualizer.Visualizer.Subject.__init__')
+    @patch('PartyProblemSimulator.Visualizer.Visualizer.Observer.__init__')
+    @patch('PartyProblemSimulator.Visualizer.Visualizer.Visualizer._setup_eventhandlers')
+    @patch('PartyProblemSimulator.Visualizer.Visualizer.Builder')
     def test_init(self, builder_mock, handlers_mock, obs_mck, sub_mck):
         """ Tests the initialisation of the gui. """
         builder_mock.add_from_file = Mock()
@@ -20,8 +23,8 @@ class TestVisualizer(TestCase):
         assert builder_mock.call_count == 1     # Ensure builder has been created.
         assert handlers_mock.call_count == 1    # Ensure event handlers have been added.
 
-    @patch('Visualizer.Visualizer.Visualizer._notify_observers')
-    @patch('Visualizer.Visualizer.Visualizer._validate_input')
+    @patch('PartyProblemSimulator.Visualizer.Visualizer.Visualizer._notify_observers')
+    @patch('PartyProblemSimulator.Visualizer.Visualizer.Visualizer._validate_input')
     def test_btn_solve(self, validate_mock, notify_mock):
         """ Ensure action checks validation before notifying observers. """
         gui = Visualizer(None)
@@ -57,7 +60,7 @@ class TestVisualizer(TestCase):
         except Exception:
             assert False
     
-    @patch('Visualizer.Visualizer.Visualizer._determine_colour')
+    @patch('PartyProblemSimulator.Visualizer.Visualizer.Visualizer._determine_colour')
     def test_draw_graph(self, det_col):
         """ Ensures a graph is drawn with the corredct items. """
         gui = Visualizer(None)
@@ -71,8 +74,6 @@ class TestVisualizer(TestCase):
         gui._builder.get_object.return_value = fake_canvas
 
         # Test vertice drawing
-        from Visualizer.Graphing.Graph import Graph
-        from Visualizer.Graphing.Vertex import Vertex
         g = Graph() # Setup graph
         vertex_one = Vertex(0)
         g.add_vertex(vertex_one)
@@ -82,7 +83,6 @@ class TestVisualizer(TestCase):
         assert fake_canvas.create_oval.call_count == 3
 
         # Test edge drawing
-        from Visualizer.Graphing.Edge import Edge
         edge = Edge(0, vertex_one, vertex_one, colour=5)   # Setup (Continued from above)
         g.add_edge(edge)
         gui._draw_graph(g)   # Try drawing
@@ -116,7 +116,7 @@ class TestVisualizer(TestCase):
 
         observer.update.assert_called_with({"method": "999", "clique_size": 999, "graph_size": 999})
 
-    @patch('Visualizer.Visualizer.Visualizer._draw_graph')
+    @patch('PartyProblemSimulator.Visualizer.Visualizer.Visualizer._draw_graph')
     def test_update(self, draw_graph):
         """ Ensures the view updates if a graph is provided. """
         gui = Visualizer(None)

@@ -1,4 +1,4 @@
-from SatisfiabilitySimulator.Solvers.GeneticAlgorithm import GeneticAlgorithm
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.GeneticAlgorithm import GeneticAlgorithm
 
 class HeuristicAlgorithm(GeneticAlgorithm):
     """ Defines the method for heuristic algorithms. """

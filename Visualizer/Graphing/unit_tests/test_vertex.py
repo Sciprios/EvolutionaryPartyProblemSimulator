@@ -1,11 +1,11 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from Visualizer.Graphing.Vertex import Vertex
+from PartyProblemSimulator.Visualizer.Graphing.Vertex import Vertex
 
 class TestVertex(TestCase):
     """ Tests the vertex class. """
 
-    @patch('Visualizer.Graphing.Vertex.Vertex.set_location')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Vertex.Vertex.set_location')
     def test_init(self, set_loc):
         """ Ensure initializing the Vertex sets the right properties. """
         vertex = Vertex(0, 1, 2)
@@ -25,7 +25,7 @@ class TestVertex(TestCase):
         vertex.set_location("Not an integer", "Not an integer")
         assert vertex._location == (0, 0)
     
-    @patch('Visualizer.Graphing.Vertex.Vertex.set_location')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Vertex.Vertex.set_location')
     def test_get_location(self, set_loc):
         """ Tests the retrieval of the location. """
         vertex = Vertex(None, None, None)

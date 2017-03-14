@@ -1,8 +1,8 @@
-from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
-from SatisfiabilitySimulator.BooleanEquation.VariableNode import VariableNode
-from SatisfiabilitySimulator.BooleanEquation.AndNode import AndNode
-from SatisfiabilitySimulator.BooleanEquation.OrNode import OrNode
-from SatisfiabilitySimulator.BooleanEquation.InversionNode import InversionNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.VariableNode import VariableNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.AndNode import AndNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.OrNode import OrNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.InversionNode import InversionNode
 
 class Equation(BooleanNode):
     """ Used to analyse an equation. """

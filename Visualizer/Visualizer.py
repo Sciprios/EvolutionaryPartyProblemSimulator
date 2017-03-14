@@ -1,5 +1,5 @@
-from Visualizer.Observation.Observer import Observer
-from Visualizer.Observation.Subject import Subject
+from PartyProblemSimulator.Visualizer.Observation.Observer import Observer
+from PartyProblemSimulator.Visualizer.Observation.Subject import Subject
 from pygubu import Builder
 from math import sin, cos
 

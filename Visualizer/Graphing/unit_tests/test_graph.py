@@ -1,8 +1,8 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from Visualizer.Graphing.Edge import Edge
-from Visualizer.Graphing.Vertex import Vertex
-from Visualizer.Graphing.Graph import Graph
+from PartyProblemSimulator.Visualizer.Graphing.Edge import Edge
+from PartyProblemSimulator.Visualizer.Graphing.Vertex import Vertex
+from PartyProblemSimulator.Visualizer.Graphing.Graph import Graph
 
 class TestGraph(TestCase):
     """ Tests the graph class. """
@@ -103,7 +103,7 @@ class TestGraph(TestCase):
         assert (edge_one and edge_three) in edges
         assert edge_two not in edges
     
-    @patch('Visualizer.Graphing.Graph.Graph.remove_edge')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Graph.Graph.remove_edge')
     def test_remove_vertex(self, rm_edge):
         """ Ensures a vertex and its corresponding edges are removed. """
         vertex_one = Vertex(0)  # Create some components

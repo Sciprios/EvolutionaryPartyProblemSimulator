@@ -1,6 +1,6 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from Visualizer.Observation.Observer import Observer
+from PartyProblemSimulator.Visualizer.Observation.Observer import Observer
 
 class TestObserver(TestCase):
     """ Ensures the observer object throws an error if unimplemented. """

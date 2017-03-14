@@ -1,7 +1,7 @@
 """ Modules containing tests for the flipga class. """
 from unittest.mock import MagicMock, Mock, patch
 from unittest import TestCase
-from SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
 
 class TestFlipGA(TestCase):
     """ Test class for the FlipGA class. """
@@ -17,7 +17,7 @@ class TestFlipGA(TestCase):
         assert ga._EQUATION is eq
         assert ga._variables is vars
     
-    @patch('SatisfiabilitySimulator.Solvers.FlipGA.random')
+    @patch('PartyProblemSimulator.SatisfiabilitySimulator.Solvers.FlipGA.random')
     def test_heuristic_method(self, rand_mock):
         """ Ensures the algorithm flips children correctly. """
         eq = Mock()
@@ -70,7 +70,7 @@ class TestFlipGA(TestCase):
         assert b in parents
         assert c in parents
     
-    @patch('SatisfiabilitySimulator.Solvers.FlipGA.random')
+    @patch('PartyProblemSimulator.SatisfiabilitySimulator.Solvers.FlipGA.random')
     def test_reproduction(self, rand_mock):
         """ Tests the reproduction of the FlipGA. """
         ga = FlipGA(None, ['A', 'B']) # Instantiate algorithm
@@ -99,7 +99,7 @@ class TestFlipGA(TestCase):
         assert children[1]['A'] == parent_b['A']    # Child b should get all genes from parent b
         assert children[1]['B'] == parent_b['B']
     
-    @patch('SatisfiabilitySimulator.Solvers.FlipGA.random')
+    @patch('PartyProblemSimulator.SatisfiabilitySimulator.Solvers.FlipGA.random')
     def test_mutation(self, rand_mock):
         """ Tests the mutation method. """
         ga = FlipGA(None, ['A', 'B'])   # Instantiate Algorithm

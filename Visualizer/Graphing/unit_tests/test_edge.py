@@ -1,7 +1,7 @@
 from unittest.mock import Mock, call, patch
 from unittest import TestCase
-from Visualizer.Graphing.Edge import Edge
-from Visualizer.Graphing.Vertex import Vertex
+from PartyProblemSimulator.Visualizer.Graphing.Edge import Edge
+from PartyProblemSimulator.Visualizer.Graphing.Vertex import Vertex
 
 class TestEdge(TestCase):
     """ Tests the Edge class. """
@@ -10,9 +10,9 @@ class TestEdge(TestCase):
         """ Sets up a fake vertex for class based use. """
         self.vertex = Vertex(0, 0, 0)
 
-    @patch('Visualizer.Graphing.Edge.Edge._set_origin')
-    @patch('Visualizer.Graphing.Edge.Edge._set_target')
-    @patch('Visualizer.Graphing.Edge.Edge.set_colour')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Edge.Edge._set_origin')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Edge.Edge._set_target')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Edge.Edge.set_colour')
     def test_init(self, set_col, set_tar, set_or):
         """ Tests the initialisation of an Edge. """
         edge = Edge(0, self.vertex, self.vertex)
@@ -28,7 +28,7 @@ class TestEdge(TestCase):
         set_tar.assert_called_with(t)
         set_col.assert_called_with(c)
     
-    @patch('Visualizer.Graphing.Edge.Edge._set_target')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Edge.Edge._set_target')
     def test_set_origin(self, set_tar):
         """ Ensures the origin instance variable is protected. """
         edge = Edge(0, self.vertex, None)
@@ -45,7 +45,7 @@ class TestEdge(TestCase):
         except TypeError:
             assert True
 
-    @patch('Visualizer.Graphing.Edge.Edge._set_origin')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Edge.Edge._set_origin')
     def test_set_target(self, set_or):
         """ Ensures the target instance variable is protected. """
         edge = Edge(0, None, self.vertex)
@@ -62,8 +62,8 @@ class TestEdge(TestCase):
         except TypeError:
             assert True
     
-    @patch('Visualizer.Graphing.Edge.Edge._set_origin')
-    @patch('Visualizer.Graphing.Edge.Edge._set_target')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Edge.Edge._set_origin')
+    @patch('PartyProblemSimulator.Visualizer.Graphing.Edge.Edge._set_target')
     def test_set_colour(self, set_tar, set_or):
         edge = Edge(0, None, None)
 

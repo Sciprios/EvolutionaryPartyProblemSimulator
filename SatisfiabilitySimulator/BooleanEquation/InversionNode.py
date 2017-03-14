@@ -1,4 +1,4 @@
-from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
 
 class InversionNode(BooleanNode):
     """ A node which inverts its child. """

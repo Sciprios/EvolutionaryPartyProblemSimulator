@@ -1,5 +1,5 @@
 from collections import Counter
-from SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
 import random
 
 class FlipGA_AES(FlipGA):

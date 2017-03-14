@@ -1,4 +1,4 @@
-from SatisfiabilitySimulator.Solvers.GeneticAlgorithm import GeneticAlgorithm
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.GeneticAlgorithm import GeneticAlgorithm
 from pprint import PrettyPrinter
 from collections import Counter
 import random

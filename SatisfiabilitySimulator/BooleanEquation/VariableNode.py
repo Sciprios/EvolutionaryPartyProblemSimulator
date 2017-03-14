@@ -1,4 +1,4 @@
-from SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
 
 class VariableNode(BooleanNode):
     """ A node which evaluates as a variable. """

@@ -1,11 +1,11 @@
-from SatisfiabilitySimulator.BooleanEquation.Equation import Equation
-from SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
-from SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
-from SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
-from SatisfiabilitySimulator.Solvers.Experimental.FlipGA import FlipGA_1, FlipGA_2, FlipGA_3
-from SatisfiabilitySimulator.Solvers.Experimental.EvoSAP import EvoSAP_1, EvoSAP_2, EvoSAP_3
-from SatisfiabilitySimulator.Solvers.Experimental.BlindGA import BlindGA_1, BlindGA_2, BlindGA_3
-from SatisfiabilitySimulator.Examples import Interpreter
+from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.Equation import Equation
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.Experimental.FlipGA import FlipGA_1, FlipGA_2, FlipGA_3
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.Experimental.EvoSAP import EvoSAP_1, EvoSAP_2, EvoSAP_3
+from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.Experimental.BlindGA import BlindGA_1, BlindGA_2, BlindGA_3
+from PartyProblemSimulator.SatisfiabilitySimulator.Examples import Interpreter
 from collections import Counter
 from pprint import PrettyPrinter
 from threading import Thread
