@@ -52,12 +52,10 @@ py.test --cov=. --cov-config .coveragec
 
 * **Andrew Barnes** - *Dissertation* - [Sciprios](https://github.com/Sciprios)
 
-See also the list of [contributors](https://github.com/sciprios/PartyProblemSimulator/graphs/contributors) who participated in this project.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
+* Hat tip to my supervisor Angelo Cangelosi.
