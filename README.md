@@ -52,7 +52,7 @@ py.test --cov=. --cov-config .coveragec
 
 * **Andrew Barnes** - *Dissertation* - [Sciprios](https://github.com/Sciprios)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/sciprios/PartyProblemSimulator/graphs/contributors) who participated in this project.
 
 ## License
 
