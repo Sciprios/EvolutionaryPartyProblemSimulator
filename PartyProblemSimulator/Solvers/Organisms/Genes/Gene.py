@@ -9,10 +9,10 @@ class Gene(object):
         """ Safely sets the data of this gene. """
         self._data = data
     
-    def get_data():
+    def get_data(self):
         """ Retrieves the data which this gene represents. """
         return self._data
     
-    def get_information():
+    def get_information(self):
         """ Retrieves the information encoded in this gene. """
         raise NotImplementedError("The get_data method has not been inherited by the base class {}".format(type(self)))
