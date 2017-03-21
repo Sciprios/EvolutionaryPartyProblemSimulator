@@ -18,6 +18,5 @@ class SubMatrixGene(Gene):
         """ Decodes the grammatical data and returns a bit string. """
         bit_string = []
         for symbol in self.get_data():  # For each component in this sub-matrix
-            for value in ENCODINGS[symbol]: # Generate bit string from known values
-                bit_string.append(value)
+            bit_string.extend(ENCODINGS[symbol])
         return bit_string

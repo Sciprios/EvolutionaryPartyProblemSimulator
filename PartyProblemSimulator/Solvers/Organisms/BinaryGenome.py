@@ -1,22 +1,22 @@
 from PartyProblemSimulator.Solvers.Organisms.Genome import Genome
+from PartyProblemSimulator.Solvers.Organisms.Genes.BinaryGene import BinaryGene
 from random import randint
 
 class BinaryGenome(Genome):
     """ A binary encoding of a genome consisting of bits. """
 
-    def __init__(self, gene_count):
+    def __init__(self, genome_size):
         """ Initialises the number of genes required in this genome. """
-        self._set_gene_count(gene_count)
-        Genome.__init__(self)
+        Genome.__init__(self, genome_size)
 
     def _instantiate(self):
         """ Initialises this genome with a random set of binary values. """
         count = 0
-        while count < self._get_gene_count():
+        while count < self._get_genome_size():
             if randint(0, 100) < 50:        # Randomize the value to apply to the gene
-                self.add_gene(False)
+                self.add_gene(BinaryGene(False))
             else:
-                self.add_gene(True)
+                self.add_gene(BinaryGene(True))
             count = count + 1
     
     def evaluate(self, equation):
@@ -25,19 +25,9 @@ class BinaryGenome(Genome):
         count = 0   # Generate the input vector
         for gene in self.get_genes():
             gene_id = "{" + str(count) + "}" # Generate the identifier for this gene in the equation.
-            input_vector[gene_id] = gene
+            input_vector[gene_id] = gene.get_information()
             count = count + 1
         clausal_result = equation.get_clause_evaluation(input_vector)
         score = sum(clausal_result) / len(clausal_result)   # Calculate the percentage of clauses met.
         return score
 
-    def _set_gene_count(self, gene_count):
-        """ Safely sets the gene count of this genome. """
-        if gene_count > 0:
-            self._gene_count = gene_count
-        else:
-            self._gene_count = 1
-    
-    def _get_gene_count(self):
-        """ Retrieves the gene count for this binary genome. """
-        return self._gene_count

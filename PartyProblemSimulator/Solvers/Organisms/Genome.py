@@ -1,7 +1,7 @@
 class Genome(object):
     """ A collection of genes. """
 
-    def __init__(self):
+    def __init__(self, genome_size):
         """ Initialises the required attributes for a genome. """
         self._genes = []
         self._instantiate()
@@ -25,3 +25,14 @@ class Genome(object):
     def get_genes(self):
         """ Retrieves the genes from this genome. """
         return self._genes
+
+    def _set_genome_size(self, genome_size):
+        """ Safely sets the gene count of this genome. """
+        if genome_size > 0:
+            self._genome_size = genome_size
+        else:
+            self._genome_size = 1
+    
+    def _get_genome_size(self):
+        """ Retrieves the gene count for this binary genome. """
+        return self._genome_size
