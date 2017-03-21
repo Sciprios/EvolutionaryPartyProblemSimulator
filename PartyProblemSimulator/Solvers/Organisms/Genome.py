@@ -4,8 +4,9 @@ class Genome(object):
     def __init__(self, genome_size):
         """ Initialises the required attributes for a genome. """
         self._genes = []
+        self._set_genome_size(genome_size)
         self._instantiate()
-    
+        
     def _instantiate(self):
         """ Initialises this genome with a random set of genes. """
         raise NotImplementedError("The instantiate method has not been inherited by the base class {}".format(type(self)))
@@ -34,5 +35,5 @@ class Genome(object):
             self._genome_size = 1
     
     def _get_genome_size(self):
-        """ Retrieves the gene count for this binary genome. """
+        """ Retrieves the gene count for this genome. """
         return self._genome_size

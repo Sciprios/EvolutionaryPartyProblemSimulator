@@ -4,7 +4,9 @@ ENCODINGS = {
     "a": [0, 1],
     "b": [1, 0],
     "c": [0, 0],
-    "d": [1, 1]
+    "d": [1, 1],
+    "e": [1],
+    "f": [0]
 }
 
 class SubMatrixGene(Gene):
