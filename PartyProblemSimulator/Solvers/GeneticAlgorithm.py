@@ -1,6 +1,4 @@
-from PartyProblemSimulator.Observation.Subject import Subject
-
-class GeneticAlgorithm(Subject):
+class GeneticAlgorithm(object):
     """ A genetic algorithm evolves a solution to a problem. """
     
     def __init__(self, max_generations):
@@ -11,29 +9,20 @@ class GeneticAlgorithm(Subject):
         self._set_best_genome(None)
         self._set_max_generation(max_generations)
         self._set_mutation_rate(0.5)
-        Subject.__init__(self)
-    
-    def _notify_observers(self):
-        """ Notifies observers on completion of a generation with the best organism and current stats. """
-        # Arguments to be passed to each observer
-        args = {
-            'Best Organism': self._get_best_genome(), 
-            'Generation': self.get_generation(),
-            'Evaluations': self.get_num_evaluations()
-        }
-        print(args)
-        for obs in self._observers:
-            obs.update(args)
+        self._set_finished_flag(False)
     
     def run(self, equation, no_vars):  # pragma: no cover
         """ Runs the genetic algorithm on the given equation. """
         self._set_generation(0) # Reset algorithm attributes
+        self._set_finished_flag(False)
         self._reset_eval_count()
         self._initialise(no_vars)  # Initialize a population
-        while (self.get_generation() <= self.get_max_generation()) and ((self._get_best_genome() is None) or (self._get_best_genome().evaluate(equation) != 1)):
+        while (self.get_generation() <= self.get_max_generation()) and ((self.get_best_genome() is None) or (self.get_best_genome().evaluate(equation) != 1)):
             self._set_generation(self.get_generation() + 1)
             self._evolve(equation)
-            self._notify_observers()
+            #print("Generation: {} - Best Fitness: {}".format(self.get_generation(), self.get_best_genome().evaluate(equation)))
+        self._set_finished_flag(True)
+        print("Algorithm finished with {} evaluations.".format(self.get_num_evaluations()))
     
     def _initialise(self): # pragma: no cover
         """ Initializes the population of organisms. """
@@ -93,6 +82,10 @@ class GeneticAlgorithm(Subject):
             self._max_generation = max
         else:
             self._max_generation = 1
+    
+    def _set_finished_flag(self, flag):
+        """ Sets the finished flag. """
+        self._finished = flag
 
     def _reset_eval_count(self): # pragma: no cover
         """ Resets the evaluation count to 0. """
@@ -102,7 +95,7 @@ class GeneticAlgorithm(Subject):
         """ Adds an organism to the population. """
         self._population.append(new_org)
 
-    def _get_best_genome(self): # pragma: no cover
+    def get_best_genome(self): # pragma: no cover
         """ Retrieves the best genome from the population. """
         return self._best_genome
 
@@ -125,3 +118,7 @@ class GeneticAlgorithm(Subject):
     def get_num_evaluations(self): # pragma: no cover
         """ Retrieves the number of evaluations this method has used. """
         return self._eval_count
+    
+    def is_finished(self): # pragma: no cover
+        """ Determines if this GA is finished. """
+        return self._finished
