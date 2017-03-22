@@ -114,7 +114,7 @@ class Visualizer(Subject, Observer):
             new_graph = args['graph']
             self._builder.get_object("lbl_generations").config(text="Generation: {}".format(args['generation']))
             self._builder.get_object("lbl_eval_count").config(text="Eval Count: {}".format(args['evals']))
-            self._builder.get_object("lbl_best_fitness").config(text="Best Fitness: {}/1".format(args['best_fitness']))
+            self._builder.get_object("lbl_best_fitness").config(text="Best Fitness: {0:.2f}/1".format(float(args['best_fitness'])))
             if args["finished"]:
                 self._builder.get_object("lbl_error").config(text="Finished!")
                 self._builder.get_object("btn_solve").config(state="normal")

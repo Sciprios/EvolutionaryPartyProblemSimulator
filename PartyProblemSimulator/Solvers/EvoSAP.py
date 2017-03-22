@@ -12,7 +12,7 @@ class EvoSAP(HeuristicAlgorithm):
     
     def _initialise(self, no_vars):
         """ Initialises the population of directly encoded genomes. """
-        while len(self.get_population()) < self.get_max_generation():
+        while len(self.get_population()) < 1:
             new_organism = BinaryGenome(no_vars)
             self._add_organism(new_organism)
     
@@ -29,7 +29,7 @@ class EvoSAP(HeuristicAlgorithm):
         """ Mutates the population. """
         for organism in new_population:
             for gene in organism.get_genes():
-                if randint(0,100) > 50:
+                if randint(0,100) > (self.get_mutation_rate() * 10):
                     gene.mutate()
 
     def _heuristic_method(self, new_population, equation):

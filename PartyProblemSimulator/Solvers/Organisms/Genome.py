@@ -22,6 +22,10 @@ class Genome(object):
     def remove_gene(self, gene):
         """ Removes the given gene from the genome. """
         self._genes.remove(gene)
+    
+    def clear_genes(self):
+        """ Removes all genes from this genome. """
+        self._genes.clear()
 
     def get_genes(self):
         """ Retrieves the genes from this genome. """

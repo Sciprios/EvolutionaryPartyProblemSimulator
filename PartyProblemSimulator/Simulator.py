@@ -1,6 +1,4 @@
 from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.Equation import Equation
-from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
-from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
 from PartyProblemSimulator.Observation.Observer import Observer
 from PartyProblemSimulator.Observation.Subject import Subject
 from PartyProblemSimulator.Graphing.ConnectedGraph import ConnectedGraph
@@ -13,6 +11,7 @@ from tkinter import Tk
 from time import sleep
 
 from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP
+from PartyProblemSimulator.Solvers.FlipGA import FlipGA
 
 
 class Simulator(Subject, Observer):
@@ -59,6 +58,9 @@ class Simulator(Subject, Observer):
         if method == "EvoSAP":
             print("EvoSAP - Original")
             return EvoSAP
+        elif method == "FlipGA":
+            print("FlipGA - Original")
+            return FlipGA
 
     def _poll(self):
         """ Polls the algorithm, updating observers when required. """
@@ -133,7 +135,7 @@ class Simulator(Subject, Observer):
             }
             for o in self._observers:
                 o.update(args)
-    
+
     def update(self, args):
         """ Get clique and graph size and begin simulation. """
         clique_size = args['clique_size']

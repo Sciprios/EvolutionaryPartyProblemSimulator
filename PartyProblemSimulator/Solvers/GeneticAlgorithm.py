@@ -20,7 +20,7 @@ class GeneticAlgorithm(object):
         while (self.get_generation() <= self.get_max_generation()) and ((self.get_best_genome() is None) or (self.get_best_genome().evaluate(equation) != 1)):
             self._set_generation(self.get_generation() + 1)
             self._evolve(equation)
-            #print("Generation: {} - Best Fitness: {}".format(self.get_generation(), self.get_best_genome().evaluate(equation)))
+            print("Generation: {} - Best Fitness: {}".format(self.get_generation(), self.get_best_genome().evaluate(equation)))
         self._set_finished_flag(True)
         print("Algorithm finished with {} evaluations.".format(self.get_num_evaluations()))
     
