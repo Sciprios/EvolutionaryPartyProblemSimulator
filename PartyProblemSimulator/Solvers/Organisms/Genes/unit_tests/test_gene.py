@@ -12,6 +12,11 @@ class TestGene(TestCase):
         gn = Gene(some_data)
         set_data.assert_called_with(some_data)
     
+    def test_mutate(self):
+        """ Ensure the retrieval of information throws an error. """
+        gn = Gene(None)
+        self.assertRaises(NotImplementedError, gn.mutate)
+
     def test_set_data(self):
         """ Ensure the data is set. """
         some_data = Mock()
