@@ -9,10 +9,14 @@ class GeneticAlgorithm(object):
         self._set_best_genome(None)
         self._set_max_generation(max_generations)
         self._set_mutation_rate(0.5)
+        self._history_evaluations = []
+        self._history_fitness = []
         self._set_finished_flag(False)
     
     def run(self, equation, no_vars):  # pragma: no cover
         """ Runs the genetic algorithm on the given equation. """
+        self._history_evaluations = []
+        self._history_fitness = []
         self._set_generation(0) # Reset algorithm attributes
         self._set_finished_flag(False)
         self._reset_eval_count()
@@ -20,6 +24,8 @@ class GeneticAlgorithm(object):
         while (self.get_generation() <= self.get_max_generation()) and ((self.get_best_genome() is None) or (self.get_best_genome().evaluate(equation) != 1)):
             self._set_generation(self.get_generation() + 1)
             self._evolve(equation)
+            self._history_fitness.append(self.get_best_genome().evaluate(equation))
+            self._history_evaluations.append(self.get_num_evaluations())
             print("Generation: {} - Best Fitness: {}".format(self.get_generation(), self.get_best_genome().evaluate(equation)))
         self._set_finished_flag(True)
         print("Algorithm finished with {} evaluations.".format(self.get_num_evaluations()))
@@ -122,3 +128,11 @@ class GeneticAlgorithm(object):
     def is_finished(self): # pragma: no cover
         """ Determines if this GA is finished. """
         return self._finished
+    
+    def get_evaluation_history(self): # pragma: no cover
+        """ Retrieves the history of evaluation count. """
+        return self._history_evaluations
+    
+    def get_fitness_history(self): # pragma: no cover
+        """ Retrieves the history of best fitness. """
+        return self._history_fitness

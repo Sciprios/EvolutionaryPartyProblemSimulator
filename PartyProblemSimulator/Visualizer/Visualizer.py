@@ -2,6 +2,7 @@ from PartyProblemSimulator.Observation.Observer import Observer
 from PartyProblemSimulator.Observation.Subject import Subject
 from pygubu import Builder
 from math import sin, cos
+from tkinter import VERTICAL
 
 class Visualizer(Subject, Observer):
     """ A visualizer gui which waits for updates and provides updates on user actions. """
@@ -17,9 +18,6 @@ class Visualizer(Subject, Observer):
         self._builder.get_object("cnv_graph_fitness").config(width=500, height=250)
         self._builder.get_object("cnv_graph_evaluations").config(width=500, height=250)
         self._setup_eventhandlers()
-        self._history_generations = []  # Stores the generations at which values are taken
-        self._history_eval_count = [] # To store history of evaluations for graphing
-        self._history_best_fitness = [] # To store the best fitness for graphing
 
     def _setup_eventhandlers(self): # pragma : no cover
         """ Sets the event handlers for form controls. """
@@ -91,25 +89,113 @@ class Visualizer(Subject, Observer):
             colour = self._determine_colour(edge.get_colour())  # Determine colour
             cnv_display.create_line(start_x, start_y, end_x, end_y, width=edge_thickness, fill=colour)
     
-    def _draw_plots(self):
+    def _draw_plots(self, history):
         """ Draws the plots. """
-        cnv_fitness_graph = self._builder.get_object("cnv_graph_fitness")
+        cnv_graph_fitness = self._builder.get_object("cnv_graph_fitness")
         cnv_graph_evaluations = self._builder.get_object("cnv_graph_evaluations")
-        cnv_fitness_graph.delete("all")
+        cnv_graph_fitness.delete("all")
         cnv_graph_evaluations.delete("all")
         # Determine axis locations
-        origin = (30, 220)
-        end_x = (origin[0] + 450, origin[1])
+        origin = (50, 220)
+        end_x = (origin[0] + 430, origin[1])
         end_y = (origin[0], origin[1] - 210)
         # Draw graph axis
-        cnv_fitness_graph.create_line(origin[0], origin[1], end_x[0], end_x[1], fill="black")
-        cnv_fitness_graph.create_line(origin[0], origin[1], end_y[0], end_y[1], fill="black")
+        cnv_graph_fitness.create_line(origin[0], origin[1], end_x[0], end_x[1], fill="black")
+        cnv_graph_fitness.create_line(origin[0], origin[1], end_y[0], end_y[1], fill="black")
         cnv_graph_evaluations.create_line(origin[0], origin[1], end_x[0], end_x[1], fill="black")
         cnv_graph_evaluations.create_line(origin[0], origin[1], end_y[0], end_y[1], fill="black")
         # Label axis
-        horizontal_label_location = ((origin[0] + end_x[0])/2, origin[1] + 10)
-        cnv_fitness_graph.create_text(horizontal_label_location[0], horizontal_label_location[1], font="arial", text="Generation")
-        cnv_graph_evaluations.create_text(horizontal_label_location[0], horizontal_label_location[1], font="arial", text="Generation")
+        horizontal_label_location = ((origin[0] + end_x[0])/2, origin[1] + 20)
+        cnv_graph_fitness.create_text(horizontal_label_location[0], horizontal_label_location[1], font="arial 10", text="Generation")
+        cnv_graph_evaluations.create_text(horizontal_label_location[0], horizontal_label_location[1], font="arial 10", text="Generation")
+        # Draw Horizontal labels
+        label_x = 0
+        label_y = origin[1] + 10
+        if len(history['fitness']) >= 10:
+            horizontal_increment = (end_x[0] - origin[0]) / 10
+            count = 0
+            while count < 11:
+                label_x = origin[0] + (count * horizontal_increment)    # Determine axis details
+                generation = len(history['fitness']) / 10
+                cnv_graph_fitness.create_text(label_x, label_y, font="arial 8", text="{}".format(int(generation * count)))  # Label axis
+                cnv_graph_evaluations.create_text(label_x, label_y, font="arial 8", text="{}".format(int(generation * count)))
+                cnv_graph_fitness.create_line(label_x, label_y - 12, label_x, label_y - 8)  # Show a small line on the axis
+                cnv_graph_evaluations.create_line(label_x, label_y - 12, label_x, label_y - 8)
+                count = count + 1
+        else:   # Special case if there are < 10 cases
+            no_increments = len(history['fitness'])
+            horizontal_increment = (end_x[0] - origin[0]) / (no_increments + 1)
+            count = 1
+            while count <= no_increments:
+                label_x = origin[0] + (count * horizontal_increment)    # Determine axis details
+                generation = len(history['fitness']) / 10
+                cnv_graph_fitness.create_text(label_x, label_y, font="arial 8", text="{}".format(int(generation * count)))  # Label axis
+                cnv_graph_evaluations.create_text(label_x, label_y, font="arial 8", text="{}".format(int(generation * count)))
+                cnv_graph_fitness.create_line(label_x, label_y - 12, label_x, label_y - 8)  # Show a small line on the axis
+                cnv_graph_evaluations.create_line(label_x, label_y - 12, label_x, label_y - 8)
+                count = count + 1
+            
+        # Draw points and labels
+        self._draw_fitness_points(cnv_graph_fitness, origin, end_y, end_x, history['fitness'])
+        self._draw_evaluation_points(cnv_graph_evaluations, origin, end_y, end_x, history['evaluation'])
+
+        
+    def _draw_fitness_points(self, cnv_graph_fitness, graph_origin, vertical_end, horizontal_end, fitness_history):
+        """ Draws the fitness graph. """
+        # Draw vertical axis values (Increments of 0.1 from 0)
+        increment = (graph_origin[1] - vertical_end[1]) / 10
+        count = 0
+        while count < 1:
+            text_location = (graph_origin[0], graph_origin[1] - ((count * 10) * increment))    # Add the label slightly to the left of axis
+            cnv_graph_fitness.create_text(text_location[0] - 15, text_location[1], font="arial 8", text="{0:.1f}".format(count))   # Create label
+            cnv_graph_fitness.create_line(text_location[0] - 2, text_location[1], text_location[0] + 2, text_location[1])
+            count = count + 0.1
+        # Draw points
+        horizontal_increment = (horizontal_end[0] - graph_origin[0]) / len(fitness_history)    # Calculate an even spacing between fitness values
+        count = 0
+        previous_point = None
+        if len(fitness_history) == 1:   # Special case of a single point
+            location_y = graph_origin[1] - (fitness_history[0] * (graph_origin[1] - vertical_end[1]))
+            location_x = graph_origin[0] + ((horizontal_end[0] - graph_origin[0]) / 2)
+            cnv_graph_fitness.create_text(location_x, location_y, fill="blue", text="x")
+        else:
+            while count < len(fitness_history): # Do a line graph
+                location_y = graph_origin[1] - (fitness_history[count] * (graph_origin[1] - vertical_end[1]))
+                location_x = graph_origin[0] + (1 * (horizontal_increment * count)) + 5
+                current_point = (location_x, location_y)
+                if previous_point is not None:
+                    cnv_graph_fitness.create_line(previous_point[0], previous_point[1], current_point[0], current_point[1], fill="blue")
+                previous_point = current_point
+                count = count + 1
+
+    def _draw_evaluation_points(self, cnv_graph_evaluations, graph_origin, vertical_end, horizontal_end, evaluation_history):
+        """ Draws the evaluation graph. """
+        # Draw vertical axis values (Increments of 0.1 from 0)
+        increment = (graph_origin[1] - vertical_end[1]) / 10
+        count = 0
+        while count <= 1:
+            text_location = (graph_origin[0], graph_origin[1] - ((count * 10) * increment))    # Add the label slightly to the left of axis
+            cnv_graph_evaluations.create_text(text_location[0] - 25, text_location[1], font="arial 8", text="{}".format(int(evaluation_history[-1] * count) + 1))   # Create label
+            cnv_graph_evaluations.create_line(text_location[0] - 2, text_location[1], text_location[0] + 2, text_location[1])
+            count = count + 0.1
+        # Draw points
+        horizontal_increment = (horizontal_end[0] - graph_origin[0]) / len(evaluation_history)    # Calculate an even spacing between evaluation values
+        count = 0
+        previous_point = None
+        if len(evaluation_history) == 1:   # Special case of a single point
+            location_y = vertical_end[1]    # Top most point
+            location_x = graph_origin[0] + ((horizontal_end[0] - graph_origin[0]) / 2)
+            cnv_graph_evaluations.create_text(location_x, location_y, fill="blue", text="x")
+            #print("{}x{}".format(location_x, location_y))
+        else:
+            while count < len(evaluation_history): # Do a line graph
+                location_y = graph_origin[1] - ((evaluation_history[count] / evaluation_history[-1]) * (graph_origin[1] - vertical_end[1])) # position varies
+                location_x = graph_origin[0] + (count * (horizontal_increment)) + 5
+                current_point = (location_x, location_y)
+                if previous_point is not None:
+                    cnv_graph_evaluations.create_line(previous_point[0], previous_point[1], current_point[0], current_point[1], fill="blue")
+                previous_point = current_point
+                count = count + 1
 
     def _determine_colour(self, colour_code):
         """ Determines the colour code of an edge. """
@@ -135,16 +221,13 @@ class Visualizer(Subject, Observer):
 
     def update(self, args):
         """ Update details on form to show progress if required. """
-        if ('graph' and 'generation' and 'evals' and 'best_fitness' and 'finished') in args:
+        if ('graph' and 'generation' and 'evals' and 'best_fitness' and 'finished' and 'history') in args:
             new_graph = args['graph']
             self._builder.get_object("lbl_generations").config(text="Generation: {}".format(args['generation']))
-            self._history_generations.append(args['generation']) # Append this eval count to history
             self._builder.get_object("lbl_eval_count").config(text="Eval Count: {}".format(args['evals']))
-            self._history_eval_count.append(args['evals']) # Append this eval count to history
             self._builder.get_object("lbl_best_fitness").config(text="Best Fitness: {0:.2f}/1".format(float(args['best_fitness'])))
-            self._history_best_fitness.append(args['best_fitness']) # Append the best fitness
             # Update plots
-            self._draw_plots()
+            self._draw_plots(args['history'])
             if args["finished"]:
                 self._builder.get_object("lbl_error").config(text="Finished!")
                 self._builder.get_object("btn_solve").config(state="normal")

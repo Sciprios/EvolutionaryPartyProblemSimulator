@@ -66,6 +66,7 @@ class Simulator(Subject, Observer):
         """ Polls the algorithm, updating observers when required. """
         cur_fit = -1
         org = None
+        sleep(1)
         while not self._method.is_finished():
             org = self._method.get_best_genome()
             if org is not None:
@@ -131,7 +132,11 @@ class Simulator(Subject, Observer):
                 "evals": self._method.get_num_evaluations(),
                 "best_fitness": best_genome.evaluate(self._equation),
                 "graph": self._graph,
-                "finished": self._method.is_finished()
+                "finished": self._method.is_finished(),
+                "history": {
+                    "fitness": list(self._method.get_fitness_history()),
+                    "evaluation": list(self._method.get_evaluation_history())
+                }
             }
             for o in self._observers:
                 o.update(args)
