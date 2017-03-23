@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock, Mock
 from unittest import TestCase
-from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.BooleanNode import BooleanNode
-from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.InversionNode import InversionNode
+from PartyProblemSimulator.BooleanEquation.BooleanNode import BooleanNode
+from PartyProblemSimulator.BooleanEquation.InversionNode import InversionNode
 
 class NotABooleanNode(object):  # pragma: no cover
     """ This class is not a boolean node. """

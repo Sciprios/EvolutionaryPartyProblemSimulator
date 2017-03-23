@@ -1,4 +1,4 @@
-from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.Equation import Equation
+from PartyProblemSimulator.BooleanEquation.Equation import Equation
 from PartyProblemSimulator.Observation.Observer import Observer
 from PartyProblemSimulator.Observation.Subject import Subject
 from PartyProblemSimulator.Graphing.ConnectedGraph import ConnectedGraph

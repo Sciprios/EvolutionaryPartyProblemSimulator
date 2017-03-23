@@ -1,15 +1,15 @@
 from unittest.mock import MagicMock, Mock, call, patch
 from unittest import TestCase
-from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.Equation import Equation
-from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.VariableNode import VariableNode
-from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.AndNode import AndNode
-from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.OrNode import OrNode
-from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.InversionNode import InversionNode
+from PartyProblemSimulator.BooleanEquation.Equation import Equation
+from PartyProblemSimulator.BooleanEquation.VariableNode import VariableNode
+from PartyProblemSimulator.BooleanEquation.AndNode import AndNode
+from PartyProblemSimulator.BooleanEquation.OrNode import OrNode
+from PartyProblemSimulator.BooleanEquation.InversionNode import InversionNode
 
 
 class TestEquation(TestCase):
     """ Tests the Equation class. """
-    @patch('PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.Equation.Equation._validate_string')
+    @patch('PartyProblemSimulator.BooleanEquation.Equation.Equation._validate_string')
     def test_evaluate(self, val):
         """ Ensures the evaluate class tests response for a False. """
         nde = Equation('({1})')
@@ -22,7 +22,7 @@ class TestEquation(TestCase):
         nde.get_clause_evaluation = MagicMock(return_value=rtn_val)
         self.assertFalse(nde.evaluate({}))
     
-    @patch('PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.Equation.Equation._generate_clause')
+    @patch('PartyProblemSimulator.BooleanEquation.Equation.Equation._generate_clause')
     def test_gen_clause_list(self, gen_clause):
         """ Ensures the method generates the set of clauses. """
         gen_clause.return_value = "Fake3lause" # Fake the generation of a clause node.
