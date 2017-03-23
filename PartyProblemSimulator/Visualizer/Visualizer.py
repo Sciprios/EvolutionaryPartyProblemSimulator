@@ -30,7 +30,6 @@ class Visualizer(Subject, Observer):
         """ Notify observers that a problem is ready to be solved. """
         if self._validate_input(): # Extract form information if valid
             self._notify_observers()
-            self._graph_window.show()
 
     def _validate_input(self):
         """ Extracts and validates the input. """
@@ -98,12 +97,19 @@ class Visualizer(Subject, Observer):
         cnv_graph_evaluations = self._builder.get_object("cnv_graph_evaluations")
         cnv_fitness_graph.delete("all")
         cnv_graph_evaluations.delete("all")
+        # Determine axis locations
         origin = (30, 220)
+        end_x = (origin[0] + 450, origin[1])
+        end_y = (origin[0], origin[1] - 210)
         # Draw graph axis
-        cnv_fitness_graph.create_line(origin[0], origin[1], origin[0], origin[1] - 210, fill="black")
-        cnv_fitness_graph.create_line(origin[0], origin[1], origin[0] + 450, origin[1])
-        cnv_graph_evaluations.create_line(origin[0], origin[1], origin[0], origin[1] - 210, fill="black")
-        cnv_graph_evaluations.create_line(origin[0], origin[1], origin[0] + 450, origin[1])
+        cnv_fitness_graph.create_line(origin[0], origin[1], end_x[0], end_x[1], fill="black")
+        cnv_fitness_graph.create_line(origin[0], origin[1], end_y[0], end_y[1], fill="black")
+        cnv_graph_evaluations.create_line(origin[0], origin[1], end_x[0], end_x[1], fill="black")
+        cnv_graph_evaluations.create_line(origin[0], origin[1], end_y[0], end_y[1], fill="black")
+        # Label axis
+        horizontal_label_location = ((origin[0] + end_x[0])/2, origin[1] + 10)
+        cnv_fitness_graph.create_text(horizontal_label_location[0], horizontal_label_location[1], font="arial", text="Generation")
+        cnv_graph_evaluations.create_text(horizontal_label_location[0], horizontal_label_location[1], font="arial", text="Generation")
 
     def _determine_colour(self, colour_code):
         """ Determines the colour code of an edge. """
