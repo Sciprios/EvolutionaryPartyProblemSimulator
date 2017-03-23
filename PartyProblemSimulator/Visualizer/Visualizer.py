@@ -1,6 +1,7 @@
 from PartyProblemSimulator.Observation.Observer import Observer
 from PartyProblemSimulator.Observation.Subject import Subject
 from pygubu import Builder
+from mathplotlib import pyplot as plt
 from math import sin, cos
 
 class Visualizer(Subject, Observer):
@@ -15,6 +16,9 @@ class Visualizer(Subject, Observer):
         self.mainwindow = self._builder.get_object("frm_main")
         self._builder.get_object("cnv_display").config(width=500, height=500)
         self._setup_eventhandlers()
+        self._history_eval_count = [] # To store history of evaluations for graphing
+        self._history_best_fitness = [] # To store the best fitness for graphing
+        self._graph_window = plt    # The plotter to be used
 
     def _setup_eventhandlers(self): # pragma : no cover
         """ Sets the event handlers for form controls. """
@@ -50,7 +54,7 @@ class Visualizer(Subject, Observer):
             valid = False
             self._builder.get_object("lbl_error").config(text="Clique size must be an integer > 1.")
         
-        if method not in ["BlindGA", "EvoSAP", "FlipGA"]:
+        if method not in ["EvoSAP", "FlipGA"]:
             self._builder.get_object("lbl_error").config(text="Please select a method from the list provided.")
         
         if valid:   # Reset error label if entry is valid.
@@ -99,24 +103,35 @@ class Visualizer(Subject, Observer):
 
     def _notify_observers(self):
         """ Notifies observers. """
-        clique_size = int(self._builder.get_object("tb_clique_size").get())
+        clique_size = int(self._builder.get_object("tb_clique_size").get()) # Get update parameters
         graph_size = int(self._builder.get_object("tb_graph_size").get())
         method = self._builder.get_object("cb_method").get()
-
         update_argument = {"clique_size": clique_size, "graph_size": graph_size, "method": method}    # Argument to update observers with
-
         for o in self._observers:
             o.update(update_argument)
-        
+        # Disable solve button
         self._builder.get_object("btn_solve").config(state="disabled")
 
     def update(self, args):
         """ Update details on form to show progress if required. """
-        if ('graph' and 'generation' and 'evals' and 'best_fitness' and 'ideal_fitness' and 'finished') in args:
+        if ('graph' and 'generation' and 'evals' and 'best_fitness' and 'finished') in args:
             new_graph = args['graph']
             self._builder.get_object("lbl_generations").config(text="Generation: {}".format(args['generation']))
             self._builder.get_object("lbl_eval_count").config(text="Eval Count: {}".format(args['evals']))
-            self._builder.get_object("lbl_best_fitness").config(text="Best Fitness: {}/{}".format(args['best_fitness'], args['ideal_fitness']))
+            self._history_eval_count.append(args['evals']) # Append this eval count to history
+            self._builder.get_object("lbl_best_fitness").config(text="Best Fitness: {0:.2f}/1".format(float(args['best_fitness'])))
+            self._history_best_fitness.append(args['best_fitness']) # Append the best fitness
+            # Update pyplot even if not being shown
+            self._graph_window.subplot(211)
+            self._graph_window.plot(range(0, args['generation'] + 1), self._history_best_fitness, color='g')
+            self._graph_window.title("Best Fitness")
+            self._graph_window.xlabel("Generation")
+            self._graph_window.ylabel("Fitness")
+            self._graph_window.subplot(212)
+            self._graph_window.plot(range(0, args['generation'] + 1), self._history_eval_count, color='b')
+            self._graph_window.title("Best Fitness")
+            self._graph_window.xlabel("Generation")
+            self._graph_window.ylabel("Fitness")
             if args["finished"]:
                 self._builder.get_object("lbl_error").config(text="Finished!")
                 self._builder.get_object("btn_solve").config(state="normal")
