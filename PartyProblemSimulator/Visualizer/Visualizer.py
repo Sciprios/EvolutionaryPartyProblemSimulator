@@ -1,7 +1,6 @@
 from PartyProblemSimulator.Observation.Observer import Observer
 from PartyProblemSimulator.Observation.Subject import Subject
 from pygubu import Builder
-from mathplotlib import pyplot as plt
 from math import sin, cos
 
 class Visualizer(Subject, Observer):
@@ -14,11 +13,13 @@ class Visualizer(Subject, Observer):
         self._builder = Builder()   # Setup form from build file
         self._builder.add_from_file("PartyProblemSimulator/Visualizer/gui.ui")
         self.mainwindow = self._builder.get_object("frm_main")
-        self._builder.get_object("cnv_display").config(width=500, height=500)
+        self._builder.get_object("cnv_display").config(width=250, height=250)
+        self._builder.get_object("cnv_graph_fitness").config(width=500, height=250)
+        self._builder.get_object("cnv_graph_evaluations").config(width=500, height=250)
         self._setup_eventhandlers()
+        self._history_generations = []  # Stores the generations at which values are taken
         self._history_eval_count = [] # To store history of evaluations for graphing
         self._history_best_fitness = [] # To store the best fitness for graphing
-        self._graph_window = plt    # The plotter to be used
 
     def _setup_eventhandlers(self): # pragma : no cover
         """ Sets the event handlers for form controls. """
@@ -29,6 +30,7 @@ class Visualizer(Subject, Observer):
         """ Notify observers that a problem is ready to be solved. """
         if self._validate_input(): # Extract form information if valid
             self._notify_observers()
+            self._graph_window.show()
 
     def _validate_input(self):
         """ Extracts and validates the input. """
@@ -89,6 +91,19 @@ class Visualizer(Subject, Observer):
             end_y = edge.get_target().get_location()[1]
             colour = self._determine_colour(edge.get_colour())  # Determine colour
             cnv_display.create_line(start_x, start_y, end_x, end_y, width=edge_thickness, fill=colour)
+    
+    def _draw_plots(self):
+        """ Draws the plots. """
+        cnv_fitness_graph = self._builder.get_object("cnv_graph_fitness")
+        cnv_graph_evaluations = self._builder.get_object("cnv_graph_evaluations")
+        cnv_fitness_graph.delete("all")
+        cnv_graph_evaluations.delete("all")
+        origin = (30, 220)
+        # Draw graph axis
+        cnv_fitness_graph.create_line(origin[0], origin[1], origin[0], origin[1] - 210, fill="black")
+        cnv_fitness_graph.create_line(origin[0], origin[1], origin[0] + 450, origin[1])
+        cnv_graph_evaluations.create_line(origin[0], origin[1], origin[0], origin[1] - 210, fill="black")
+        cnv_graph_evaluations.create_line(origin[0], origin[1], origin[0] + 450, origin[1])
 
     def _determine_colour(self, colour_code):
         """ Determines the colour code of an edge. """
@@ -117,21 +132,13 @@ class Visualizer(Subject, Observer):
         if ('graph' and 'generation' and 'evals' and 'best_fitness' and 'finished') in args:
             new_graph = args['graph']
             self._builder.get_object("lbl_generations").config(text="Generation: {}".format(args['generation']))
+            self._history_generations.append(args['generation']) # Append this eval count to history
             self._builder.get_object("lbl_eval_count").config(text="Eval Count: {}".format(args['evals']))
             self._history_eval_count.append(args['evals']) # Append this eval count to history
             self._builder.get_object("lbl_best_fitness").config(text="Best Fitness: {0:.2f}/1".format(float(args['best_fitness'])))
             self._history_best_fitness.append(args['best_fitness']) # Append the best fitness
-            # Update pyplot even if not being shown
-            self._graph_window.subplot(211)
-            self._graph_window.plot(range(0, args['generation'] + 1), self._history_best_fitness, color='g')
-            self._graph_window.title("Best Fitness")
-            self._graph_window.xlabel("Generation")
-            self._graph_window.ylabel("Fitness")
-            self._graph_window.subplot(212)
-            self._graph_window.plot(range(0, args['generation'] + 1), self._history_eval_count, color='b')
-            self._graph_window.title("Best Fitness")
-            self._graph_window.xlabel("Generation")
-            self._graph_window.ylabel("Fitness")
+            # Update plots
+            self._draw_plots()
             if args["finished"]:
                 self._builder.get_object("lbl_error").config(text="Finished!")
                 self._builder.get_object("btn_solve").config(state="normal")
