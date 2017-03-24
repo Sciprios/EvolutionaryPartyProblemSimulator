@@ -1,4 +1,4 @@
-# Party Problem Simulator
+# Evolutionary Party Problem Simulator
 
 This simulator allows a user to attempt to find solutions to classic 2-clique party problems of a defined size within a connected graph. The simulator utilizes evolutionary computation and has been used in modern research into the effectiveness of mutation methods.
 

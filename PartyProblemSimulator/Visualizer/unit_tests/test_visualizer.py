@@ -116,15 +116,14 @@ class TestVisualizer(TestCase):
 
         observer.update.assert_called_with({"method": "999", "clique_size": 999, "graph_size": 999})
 
-    @patch('PartyProblemSimulator.Visualizer.Visualizer.Visualizer._draw_graph')
-    def test_update(self, draw_graph):
+    @patch('PartyProblemSimulator.Visualizer.Visualizer.Thread')
+    def test_update(self, thrd):
         """ Ensures the view updates if a graph is provided. """
         gui = Visualizer(None)
         args = {"graph": "GRAPH", "generation": "gen", "evals": "evals", "best_fitness": 0.999, "finished": "fin", "history": {"fitness": [1], "evaluation": [1]}}   # Try with a graph
         gui.update(args)
-        draw_graph.assert_called_with("GRAPH")
-        assert draw_graph.call_count == 1
+        assert thrd.call_count == 1
 
         args = {}   # Try without a graph
         gui.update(args)
-        assert draw_graph.call_count == 1   # (Continuing from previous test)
+        assert thrd.call_count == 1   # (Continuing from previous test)
