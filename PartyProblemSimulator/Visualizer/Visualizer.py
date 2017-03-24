@@ -3,6 +3,7 @@ from PartyProblemSimulator.Observation.Subject import Subject
 from pygubu import Builder
 from math import sin, cos
 from tkinter import VERTICAL
+from threading import Thread
 
 class Visualizer(Subject, Observer):
     """ A visualizer gui which waits for updates and provides updates on user actions. """
@@ -11,6 +12,7 @@ class Visualizer(Subject, Observer):
         """ Initialises this gui with an interface. """
         Subject.__init__(self)  # Call parent constructors
         Observer.__init__(self)
+        self._update_thread = None  # Thread to update the graphs
         self._builder = Builder()   # Setup form from build file
         self._builder.add_from_file("PartyProblemSimulator/Visualizer/gui.ui")
         self.mainwindow = self._builder.get_object("frm_main")
@@ -60,6 +62,24 @@ class Visualizer(Subject, Observer):
             self._builder.get_object("lbl_error").config(text="")
 
         return valid
+    
+    def _update_gui(self, generation, eval_count, fitness, history, finished, graph):
+        """ Updates the relevant gui components. """
+        self._builder.get_object("lbl_generations").config(text="Generation: {}".format(generation))
+        self._builder.get_object("lbl_eval_count").config(text="Eval Count: {}".format(eval_count))
+        self._builder.get_object("lbl_best_fitness").config(text="Best Fitness: {0:.2f}/1".format(fitness))
+        if finished:
+            self._builder.get_object("lbl_error").config(text="Finished!")
+            self._builder.get_object("btn_solve").config(state="normal")
+        else:
+            self._builder.get_object("lbl_error").config(text="Computing...")
+        # Update plots on seperate threads for efficiency
+        plots_thread = Thread(target=self._draw_plots, args=(history,))
+        graph_thread = Thread(target=self._draw_graph, args=(graph,))
+        plots_thread.start()
+        graph_thread.start()
+        plots_thread.join()
+        graph_thread.join()
 
     def _draw_graph(self, graph):
         """ Draws the graph provided. """
@@ -112,7 +132,7 @@ class Visualizer(Subject, Observer):
         label_x = 0
         label_y = origin[1] + 10
         if len(history['fitness']) >= 10:
-            horizontal_increment = (end_x[0] - origin[0]) / 10
+            horizontal_increment = (end_x[0] - origin[0]) / 10  # Calculate increments to do horizontally
             count = 0
             while count < 11:
                 label_x = origin[0] + (count * horizontal_increment)    # Determine axis details
@@ -136,8 +156,12 @@ class Visualizer(Subject, Observer):
                 count = count + 1
             
         # Draw points and labels
-        self._draw_fitness_points(cnv_graph_fitness, origin, end_y, end_x, history['fitness'])
-        self._draw_evaluation_points(cnv_graph_evaluations, origin, end_y, end_x, history['evaluation'])
+        fitness_thread = Thread(target=self._draw_fitness_points, args=(cnv_graph_fitness, origin, end_y, end_x, history['fitness'],))
+        evals_thread = Thread(target=self._draw_evaluation_points, args=(cnv_graph_evaluations, origin, end_y, end_x, history['evaluation'],))
+        fitness_thread.start()
+        evals_thread.start()
+        fitness_thread.join()
+        evals_thread.join()
 
         
     def _draw_fitness_points(self, cnv_graph_fitness, graph_origin, vertical_end, horizontal_end, fitness_history):
@@ -222,15 +246,6 @@ class Visualizer(Subject, Observer):
     def update(self, args):
         """ Update details on form to show progress if required. """
         if ('graph' and 'generation' and 'evals' and 'best_fitness' and 'finished' and 'history') in args:
-            new_graph = args['graph']
-            self._builder.get_object("lbl_generations").config(text="Generation: {}".format(args['generation']))
-            self._builder.get_object("lbl_eval_count").config(text="Eval Count: {}".format(args['evals']))
-            self._builder.get_object("lbl_best_fitness").config(text="Best Fitness: {0:.2f}/1".format(float(args['best_fitness'])))
-            # Update plots
-            self._draw_plots(args['history'])
-            if args["finished"]:
-                self._builder.get_object("lbl_error").config(text="Finished!")
-                self._builder.get_object("btn_solve").config(state="normal")
-            else:
-                self._builder.get_object("lbl_error").config(text="Computing...")
-            self._draw_graph(new_graph)
+            if (self._update_thread is None) or (not self._update_thread.isAlive()):
+                self._update_thread = Thread(target=self._update_gui, args=(args['generation'], args['evals'], float(args['best_fitness']), args['history'], args['finished'], args['graph'],))
+                self._update_thread.start()
