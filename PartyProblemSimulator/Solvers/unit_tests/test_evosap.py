@@ -17,6 +17,7 @@ class TestEvoSAP(TestCase):
         ga = EvoSAP() # Try with empty population
         ga._initialise(5)
         bin_genome.assert_called_with(5)
+        assert bin_genome.call_count == 1
     
     def test_selection(self):
         """ Sets the best genome as the induvidual. """
