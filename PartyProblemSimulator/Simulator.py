@@ -1,9 +1,4 @@
-from PartyProblemSimulator.SatisfiabilitySimulator.BooleanEquation.Equation import Equation
-from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.BlindGA import BlindGA
-from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.FlipGA import FlipGA
-from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.EvoSAP import EvoSAP
-from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.Experimental.EvoSAP import EvoSAP_1, EvoSAP_2
-from PartyProblemSimulator.SatisfiabilitySimulator.Solvers.Experimental.FlipGA import FlipGA_1, FlipGA_2
+from PartyProblemSimulator.BooleanEquation.Equation import Equation
 from PartyProblemSimulator.Observation.Observer import Observer
 from PartyProblemSimulator.Observation.Subject import Subject
 from PartyProblemSimulator.Graphing.ConnectedGraph import ConnectedGraph
@@ -14,6 +9,9 @@ from itertools import combinations
 from threading import Thread
 from tkinter import Tk
 from time import sleep
+
+from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP
+from PartyProblemSimulator.Solvers.FlipGA import FlipGA
 
 
 class Simulator(Subject, Observer):
@@ -43,13 +41,13 @@ class Simulator(Subject, Observer):
         self._graph = ConnectedGraph(graph_size)
         # Generate an equation to solve and its variables
         result = self._generate_equation(clique_size)
-        equation = result[0]
+        self._equation = result[0]
         var_set = result[1]
-        self._goal_fitness = len(equation._clauses)
+        self._goal_fitness = len(self._equation._clauses)
         # Generate a method to solve equation
-        self._method = self._determine_method(method)(equation, var_set)
+        self._method = self._determine_method(method)()
         # Run algorithm on a seperate thread
-        self._algo_thread = Thread(target=self._method.run)
+        self._algo_thread = Thread(target=self._method.run, args=(self._equation, len(var_set),))
         # Run poller on seperate thread
         self._poll_thread = Thread(target=self._poll)
         self._algo_thread.start()
@@ -57,56 +55,42 @@ class Simulator(Subject, Observer):
     
     def _determine_method(self, method):
         """ Returns the Genetic Algorithm class to be instantiated. """
-        if method == "FlipGA":
-            print("FlipGA - Original")
-            return FlipGA
-        elif method == "(Mut.1)-FlipGA":
-            print("FlipGA - Mutation 1")
-            return FlipGA_1
-        elif method == "(Mut.2)-FlipGA":
-            print("FlipGA - Mutation 2")
-            return FlipGA_2
-        elif method == "EvoSAP":
+        if method == "EvoSAP":
             print("EvoSAP - Original")
             return EvoSAP
-        elif method == "(Mut.1)-EvoSAP":
-            print("EvoSAP - Mutation 1")
-            return EvoSAP_1
-        elif method == "(Mut.2)-EvoSAP":
-            print("EvoSAP - Mutation 2")
-            return EvoSAP_2
-        else:
-            print("BlindGA - Original")
-            return BlindGA
+        elif method == "FlipGA":
+            print("FlipGA - Original")
+            return FlipGA
 
     def _poll(self):
         """ Polls the algorithm, updating observers when required. """
         cur_fit = -1
         org = None
-        while not self._method.finished:
-            org = self._method.get_best_org()
+        sleep(1)
+        while not self._method.is_finished():
+            org = self._method.get_best_genome()
             if org is not None:
-                fit = org['fitness']
-                if cur_fit < fit:   # Only update if an improvement was made
-                    cur_fit = fit
-                    # Update graph
-                    self._generate_graph(org)
-                    # Update observers
-                    self._notify_observers(org)
+                self._method.get_best_genome().evaluate(self._equation)
+                # Update graph
+                self._generate_graph(org)
+                # Update observers
+                self._notify_observers(org)
+                sleep(0.5)
         # Update when finished
-        org = self._method.get_best_org()
+        org = self._method.get_best_genome()
         self._generate_graph(org)
         self._notify_observers(org)
 
     def _generate_graph(self, org):
         """ Generates a graph based on current state of method's best orgnism. """
-        truth_assignments = org['org']
-        for variable in truth_assignments: # For each variable (edge)
-            edge_id = int(variable[1:-1])
-            if truth_assignments[variable]:
-                self._graph.get_edge(edge_id).set_colour(0)
+        genome = org.get_genes()
+        count = 0
+        for gene in genome: # For each gene (edge)
+            if gene.get_information():
+                self._graph.get_edge(count).set_colour(1)
             else:
-                self._graph.get_edge(edge_id).set_colour(1)
+                self._graph.get_edge(count).set_colour(0)
+            count = count + 1
 
     def _generate_equation(self, clique_size):
         """ Generates a boolean equation and variable set based on the parameters. """
@@ -141,18 +125,22 @@ class Simulator(Subject, Observer):
 
     def _notify_observers(self, org):
         """ Notifies observers of genetic parameters and graph. """
-        if self._method.get_best_org() is not None:
+        best_genome = self._method.get_best_genome()
+        if best_genome is not None:
             args = {
-                "generation": self._method.generation,
-                "evals": self._method.eval_count,
-                "best_fitness": org['fitness'],
-                "ideal_fitness": self._goal_fitness,
+                "generation": self._method.get_generation(),
+                "evals": self._method.get_num_evaluations(),
+                "best_fitness": best_genome.evaluate(self._equation),
                 "graph": self._graph,
-                "finished": self._method.finished
+                "finished": self._method.is_finished(),
+                "history": {
+                    "fitness": list(self._method.get_fitness_history()),
+                    "evaluation": list(self._method.get_evaluation_history())
+                }
             }
             for o in self._observers:
                 o.update(args)
-    
+
     def update(self, args):
         """ Get clique and graph size and begin simulation. """
         clique_size = args['clique_size']
