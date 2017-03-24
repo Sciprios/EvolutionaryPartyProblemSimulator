@@ -65,7 +65,7 @@ class FlipGA(HeuristicAlgorithm):
                     if randint(0,100) > 50:
                         gene.mutate()
 
-    def _heuristic_method(self, new_population, equation):
+    def _heuristic_method(self, new_population, equation): # pragma: no cover
         """ Applies a local search heuristic on the population. """
         for organism in new_population:
             # Generate a random permutation of the genes
