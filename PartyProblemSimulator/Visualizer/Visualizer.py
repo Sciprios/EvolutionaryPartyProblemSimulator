@@ -63,7 +63,7 @@ class Visualizer(Subject, Observer):
 
         return valid
     
-    def _update_gui(self, generation, eval_count, fitness, history, finished, graph):
+    def _update_gui(self, generation, eval_count, fitness, history, finished, graph):# pragma: no cover
         """ Updates the relevant gui components. """
         self._builder.get_object("lbl_generations").config(text="Generation: {}".format(generation))
         self._builder.get_object("lbl_eval_count").config(text="Eval Count: {}".format(eval_count))
@@ -109,7 +109,7 @@ class Visualizer(Subject, Observer):
             colour = self._determine_colour(edge.get_colour())  # Determine colour
             cnv_display.create_line(start_x, start_y, end_x, end_y, width=edge_thickness, fill=colour)
     
-    def _draw_plots(self, history):
+    def _draw_plots(self, history): # pragma: no cover
         """ Draws the plots. """
         cnv_graph_fitness = self._builder.get_object("cnv_graph_fitness")
         cnv_graph_evaluations = self._builder.get_object("cnv_graph_evaluations")
@@ -164,7 +164,7 @@ class Visualizer(Subject, Observer):
         evals_thread.join()
 
         
-    def _draw_fitness_points(self, cnv_graph_fitness, graph_origin, vertical_end, horizontal_end, fitness_history):
+    def _draw_fitness_points(self, cnv_graph_fitness, graph_origin, vertical_end, horizontal_end, fitness_history): # pragma: no cover
         """ Draws the fitness graph. """
         # Draw vertical axis values (Increments of 0.1 from 0)
         increment = (graph_origin[1] - vertical_end[1]) / 10
@@ -192,7 +192,7 @@ class Visualizer(Subject, Observer):
                 previous_point = current_point
                 count = count + 1
 
-    def _draw_evaluation_points(self, cnv_graph_evaluations, graph_origin, vertical_end, horizontal_end, evaluation_history):
+    def _draw_evaluation_points(self, cnv_graph_evaluations, graph_origin, vertical_end, horizontal_end, evaluation_history): # pragma: no cover
         """ Draws the evaluation graph. """
         # Draw vertical axis values (Increments of 0.1 from 0)
         increment = (graph_origin[1] - vertical_end[1]) / 10
