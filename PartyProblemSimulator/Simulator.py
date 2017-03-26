@@ -5,13 +5,15 @@ from PartyProblemSimulator.Graphing.ConnectedGraph import ConnectedGraph
 from PartyProblemSimulator.Graphing.Vertex import Vertex
 from PartyProblemSimulator.Graphing.Edge import Edge
 from PartyProblemSimulator.Visualizer.Visualizer import Visualizer
+from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP
+from PartyProblemSimulator.Solvers.FlipGA import FlipGA
+from PartyProblemSimulator.Solvers.BlindGA import BlindGA
 from itertools import combinations
 from threading import Thread
 from tkinter import Tk
 from time import sleep
 
-from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP
-from PartyProblemSimulator.Solvers.FlipGA import FlipGA
+
 
 
 class Simulator(Subject, Observer):
@@ -61,6 +63,9 @@ class Simulator(Subject, Observer):
         elif method == "FlipGA":
             print("FlipGA - Original")
             return FlipGA
+        elif method == "BlindGA":
+            print("BlindGA - Original")
+            return BlindGA
 
     def _poll(self):
         """ Polls the algorithm, updating observers when required. """
