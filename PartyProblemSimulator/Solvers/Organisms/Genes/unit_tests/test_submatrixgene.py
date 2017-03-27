@@ -12,3 +12,11 @@ class TestSubMatrixGene(TestCase):
     
         smgn.set_data("aa")   # All of one encoding
         assert smgn.get_information() == [0, 1, 0, 1]
+    
+    @patch('PartyProblemSimulator.Solvers.Organisms.Genes.SubMatrixGene.randint')
+    def test_mutate(self, rand):
+        """ Ensures the gene is mutated randomly. """
+        smg = SubMatrixGene("efabcd")   # Create a gene to mutate
+        rand.return_value = 0   # Last 4 symbols should turn into an 'a'
+        smg.mutate()
+        assert smg.get_data() == "feaaaa"
