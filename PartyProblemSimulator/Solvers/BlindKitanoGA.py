@@ -2,12 +2,12 @@ from PartyProblemSimulator.Solvers.Organisms.KitanoGenome import KitanoGenome
 from PartyProblemSimulator.Solvers.BlindGA import BlindGA
 from random import shuffle, randint
 
-class BlindGAm(BlindGA):
+class BlindKitanoGA(BlindGA):
     """ The BlindGA genetic algorithm using morphogenetic encoding. """
 
     def __init__(self):
-        """ Initializes the FlipGA method with predefined attributes. """
-        BlindGA.__init__(self, 1000)
+        """ Initializes the BlindGA with morphogenetic encodings. """
+        BlindGA.__init__(self)
         self._set_mutation_rate(0.5)
     
     def _initialise(self, no_vars):
@@ -26,9 +26,9 @@ class BlindGAm(BlindGA):
         all_genes = []
         all_genes.extend(parent_a_genes)    # Generate a list of all genes
         all_genes.extend(parent_b_genes)
-        while len(population) <= 10:
+        while len(population) < 10:
             # Make child by randomly selecting genes then pruning
-            child = KitanoGenome(no_vars)
+            child = KitanoGenome(genome_size)
             child.clear_genes()
             # Create a random permutation of the genes to be added
             shuffle(all_genes)
