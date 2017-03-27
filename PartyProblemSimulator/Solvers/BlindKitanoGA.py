@@ -43,11 +43,3 @@ class BlindGAm(BlindGA):
             child.prune_genome()
             population.append(child)
         return population
-    
-    def _mutation(self, new_population):
-        """ Mutates the population. """
-        for organism in new_population:
-            if randint(0, 100) > (self.get_mutation_rate() * 10):
-                for gene in organism.get_genes():
-                    if randint(0,100) > 50:
-                        gene.mutate()
