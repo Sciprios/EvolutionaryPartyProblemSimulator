@@ -18,7 +18,7 @@ class BlindKitanoGA(BlindGA):
     
     def _reproduction(self, parents):
         """ Reproduces the organism from the parent. """
-        genome_size = parents[0].get_genome_size()
+        genome_size = parents[0].get_expected_genome_size()
         population = [] # New population
         population.extend(parents)  # The parents carry on
         parent_a_genes = parents[0].get_genes() # Get the parents genes for crossover
@@ -42,4 +42,5 @@ class BlindKitanoGA(BlindGA):
                 child.add_gene(gene)
             child.prune_genome()
             population.append(child)
+        print(len(population))
         return population

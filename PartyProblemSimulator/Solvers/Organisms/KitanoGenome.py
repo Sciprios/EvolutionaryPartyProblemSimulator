@@ -12,12 +12,12 @@ class KitanoGenome(Genome):
     def _instantiate(self):
         """ Initialises this genome with a random grammatical representation. """
         # Generate number of sub-matrices to use
-        no_sub_matrices = self.get_genome_size()
+        no_sub_matrices = self.get_expected_genome_size()
         # Give each sub matrix a random number of symbols
         cnt = 0
         while cnt < no_sub_matrices:
             symbols = ""
-            no_symbols = randint(self.get_genome_size() / no_sub_matrices, 4)  # Random number of symbols
+            no_symbols = randint(self.get_expected_genome_size() / no_sub_matrices, 4)  # Random number of symbols
             while len(symbols) < no_symbols:
                 symbol = randint(1, 4)
                 if symbol == 1:
@@ -29,7 +29,7 @@ class KitanoGenome(Genome):
                 elif symbol == 4:
                     symbols = symbols + ('d')
             if cnt == 0:  # First element
-                if self.get_genome_size() % 2 != 0:    # If genome is uneven in size add an extra element to the end.
+                if (no_sub_matrices % 2) != 0:    # If genome is uneven in size add an extra element to the end.
                     rand = randint(0, 1)
                     if rand == 0:
                         symbols = symbols + 'f'
@@ -39,38 +39,35 @@ class KitanoGenome(Genome):
             self.add_gene(gene)
             cnt = cnt + 1
         self.prune_genome()
-
+    
     def prune_genome(self):
-        """ Prunes the genome to ensure it has the correct size. """
-        max_size = self.get_genome_size()
-        spare_genes = []
-        # Calculate length
-        # DEBUG
-        print("Max size: {}".format(max_size))
-        d_length = 0
-        for gene in self.get_genes():
-            d_length = d_length + len(gene.get_information())
-        print("Before prune: {}".format(d_length))
+        """ Prunes the genome to ensure its of the correct size. """
+        max_length = self.get_expected_genome_size()
+        gene_index = len(self.get_genes()) - 1    # Start from the end
+        while self.get_genome_length() > max_length:
+            current_gene = self.get_genes()[gene_index]    # Get gene to prune
+            component_index = len(current_gene.get_data()) - 1
+            while (self.get_genome_length() > max_length) and (component_index > 0):    # For each component
+                current_gene.set_data(current_gene.get_data()[:-1]) # Prune it
+                component_index = component_index - 1
+                print("--Current: {}, Max: {}".format(self.get_genome_length(), max_length))
+            if self.get_genome_length() < max_length:   # IF pruning went one to far
+                current_gene.set_data(current_gene.get_data() + "e")    
+            elif self.get_genome_length() > max_length:
+                if component_index == 0:    # Try converting to single bit gene
+                    current_gene.set_data("e")
+                    if self.get_genome_length() > max_length:
+                        self.remove_gene(current_gene)
+            print("Current: {}, Max: {}".format(self.get_genome_length(), max_length))
+            gene_index = gene_index - 1
+
+    def get_genome_length(self):
+        """ Retrieves the length of this genome. """
         length = 0
         for gene in self.get_genes():
-            length = length + len(gene.get_information())   # What would the length be with this gene
-            if length > max_size:
-                diff = length - max_size
-                if diff < len(gene.get_information()):  # Is the difference prunable?
-                    componenets_to_remove = int(diff / 2)    # Two bits per componenet
-                    gene.set_data(gene.get_data()[componenets_to_remove:])  # Prune the grammar
-                    length = length - diff
-                else:
-                    spare_genes.append(gene)  # This one isn't needed
-                    length = length - len(gene.get_information())
-        for gene in spare_genes:
-            self.remove_gene(gene)
-        # DEBUG
-        d_length = 0
-        for gene in self.get_genes():
-            d_length = d_length + len(gene.get_information())
-        print("After prune: {}".format(d_length))
-    
+            length = length + len(gene.get_information())
+        return length
+
     def evaluate(self, equation):
         """ Evaluates this genome against the given equation. """
         bit_string = []
@@ -82,7 +79,7 @@ class KitanoGenome(Genome):
             id = "{" + str(count) + "}"
             input_vector[id] = bit
             count = count + 1
-        print("Bit string length: {}, Expected size: {}".format(len(input_vector), self.get_genome_size()))
+        print("Bit string length: {}, Expected size: {}".format(len(input_vector), self.get_expected_genome_size()))
         clausal_result = equation.get_clause_evaluation(input_vector)
         score = sum(clausal_result) / len(clausal_result)   # Calculate the percentage of clauses met.
         return score
