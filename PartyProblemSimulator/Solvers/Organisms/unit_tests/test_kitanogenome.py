@@ -32,6 +32,20 @@ class TestKitanoGenome(TestCase):
         for gene in kgnm.get_genes():
             length = length + len(gene.get_information())
         assert length == 105
+        kgnm = KitanoGenome(genome_size=105)        # Try a different size
+        kgnm._genome_size = 5
+        kgnm.prune_genome()
+        length = 0
+        for gene in kgnm.get_genes():
+            length = length + len(gene.get_information())
+        assert length == 5
+        kgnm = KitanoGenome(genome_size=100)        # Try a different size
+        kgnm._genome_size = 6
+        kgnm.prune_genome()
+        length = 0
+        for gene in kgnm.get_genes():
+            length = length + len(gene.get_information())
+        assert length == 6
     
     @patch('PartyProblemSimulator.Solvers.Organisms.KitanoGenome.KitanoGenome._instantiate')
     def test_evaluate(self, inst_mock):

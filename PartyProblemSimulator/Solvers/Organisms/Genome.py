@@ -38,6 +38,6 @@ class Genome(object):
         else:
             self._genome_size = 1
     
-    def _get_genome_size(self):
+    def get_genome_size(self):
         """ Retrieves the gene count for this genome. """
         return self._genome_size

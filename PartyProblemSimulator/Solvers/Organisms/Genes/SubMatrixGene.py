@@ -48,4 +48,3 @@ class SubMatrixGene(Gene):
             new_data = new_data + mutated_symbol
             count = count + 1
         self.set_data(new_data)
-            

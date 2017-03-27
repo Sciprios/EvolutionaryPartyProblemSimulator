@@ -12,7 +12,7 @@ class TestBinaryGenome(TestCase):
         bgnm = BinaryGenome(genome_size=500)
         assert inst_mock.called
     
-    @patch('PartyProblemSimulator.Solvers.Organisms.BinaryGenome.BinaryGenome._get_genome_size')
+    @patch('PartyProblemSimulator.Solvers.Organisms.BinaryGenome.BinaryGenome.get_genome_size')
     def test_instantiate(self, get_cnt_mock):
         """ Ensures the gene count is returned appropriately. """
         get_cnt_mock.return_value = 5

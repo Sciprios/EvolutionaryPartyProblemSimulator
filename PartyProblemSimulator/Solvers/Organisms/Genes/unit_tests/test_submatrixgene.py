@@ -20,3 +20,7 @@ class TestSubMatrixGene(TestCase):
         rand.return_value = 0   # Last 4 symbols should turn into an 'a'
         smg.mutate()
         assert smg.get_data() == "feaaaa"
+
+        smg = SubMatrixGene("abcdabcdabcd")
+        smg.mutate()
+        assert smg.get_data() == "aaaaaaaaaaaa"
