@@ -1,5 +1,6 @@
 from PartyProblemSimulator.Solvers.Organisms.KitanoGenome import KitanoGenome
 from PartyProblemSimulator.Solvers.BlindGA import BlindGA
+from random import shuffle, randint
 
 class BlindGAm(BlindGA):
     """ The BlindGA genetic algorithm using morphogenetic encoding. """
@@ -22,8 +23,25 @@ class BlindGAm(BlindGA):
         population.extend(parents)  # The parents carry on
         parent_a_genes = parents[0].get_genes() # Get the parents genes for crossover
         parent_b_genes = parents[1].get_genes()
+        all_genes = []
+        all_genes.extend(parent_a_genes)    # Generate a list of all genes
+        all_genes.extend(parent_b_genes)
         while len(population) <= 10:
-            # Make child
+            # Make child by randomly selecting genes then pruning
+            child = KitanoGenome(no_vars)
+            child.clear_genes()
+            # Create a random permutation of the genes to be added
+            shuffle(all_genes)
+            # For odd sized genomes we need a single extra symbol
+            if randint(0, 100) > 50:
+                all_genes = [parent_b_genes[0]] + all_genes
+            else:
+                all_genes = [parent_a_genes[0]] + all_genes
+            # Add all genes to child then prune
+            for gene in all_genes:
+                child.add_gene(gene)
+            child.prune_genome()
+            population.append(child)
         return population
     
     def _mutation(self, new_population):
