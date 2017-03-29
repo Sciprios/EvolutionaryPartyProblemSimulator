@@ -1,4 +1,5 @@
 from PartyProblemSimulator.Solvers.Organisms.KitanoGenome import KitanoGenome
+from PartyProblemSimulator.Solvers.Organisms.Genes.SubMatrixGene import SubMatrixGene
 from PartyProblemSimulator.Solvers.BlindGA import BlindGA
 from random import shuffle, randint
 
@@ -20,7 +21,6 @@ class BlindKitanoGA(BlindGA):
         """ Reproduces the organism from the parent. """
         genome_size = parents[0].get_expected_genome_size()
         population = [] # New population
-        population.extend(parents)  # The parents carry on
         parent_a_genes = parents[0].get_genes() # Get the parents genes for crossover
         parent_b_genes = parents[1].get_genes()
         all_genes = []
@@ -32,15 +32,9 @@ class BlindKitanoGA(BlindGA):
             child.clear_genes()
             # Create a random permutation of the genes to be added
             shuffle(all_genes)
-            # For odd sized genomes we need a single extra symbol
-            if randint(0, 100) > 50:
-                all_genes = [parent_b_genes[0]] + all_genes
-            else:
-                all_genes = [parent_a_genes[0]] + all_genes
             # Add all genes to child then prune
             for gene in all_genes:
-                child.add_gene(gene)
+                child.add_gene(SubMatrixGene(gene.get_data()))
             child.prune_genome()
             population.append(child)
-        print(len(population))
         return population

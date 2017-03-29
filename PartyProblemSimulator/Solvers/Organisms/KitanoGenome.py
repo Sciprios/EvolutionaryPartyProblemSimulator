@@ -28,13 +28,6 @@ class KitanoGenome(Genome):
                     symbols = symbols + ('c')
                 elif symbol == 4:
                     symbols = symbols + ('d')
-            if cnt == 0:  # First element
-                if (no_sub_matrices % 2) != 0:    # If genome is uneven in size add an extra element to the end.
-                    rand = randint(0, 1)
-                    if rand == 0:
-                        symbols = symbols + 'f'
-                    else:
-                        symbols = symbols + 'e'
             gene = SubMatrixGene(symbols)
             self.add_gene(gene)
             cnt = cnt + 1
@@ -43,23 +36,39 @@ class KitanoGenome(Genome):
     def prune_genome(self):
         """ Prunes the genome to ensure its of the correct size. """
         max_length = self.get_expected_genome_size()
-        gene_index = len(self.get_genes()) - 1    # Start from the end
-        while self.get_genome_length() > max_length:
-            current_gene = self.get_genes()[gene_index]    # Get gene to prune
-            component_index = len(current_gene.get_data()) - 1
-            while (self.get_genome_length() > max_length) and (component_index > 0):    # For each component
-                current_gene.set_data(current_gene.get_data()[:-1]) # Prune it
-                component_index = component_index - 1
-                print("--Current: {}, Max: {}".format(self.get_genome_length(), max_length))
-            if self.get_genome_length() < max_length:   # IF pruning went one to far
-                current_gene.set_data(current_gene.get_data() + "e")    
-            elif self.get_genome_length() > max_length:
-                if component_index == 0:    # Try converting to single bit gene
-                    current_gene.set_data("e")
-                    if self.get_genome_length() > max_length:
-                        self.remove_gene(current_gene)
-            print("Current: {}, Max: {}".format(self.get_genome_length(), max_length))
-            gene_index = gene_index - 1
+        removables = []
+        gene_index = 0
+        new_length = 0
+        while gene_index < len(self.get_genes()):    # For each gene see if it fits or prune until it does
+            current_gene = self.get_genes()[gene_index]
+            if current_gene.get_data() == "" or current_gene.get_information() == "":   # Check if its an empty gene
+                removables.append(current_gene) 
+            if ((new_length + len(current_gene.get_information())) <= max_length):   # IF this gene does fit in
+                new_length = new_length + len(current_gene.get_information())
+            else:
+                no_components = len(current_gene.get_data())
+                current_component = 0
+                while current_component < no_components:   # For each component
+                    current_gene.set_data(current_gene.get_data()[:-1])
+                    if (new_length + len(current_gene.get_information())) <= max_length:  # Does it now fit?
+                        new_length = new_length + len(current_gene.get_information())
+                        break
+                    current_component = current_component + 1
+                if current_gene.get_data() == "" or current_gene.get_information() == "":   # If this gene has nothing left, add it to removal list
+                    removables.append(current_gene)
+            gene_index = gene_index +  1
+        for gene in removables: # Remove all empty genes
+            self.remove_gene(gene)
+    
+    def _set_expected_genome_size(self, genome_size):
+        """ Safely sets the expected gene count of this genome, ensuring its even. """
+        if genome_size > 0:
+            if genome_size % 2 == 0:
+                self._expected_genome_size = genome_size
+            else:
+                self._expected_genome_size = genome_size + 1
+        else:
+            self._expected_genome_size = 2
 
     def get_genome_length(self):
         """ Retrieves the length of this genome. """
@@ -79,7 +88,6 @@ class KitanoGenome(Genome):
             id = "{" + str(count) + "}"
             input_vector[id] = bit
             count = count + 1
-        print("Bit string length: {}, Expected size: {}".format(len(input_vector), self.get_expected_genome_size()))
         clausal_result = equation.get_clause_evaluation(input_vector)
         score = sum(clausal_result) / len(clausal_result)   # Calculate the percentage of clauses met.
         return score

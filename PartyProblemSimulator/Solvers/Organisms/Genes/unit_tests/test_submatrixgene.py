@@ -16,10 +16,10 @@ class TestSubMatrixGene(TestCase):
     @patch('PartyProblemSimulator.Solvers.Organisms.Genes.SubMatrixGene.randint')
     def test_mutate(self, rand):
         """ Ensures the gene is mutated randomly. """
-        smg = SubMatrixGene("efabcd")   # Create a gene to mutate
+        smg = SubMatrixGene("abcd")   # Create a gene to mutate
         rand.return_value = 0   # Last 4 symbols should turn into an 'a'
         smg.mutate()
-        assert smg.get_data() == "feaaaa"
+        assert smg.get_data() == "aaaa"
 
         smg = SubMatrixGene("abcdabcdabcd")
         smg.mutate()

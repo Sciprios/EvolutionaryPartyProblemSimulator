@@ -41,7 +41,6 @@ class BlindGA(GeneticAlgorithm):
         """ Reproduces the organism from the parent. """
         genome_size = len(parents[0].get_genes())
         population = [] # New population
-        population.extend(parents)  # The parents carry on
         parent_a_genes = parents[0].get_genes() # Get the parents genes for crossover
         parent_b_genes = parents[1].get_genes()
         split_point = randint(0, genome_size)   # Choose a point to reproduce over

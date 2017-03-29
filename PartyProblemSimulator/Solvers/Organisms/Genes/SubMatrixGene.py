@@ -28,23 +28,19 @@ class SubMatrixGene(Gene):
         """ Mutates itself """
         new_data = ""
         count = 0
+        OLD_COUNT = len(self.get_data())
         for symbol in self.get_data():
             mutated_symbol = None
-            if (symbol == "e"): # Determine the mutation
-                mutated_symbol = "f"
-            elif (symbol == "f"):
-                mutated_symbol = "e"
+            # Decide whether to mutate to a, b, c or d.
+            encoding = randint(0, 3)
+            if encoding == 0:
+                mutated_symbol = "a"
+            elif encoding == 1:
+                mutated_symbol = "b"
+            elif encoding == 2:
+                mutated_symbol = "c"
             else:
-                # Decide whether to mutate to a, b, c or d.
-                encoding = randint(0, 3)
-                if encoding == 0:
-                    mutated_symbol = "a"
-                elif encoding == 1:
-                    mutated_symbol = "b"
-                elif encoding == 2:
-                    mutated_symbol = "c"
-                else:
-                    mutated_symbol = "d"
+                mutated_symbol = "d"
             new_data = new_data + mutated_symbol
             count = count + 1
         self.set_data(new_data)

@@ -28,28 +28,20 @@ class TestKitanoGenome(TestCase):
         grammar = ""
         assert length == 10
         grammar = ""
-        kgnm = KitanoGenome(genome_size=105)        # Try an odd size
+        kgnm = KitanoGenome(genome_size=15)        # Try an odd size
         length = kgnm.get_genome_length()
-        assert length == 105
-        kgnm = KitanoGenome(genome_size=105)        # Try a different size
-        kgnm._expected_genome_size = 5
-        grammar = ""
-        for gene in kgnm.get_genes():
-            grammar = grammar + "/" + gene.get_data()
-        print(grammar)
-        kgnm.prune_genome()
-        grammar = ""
-        for gene in kgnm.get_genes():
-            grammar = grammar + "/" + gene.get_data()
-        print(grammar)
-        length = kgnm.get_genome_length()
-        assert length == 5
-        kgnm = KitanoGenome(genome_size=100)        # Try a different size
+        assert length == 16
+        kgnm = KitanoGenome(genome_size=15)        # Try a different size
         kgnm._expected_genome_size = 6
         kgnm.prune_genome()
         length = kgnm.get_genome_length()
         assert length == 6
-        kgnm = KitanoGenome(10)
+        kgnm = KitanoGenome(genome_size=10)        # Try a different size
+        kgnm._expected_genome_size = 6
+        kgnm.prune_genome()
+        length = kgnm.get_genome_length()
+        assert length == 6
+        kgnm = KitanoGenome(9)
         kgnm.clear_genes()
         x1 = SubMatrixGene("aadc")
         x2 = SubMatrixGene("aadc")

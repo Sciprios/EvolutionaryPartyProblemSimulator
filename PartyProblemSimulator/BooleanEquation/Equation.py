@@ -119,7 +119,6 @@ class Equation(BooleanNode):
     def _generate_clause(self, clause):
         """ Generates an initial node for a clause. This method assumes "clause" is validated. """
         node = None
-        #print(clause)
         if clause[0] is '{':  # First items a VariableNode
             cnt = 0
             while cnt < len(clause):    # Get the end of the variable
