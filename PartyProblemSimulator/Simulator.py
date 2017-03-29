@@ -8,6 +8,7 @@ from PartyProblemSimulator.Visualizer.Visualizer import Visualizer
 from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP
 from PartyProblemSimulator.Solvers.FlipGA import FlipGA
 from PartyProblemSimulator.Solvers.BlindGA import BlindGA
+from PartyProblemSimulator.Solvers.BlindKitanoGA import BlindKitanoGA
 from itertools import combinations
 from threading import Thread
 from tkinter import Tk
@@ -66,12 +67,15 @@ class Simulator(Subject, Observer):
         elif method == "BlindGA":
             print("BlindGA - Original")
             return BlindGA
+        elif method == "BlindGA(Morphogenetic)":
+            print("BlindGA - Morphogenetic")
+            return BlindKitanoGA
 
     def _poll(self):
         """ Polls the algorithm, updating observers when required. """
         cur_fit = -1
         org = None
-        sleep(1)
+        sleep(5)
         while not self._method.is_finished():
             org = self._method.get_best_genome()
             if org is not None:
@@ -80,7 +84,7 @@ class Simulator(Subject, Observer):
                 self._generate_graph(org)
                 # Update observers
                 self._notify_observers(org)
-                sleep(0.5)
+                sleep(5)
         # Update when finished
         org = self._method.get_best_genome()
         self._generate_graph(org)

@@ -46,7 +46,7 @@
     </child>
     <child>
       <object class="ttk.Combobox" id="cb_method">
-        <property name="values">BlindGA EvoSAP FlipGA</property>
+        <property name="values">BlindGA BlindGA(Morphogenetic) EvoSAP FlipGA</property>
         <layout>
           <property name="column">5</property>
           <property name="propagate">True</property>

@@ -5,14 +5,14 @@ from PartyProblemSimulator.Solvers.Organisms.BinaryGenome import BinaryGenome
 class TestBinaryGenome(TestCase):
     """ Tests the binary genome class. """
 
-    @patch('PartyProblemSimulator.Solvers.Organisms.BinaryGenome.BinaryGenome._set_genome_size')
+    @patch('PartyProblemSimulator.Solvers.Organisms.BinaryGenome.BinaryGenome._set_expected_genome_size')
     @patch('PartyProblemSimulator.Solvers.Organisms.BinaryGenome.BinaryGenome._instantiate')
     def test_init(self, inst_mock, set_cnt_mock):
         """ Ensures the init initialises the number of genes to be expected.  """
         bgnm = BinaryGenome(genome_size=500)
         assert inst_mock.called
     
-    @patch('PartyProblemSimulator.Solvers.Organisms.BinaryGenome.BinaryGenome._get_genome_size')
+    @patch('PartyProblemSimulator.Solvers.Organisms.BinaryGenome.BinaryGenome.get_expected_genome_size')
     def test_instantiate(self, get_cnt_mock):
         """ Ensures the gene count is returned appropriately. """
         get_cnt_mock.return_value = 5

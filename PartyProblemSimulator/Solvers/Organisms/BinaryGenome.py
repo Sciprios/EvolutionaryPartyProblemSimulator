@@ -12,12 +12,16 @@ class BinaryGenome(Genome):
     def _instantiate(self):
         """ Initialises this genome with a random set of binary values. """
         count = 0
-        while count < self._get_genome_size():
+        while count < self.get_expected_genome_size():
             if randint(0, 100) < 50:        # Randomize the value to apply to the gene
                 self.add_gene(BinaryGene(False))
             else:
                 self.add_gene(BinaryGene(True))
             count = count + 1
+        
+    def get_genome_length(self):
+        """ Retrieves the length of this genome. """
+        return self.get_expected_genome_size()
     
     def evaluate(self, equation):
         """ Evaluates this genome against the given equation. """

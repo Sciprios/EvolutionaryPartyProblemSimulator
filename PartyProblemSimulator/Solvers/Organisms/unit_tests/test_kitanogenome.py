@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock, Mock, patch
 from unittest import TestCase
 from PartyProblemSimulator.Solvers.Organisms.KitanoGenome import KitanoGenome
+from PartyProblemSimulator.Solvers.Organisms.Genes.SubMatrixGene import SubMatrixGene
 
 class TestKitanoGenome(TestCase):
     """ Tests the kitano genome class. """
@@ -23,15 +24,43 @@ class TestKitanoGenome(TestCase):
     def test_instantiate_prune(self):
         """ Ensures a random number of sub matrices are generated. """
         kgnm = KitanoGenome(genome_size=10)
-        length = 0
-        for gene in kgnm.get_genes():             # Check length of genome
-            length = length + len(gene.get_information())
+        length = kgnm.get_genome_length()
+        grammar = ""
         assert length == 10
+        grammar = ""
         kgnm = KitanoGenome(genome_size=105)        # Try an odd size
-        length = 0
-        for gene in kgnm.get_genes():
-            length = length + len(gene.get_information())
+        length = kgnm.get_genome_length()
         assert length == 105
+        kgnm = KitanoGenome(genome_size=105)        # Try a different size
+        kgnm._expected_genome_size = 5
+        grammar = ""
+        for gene in kgnm.get_genes():
+            grammar = grammar + "/" + gene.get_data()
+        print(grammar)
+        kgnm.prune_genome()
+        grammar = ""
+        for gene in kgnm.get_genes():
+            grammar = grammar + "/" + gene.get_data()
+        print(grammar)
+        length = kgnm.get_genome_length()
+        assert length == 5
+        kgnm = KitanoGenome(genome_size=100)        # Try a different size
+        kgnm._expected_genome_size = 6
+        kgnm.prune_genome()
+        length = kgnm.get_genome_length()
+        assert length == 6
+        kgnm = KitanoGenome(10)
+        kgnm.clear_genes()
+        x1 = SubMatrixGene("aadc")
+        x2 = SubMatrixGene("aadc")
+        x3 = SubMatrixGene("c")
+        x4 = SubMatrixGene("cb")
+        x5 = SubMatrixGene("b")
+        x6 = SubMatrixGene("da")
+        kgnm._genes = [x1,x2,x3,x4,x5,x6]
+        kgnm.prune_genome()
+        length = kgnm.get_genome_length()
+        assert length == 10
     
     @patch('PartyProblemSimulator.Solvers.Organisms.KitanoGenome.KitanoGenome._instantiate')
     def test_evaluate(self, inst_mock):
