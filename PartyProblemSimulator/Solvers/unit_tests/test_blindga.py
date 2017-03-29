@@ -46,7 +46,7 @@ class TestBlindGA(TestCase):
         ga = BlindGA()
         parent = Mock()
         parent.get_genes = Mock(return_value=[1,2,3])
-        parents = [parent, Mock(), 3, 4, 5, 6, 7, 8, 9, 10, 11]
+        parents = [parent, parent, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         ga._reproduction(parents)
         assert rand.call_count == 1
     
