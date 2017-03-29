@@ -210,7 +210,6 @@ class Visualizer(Subject, Observer):
             location_y = vertical_end[1]    # Top most point
             location_x = graph_origin[0] + ((horizontal_end[0] - graph_origin[0]) / 2)
             cnv_graph_evaluations.create_text(location_x, location_y, fill="blue", text="x")
-            #print("{}x{}".format(location_x, location_y))
         else:
             while count < len(evaluation_history): # Do a line graph
                 location_y = graph_origin[1] - ((evaluation_history[count] / evaluation_history[-1]) * (graph_origin[1] - vertical_end[1])) # position varies

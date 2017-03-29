@@ -24,6 +24,6 @@ class TestBlindKitanoGA(TestCase):
         """ Tests the reproduction of parents into children. """
         ga = BlindKitanoGA()
         fake_parent = Mock()
-        fake_parent.get_genes = Mock(return_value=[1,2,3])
+        fake_parent.get_genes = Mock(return_value=[])
         result = ga._reproduction([fake_parent, fake_parent])
         assert len(result) == 10
