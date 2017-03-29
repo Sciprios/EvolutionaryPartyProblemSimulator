@@ -52,12 +52,12 @@ class TestGenome(TestCase):
         assert gnm._genes is gnm.get_genes()    # is checks references not equivalency.
 
     @patch('PartyProblemSimulator.Solvers.Organisms.Genome.Genome._instantiate')
-    def test_set_genome_size(self, inst_mock):
+    def test_set_expected_genome_size(self, inst_mock):
         """ Ensures the gene count can be set correctly. """
         gnm = Genome(5)
-        gnm._genome_size = 6
-        gnm._set_genome_size(500)
-        assert gnm._genome_size == 500
+        gnm._expected_genome_size = 6
+        gnm._set_expected_genome_size(500)
+        assert gnm._expected_genome_size == 500
 
     @patch('PartyProblemSimulator.Solvers.Organisms.Genome.Genome._instantiate')
     def test_clear_genome(self, inst_mock):
