@@ -30,7 +30,7 @@ Using a command line tool enter the PartyProblemSimulator repository.
 C:\Users\Andy\Desktop>cd PartyProblemSimulator
 ```
 
-Being the service by running the python script in this directory.
+Begin the service by running the python script in this directory.
 
 ```
 C:\Users\Andy\Desktop\PartyProblemSimulator>python run.py
