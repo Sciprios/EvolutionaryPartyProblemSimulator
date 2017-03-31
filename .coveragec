@@ -1,2 +1,2 @@
 [run]
-omit = */unit_tests/*, */__init__.py, */interpreter.py, */Experimental/*, */run.py, */Simulator.py
+omit = */unit_tests/*, */__init__.py, */interpreter.py, */Experimental/*, */run.py, */Simulator.py, */Experiments/*
