@@ -93,7 +93,7 @@ class Simulator(Subject, Observer):
     def _generate_graph(self, org):
         """ Generates a graph based on current state of method's best orgnism. """
         genome = org.get_genes()
-        count = 0
+        count = 1
         for gene in genome: # For each gene (edge)
             if gene.get_information():
                 self._graph.get_edge(count).set_colour(1)

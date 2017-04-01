@@ -53,3 +53,25 @@ class EvoSAP(HeuristicAlgorithm):
                     current_value = organism.get_genes()[counter].get_data() # We didn't :( Revert the flip
                     organism.get_genes()[counter].set_data(not current_value)
                 counter = counter + 1
+
+class EvoSAP_1(EvoSAP):
+    """ EvoSAP with the Mutation 1 method. """
+
+    def _mutation(self, new_population):
+        """ Mutates the population. """
+        for organism in new_population:
+            if randint(0, 100) > (self.get_mutation_rate() * 10):
+                for gene in organism.get_genes():
+                    if randint(0,100) > 50:
+                        gene.mutate()
+
+class EvoSAP_2(EvoSAP):
+    """ EvoSAP with the mutation 2 method. """
+
+    def _mutation(self, new_population):
+        """ Mutates the population. """
+        for organism in new_population:
+            if randint(0, 100) > (self.get_mutation_rate() * 10):
+                crosspoint = randint(0, len(organism.get_genes()) - 1)
+                for gene in organism.get_genes()[crosspoint:]:
+                    gene.mutate()
