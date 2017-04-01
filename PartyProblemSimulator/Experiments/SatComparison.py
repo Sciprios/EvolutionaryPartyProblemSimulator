@@ -36,6 +36,8 @@ class SatComparison(Experiment):
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
         
+        return results
+        
     def _calculate_results(self, method_results):
         """ Calculates the SR (Success Rate) and AES (Average Evaluations per Solution) based on the results given."""
         sr = 0
@@ -49,7 +51,14 @@ class SatComparison(Experiment):
     
     def _save_results(self, results):
         """ Saves the results of this experiment to disk. """
-        raise NotImplementedError("The save_results method of Experiment is not implemented.")
+        for res in results:
+            with open('PartyProblemSimulator\Experiments\Results\{}.res'.format(res['Method']), 'w') as file:   # Open file with name of method used
+                file.write("METHOD NAME: {}\n".format(res['Method'])) # Output the goodies
+                file.write("AES: {}\n".format(res['Overall']['AES']))
+                file.write("SR: {}\n".format(res['Overall']['SR']))
+                file.write("--------------------------\n")
+                for case_res in res['CaseResults']:
+                    file.write("Case AES: {}\t\tCase SR: {}\n".format(case_res['AES'], case_res['SR']))
 
     def _load_test_cases(self):
         """ Loads first 100 test cases from data if available. """
