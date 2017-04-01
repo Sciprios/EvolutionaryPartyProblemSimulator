@@ -12,6 +12,7 @@ class FlipGA(HeuristicAlgorithm):
     
     def _initialise(self, no_vars):
         """ Initialises the population of directly encoded genomes. """
+        self._repopulate([])    # Empty pop
         while len(self.get_population()) < 10:
             new_organism = BinaryGenome(no_vars)
             self._add_organism(new_organism)
@@ -90,7 +91,7 @@ class FlipGA(HeuristicAlgorithm):
 class FlipGA_1(FlipGA):
     """ FlipGA with the Mutation 1 method. """
 
-    def _mutation(self, new_population):
+    def _mutation(self, new_population):    # pragma: no cover
         """ Mutates the population. """
         for organism in new_population:
             if randint(0, 100) > (self.get_mutation_rate() * 10):
@@ -101,7 +102,7 @@ class FlipGA_1(FlipGA):
 class FlipGA_2(FlipGA):
     """ FlipGA with the mutation 2 method. """
 
-    def _mutation(self, new_population):
+    def _mutation(self, new_population):    # pragma: no cover
         """ Mutates the population. """
         for organism in new_population:
             if randint(0, 100) > (self.get_mutation_rate() * 10):

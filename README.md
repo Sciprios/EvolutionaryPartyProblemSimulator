@@ -18,6 +18,10 @@ If you wish to execute the unittests you will also need:
 
 * pytest-cov (Python Package)
 
+To run experiments you will need:
+
+* colorama (Python Package)
+
 ### Installing
 
 A step by step series of examples that tell you have to get the simulator running.
@@ -52,16 +56,18 @@ C:\Users\Andy\Desktop\EvolutionaryPartyProblemSimulator>python run_experiments.p
 
 You will then be prompted to select an experiment to run, see below for the options available to you:
 
-| Option  | Title | Description |
-| ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  |
+| Option  | Title | Description | Output Format |
+| ------------- | ------------- | ------------- | ------------- |
+| 0  | SAT Solution Finding  | Tests 2 different mutation methods with both FlipGA and EvoSAP along with the original methods.  | An overview result will appear at the top of the results file with results for each test underneath.  |
+| Content Cell  | Content Cell  | Content Cell  | Content Cell  |
 
 Enter the relevant option number and the experiment shall begin; results from the experiment shall be saved in a results file in the directory below:
 
 ```
 EvolutionaryPartyProblemSimulator\PartyProblemSimulator\Experiments\Results
 ```
+
+Please note some experiments will require some extra data to be downloaded and extracted; for more information on this please refer to the wiki presented [here](https://github.com/Sciprios/EvolutionaryPartyProblemSimulator/wiki/Experiments). 
 
 ### Running unittests
 
