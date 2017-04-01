@@ -52,10 +52,10 @@ C:\Users\Andy\Desktop\EvolutionaryPartyProblemSimulator>python run_experiments.p
 
 You will then be prompted to select an experiment to run, see below for the options available to you:
 
-| Option  | Title | Description |
-| ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  |
+| Option  | Title | Description | Output Format |
+| ------------- | ------------- | ------------- | ------------- |
+| 0  | SAT Solution Finding  | Tests 2 different mutation methods with both FlipGA and EvoSAP along with the original methods.  | An overview result will appear at the top of the results file with results for each test underneath.  |
+| Content Cell  | Content Cell  | Content Cell  | Content Cell  |
 
 Enter the relevant option number and the experiment shall begin; results from the experiment shall be saved in a results file in the directory below:
 

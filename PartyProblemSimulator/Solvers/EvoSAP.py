@@ -57,7 +57,7 @@ class EvoSAP(HeuristicAlgorithm):
 class EvoSAP_1(EvoSAP):
     """ EvoSAP with the Mutation 1 method. """
 
-    def _mutation(self, new_population):
+    def _mutation(self, new_population):    # pragma: no cover
         """ Mutates the population. """
         for organism in new_population:
             if randint(0, 100) > (self.get_mutation_rate() * 10):
@@ -68,7 +68,7 @@ class EvoSAP_1(EvoSAP):
 class EvoSAP_2(EvoSAP):
     """ EvoSAP with the mutation 2 method. """
 
-    def _mutation(self, new_population):
+    def _mutation(self, new_population):    # pragma: no cover
         """ Mutates the population. """
         for organism in new_population:
             if randint(0, 100) > (self.get_mutation_rate() * 10):
