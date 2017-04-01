@@ -50,5 +50,18 @@ if __name__ == '__main__':
             exp = SatComparison()
             exp.start()
     elif selection == 1:
-        exp = KitanoComparison()
-        exp.start()
+        print_coloured(Fore.GREEN, "Running the SAT Solution Finding experiment.")
+        default_datafile = "PartyProblemSimulator\Experiments\Data\CBS_k3_n100_m449_b90_{}.cnf"    # Check all data files exist
+        count = 0
+        data_available = True
+        while count < 100:
+            if not isfile(default_datafile.format(count)):
+                print(Fore.YELLOW, "Data file is missing. File name: {}".format(default_datafile.format(count)))
+                data_available = False
+                break
+            count = count + 1
+        if data_available is not True:  # Is there data missing?
+            print_coloured(Fore.RED, "Please ensure you have the correct data files. For more information please refer to the GitHub Wiki.")
+        else:
+            exp = KitanoComparison()
+            exp.start()
