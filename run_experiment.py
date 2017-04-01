@@ -1,4 +1,5 @@
 from PartyProblemSimulator.Experiments.SatComparison import SatComparison
+from PartyProblemSimulator.Experiments.KitanoComparison import KitanoComparison
 from os.path import isfile
 from colorama import Fore, Style, init
 
@@ -15,6 +16,7 @@ if __name__ == '__main__':
     print("=======================")
     print_coloured(Fore.GREEN, "Select an experiment from the list below:")
     print("0 - SAT Solution finding")
+    print("1 - Morphogenetic Encoding for Clique Problems")
     print("")
     print_coloured(Fore.CYAN, "For full descriptions of the experiments please refer to GitHub README.")
     while selection_valid is False:     # Get selection from user
@@ -22,7 +24,7 @@ if __name__ == '__main__':
         print("")
         try:
             selection = int(selection)  # Validation of selection
-            if (selection < 0) or (selection > 0):
+            if (selection < 0) or (selection > 1):
                 raise ValueError()
             else:
                 selection_valid = True
@@ -47,3 +49,6 @@ if __name__ == '__main__':
         else:
             exp = SatComparison()
             exp.start()
+    elif selection == 1:
+        exp = KitanoComparison()
+        exp.start()

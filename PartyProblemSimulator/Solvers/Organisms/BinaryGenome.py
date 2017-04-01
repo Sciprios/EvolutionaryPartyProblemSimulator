@@ -32,6 +32,9 @@ class BinaryGenome(Genome):
             input_vector[gene_id] = gene.get_information()
             count = count + 1
         clausal_result = equation.get_clause_evaluation(input_vector)
-        score = sum(clausal_result) / len(clausal_result)   # Calculate the percentage of clauses met.
+        try:
+            score = sum(clausal_result) / len(clausal_result)   # Calculate the percentage of clauses met.
+        except ZeroDivisionError:
+            score = 0       
         return score
 

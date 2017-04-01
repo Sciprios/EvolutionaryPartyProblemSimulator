@@ -30,9 +30,9 @@ class GeneticAlgorithm(object):
         self._set_finished_flag(True)
         print("Algorithm finished with {} evaluations.".format(self.get_num_evaluations()))
     
-    def _initialise(self): # pragma: no cover
+    def _initialise(self, no_vars): # pragma: no cover
         """ Initializes the population of organisms. """
-        raise NotImplementedError("The initialise method has not been implemented by the base class {}".format(type(self)))
+        self._population.clear()
     
     def _evolve(self, equation): # pragma: no cover
         """ Evolves the instance's population through a single generation. """

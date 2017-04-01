@@ -12,6 +12,7 @@ class FlipGA(HeuristicAlgorithm):
     
     def _initialise(self, no_vars):
         """ Initialises the population of directly encoded genomes. """
+        self._repopulate([])    # Empty pop
         while len(self.get_population()) < 10:
             new_organism = BinaryGenome(no_vars)
             self._add_organism(new_organism)
