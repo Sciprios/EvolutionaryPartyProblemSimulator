@@ -57,7 +57,11 @@ You will then be prompted to select an experiment to run, see below for the opti
 | Content Cell  | Content Cell  | Content Cell  |
 | Content Cell  | Content Cell  | Content Cell  |
 
-Enter the relevant option number and the experiment shall begin.
+Enter the relevant option number and the experiment shall begin; results from the experiment shall be saved in a results file in the directory below:
+
+```
+EvolutionaryPartyProblemSimulator\PartyProblemSimulator\Experiments\Results
+```
 
 ### Running unittests
 
