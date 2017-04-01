@@ -26,7 +26,7 @@ class BinaryGenome(Genome):
     def evaluate(self, equation):
         """ Evaluates this genome against the given equation. """
         input_vector = {}
-        count = 0   # Generate the input vector
+        count = 1   # Generate the input vector
         for gene in self.get_genes():
             gene_id = "{" + str(count) + "}" # Generate the identifier for this gene in the equation.
             input_vector[gene_id] = gene.get_information()
