@@ -24,19 +24,42 @@ A step by step series of examples that tell you have to get the simulator runnin
 
 Download or clone this repository into a directory of your choosing.
 
-Using a command line tool enter the PartyProblemSimulator repository.
+Using a command line tool enter the EvolutionaryPartyProblemSimulator repository.
 
 ```
-C:\Users\Andy\Desktop>cd PartyProblemSimulator
+C:\Users\Andy\Desktop>cd EvolutionaryPartyProblemSimulator
 ```
 
-Being the service by running the python script in this directory.
+Begin the service by running the python script in this directory.
 
 ```
-C:\Users\Andy\Desktop\PartyProblemSimulator>python run.py
+C:\Users\Andy\Desktop\EvolutionaryPartyProblemSimulator>python run.py
 ```
 
-## Running the tests
+### Running Experiments
+
+To run the experiments first enter the relevant directory for this project via a command line utility; for example:
+
+```
+C:\Users\Andy\Desktop>cd EvolutionaryPartyProblemSimulator
+```
+
+Execute the run experiments script as follows:
+
+```
+C:\Users\Andy\Desktop\EvolutionaryPartyProblemSimulator>python run_experiments.py
+```
+
+You will then be prompted to select an experiment to run, see below for the options available to you:
+
+| Option  | Title | Description |
+| ------------- | ------------- | ------------- |
+| Content Cell  | Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  | Content Cell  |
+
+Enter the relevant option number and the experiment shall begin.
+
+### Running unittests
 
 To execute the automated unittests with a basic coverage report use the following command:
 
