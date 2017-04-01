@@ -1,12 +1,14 @@
 from PartyProblemSimulator.Experiments.Experiment import Experiment
-from PartyProblemSimulator.Solvers.FlipGA import FlipGA, FlipGA_1, FlipGA_2
-from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP, EvoSAP_1, EvoSAP_2
+from PartyProblemSimulator.Solvers.BlindGA import BlindGA
+from PartyProblemSimulator.Solvers.BlindKitanoGA import BlindKitanoGA
 from PartyProblemSimulator.BooleanEquation.Equation import Equation
+from PartyProblemSimulator.Graphing.ConnectedGraph import ConnectedGraph
 from datetime import datetime
 from random import randint
+from itertools import combinations
 
-class SatComparison(Experiment):
-    """ An experiment to compare the effectiveness of different mutation methods for sat solvers. """
+class KitanoComparison(Experiment):
+    """ An experiment to compare the effectiveness of a morphogenetic approach to finding SAT solutions. """
     
     def _do_experiment(self):
         """ Tries both FlipGA and EvoSAP with different mutation methods. """
@@ -14,38 +16,14 @@ class SatComparison(Experiment):
         test_cases = self._load_test_cases()    # Get all test cases
         results = []
 
-        method = FlipGA() # Use flipga first with no modification
-        temp_res = {"Method": "FlipGA - Original"}
+        method = BlindGA() # Use blindGA first with no modification
+        temp_res = {"Method": "BlindGA - Original"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
 
-        method = FlipGA_1()
-        temp_res = {"Method": "FlipGA - Mutation 1"}
-        temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
-        temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
-        results.append(temp_res)
-
-        method = FlipGA_2()
-        temp_res = {"Method": "FlipGA - Mutation 2"}
-        temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
-        temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
-        results.append(temp_res)
-
-        method = EvoSAP() # Use EvoSAP first with no modification
-        temp_res = {"Method": "EvoSAP - Original"}
-        temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
-        temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
-        results.append(temp_res)
-
-        method = EvoSAP_1()
-        temp_res = {"Method": "EvoSAP - Mutation 1"}
-        temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
-        temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
-        results.append(temp_res)
-
-        method = EvoSAP_2()
-        temp_res = {"Method": "EvoSAP - Mutation 2"}
+        method = BlindKitanoGA()
+        temp_res = {"Method": "BlindKitanoGA - Morphogenetic Encoding"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)

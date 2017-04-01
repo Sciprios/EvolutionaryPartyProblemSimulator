@@ -18,6 +18,10 @@ If you wish to execute the unittests you will also need:
 
 * pytest-cov (Python Package)
 
+To run experiments you will need:
+
+* colorama (Python Package)
+
 ### Installing
 
 A step by step series of examples that tell you have to get the simulator running.
@@ -62,6 +66,8 @@ Enter the relevant option number and the experiment shall begin; results from th
 ```
 EvolutionaryPartyProblemSimulator\PartyProblemSimulator\Experiments\Results
 ```
+
+Please note some experiments will require some extra data to be downloaded and extracted; for more information on this please refer to the wiki presented [here](https://github.com/Sciprios/EvolutionaryPartyProblemSimulator/wiki/Experiments). 
 
 ### Running unittests
 
