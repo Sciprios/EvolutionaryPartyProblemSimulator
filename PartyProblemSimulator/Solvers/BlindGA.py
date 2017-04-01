@@ -7,7 +7,7 @@ class BlindGA(GeneticAlgorithm):
 
     def __init__(self):
         """ Initializes the FlipGA method with predefined attributes. """
-        GeneticAlgorithm.__init__(self, 2)
+        GeneticAlgorithm.__init__(self, 1000)
         self._set_mutation_rate(0.9)
     
     def _initialise(self, no_vars):
