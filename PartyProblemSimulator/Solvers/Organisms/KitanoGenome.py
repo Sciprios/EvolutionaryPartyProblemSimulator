@@ -83,7 +83,7 @@ class KitanoGenome(Genome):
         for gene in self.get_genes():   # Generate a bit string
             bit_string.extend(gene.get_information())
         input_vector = {}
-        count = 0
+        count = 1
         for bit in bit_string:  # Generate input vector
             id = "{" + str(count) + "}"
             input_vector[id] = bit
