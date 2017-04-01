@@ -1,37 +1,51 @@
 from PartyProblemSimulator.Experiments.Experiment import Experiment
-from PartyProblemSimulator.Solvers.FlipGA import FlipGA
-from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP
+from PartyProblemSimulator.Solvers.FlipGA import FlipGA, FlipGA_1, FlipGA_2
+from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP, EvoSAP_1, EvoSAP_2
 from PartyProblemSimulator.BooleanEquation.Equation import Equation
 from datetime import datetime
 from random import randint
 
 class SatComparison(Experiment):
     """ An experiment to compare the effectiveness of different mutation methods for sat solvers. """
-
-    def _mutation_method_1(self, new_population):
-        """ Mutates the population. """
-        for organism in new_population:
-            if randint(0, 100) > (self.get_mutation_rate() * 10):
-                for gene in organism.get_genes():
-                    if randint(0,100) > 50:
-                        gene.mutate()
-
-    def _mutation_method_2(self, new_population):
-        """ Mutates the population. """
-        for organism in new_population:
-            if randint(0, 100) > (self.get_mutation_rate() * 10):
-                crosspoint = randint(0, len(self.get_genes()) - 1)
-                for gene in self.get_genes()[crosspoint:]:
-                    gene.mutate()
     
     def _do_experiment(self):
         """ Tries both FlipGA and EvoSAP with different mutation methods. """
-        no_trials = 2   # 20
+        no_trials = 20
         test_cases = self._load_test_cases()    # Get all test cases
         results = []
-                
+
         method = FlipGA() # Use flipga first with no modification
         temp_res = {"Method": "FlipGA - Original"}
+        temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
+        temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
+        results.append(temp_res)
+
+        method = FlipGA_1()
+        temp_res = {"Method": "FlipGA - Mutation 1"}
+        temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
+        temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
+        results.append(temp_res)
+
+        method = FlipGA_2()
+        temp_res = {"Method": "FlipGA - Mutation 2"}
+        temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
+        temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
+        results.append(temp_res)
+
+        method = EvoSAP() # Use EvoSAP first with no modification
+        temp_res = {"Method": "EvoSAP - Original"}
+        temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
+        temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
+        results.append(temp_res)
+
+        method = EvoSAP_1()
+        temp_res = {"Method": "EvoSAP - Mutation 1"}
+        temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
+        temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
+        results.append(temp_res)
+
+        method = EvoSAP_2()
+        temp_res = {"Method": "EvoSAP - Mutation 2"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
@@ -65,7 +79,7 @@ class SatComparison(Experiment):
         test_cases = []
         default_filename = "PartyProblemSimulator\Experiments\Data\CBS_k3_n100_m449_b90_{}.cnf"
         counter = 0
-        while counter < 2:# SET TO 2 FOR TESTING counter < 100:
+        while counter < 100:
             filename = default_filename.format(counter) # Get the new file
             response = self._interpret_file(filename)
             test_cases.append({     # Add details to test cases

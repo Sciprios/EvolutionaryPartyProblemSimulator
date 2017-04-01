@@ -72,6 +72,6 @@ class EvoSAP_2(EvoSAP):
         """ Mutates the population. """
         for organism in new_population:
             if randint(0, 100) > (self.get_mutation_rate() * 10):
-                crosspoint = randint(0, len(self.get_genes()) - 1)
-                for gene in self.get_genes()[crosspoint:]:
+                crosspoint = randint(0, len(organism.get_genes()) - 1)
+                for gene in organism.get_genes()[crosspoint:]:
                     gene.mutate()
