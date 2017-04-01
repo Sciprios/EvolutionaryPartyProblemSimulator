@@ -90,7 +90,7 @@ class FlipGA(HeuristicAlgorithm):
 class FlipGA_1(FlipGA):
     """ FlipGA with the Mutation 1 method. """
 
-    def _mutation(self, new_population):
+    def _mutation(self, new_population):    # pragma: no cover
         """ Mutates the population. """
         for organism in new_population:
             if randint(0, 100) > (self.get_mutation_rate() * 10):
@@ -101,7 +101,7 @@ class FlipGA_1(FlipGA):
 class FlipGA_2(FlipGA):
     """ FlipGA with the mutation 2 method. """
 
-    def _mutation(self, new_population):
+    def _mutation(self, new_population):    # pragma: no cover
         """ Mutates the population. """
         for organism in new_population:
             if randint(0, 100) > (self.get_mutation_rate() * 10):
