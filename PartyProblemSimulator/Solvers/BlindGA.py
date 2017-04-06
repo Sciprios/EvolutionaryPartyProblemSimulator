@@ -15,6 +15,7 @@ class BlindGA(GeneticAlgorithm):
         self._repopulate([])    # Empty pop
         while len(self.get_population()) < 10:
             new_organism = BinaryGenome(no_vars)
+            print(new_organism.get_genome_length())
             self._add_organism(new_organism)
     
     def _selection(self, equation):

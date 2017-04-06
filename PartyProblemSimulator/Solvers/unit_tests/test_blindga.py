@@ -9,7 +9,7 @@ class TestBlindGA(TestCase):
     def test_init(self, mut_mck):
         """ Ensures the correct calls are made to prepare this algorithm. """
         ga = BlindGA()
-        mut_mck.assert_called_with(0.5)
+        mut_mck.assert_called_with(0.9)
     
     @patch('PartyProblemSimulator.Solvers.BlindGA.BinaryGenome')
     def test_initialise(self, bin_genome):

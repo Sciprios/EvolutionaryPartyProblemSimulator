@@ -9,7 +9,7 @@ class TestBlindKitanoGA(TestCase):
     def test_init(self, mut_mck):
         """ Ensures the correct calls are made to prepare this algorithm. """
         ga = BlindKitanoGA()
-        mut_mck.assert_called_with(0.5)
+        mut_mck.assert_called_with(0.9)
 
     @patch('PartyProblemSimulator.Solvers.BlindKitanoGA.KitanoGenome')
     def test_initialise(self, kit_genome):

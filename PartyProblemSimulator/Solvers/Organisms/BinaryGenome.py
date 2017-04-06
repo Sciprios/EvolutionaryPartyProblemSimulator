@@ -11,6 +11,7 @@ class BinaryGenome(Genome):
 
     def _instantiate(self):
         """ Initialises this genome with a random set of binary values. """
+        self.clear_genes()
         count = 0
         while count < self.get_expected_genome_size():
             if randint(0, 100) < 50:        # Randomize the value to apply to the gene
