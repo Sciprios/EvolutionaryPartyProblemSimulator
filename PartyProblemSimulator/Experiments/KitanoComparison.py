@@ -12,7 +12,7 @@ class KitanoComparison(Experiment):
     
     def _do_experiment(self):
         """ Tries both FlipGA and EvoSAP with different mutation methods. """
-        no_trials = 2
+        no_trials = 20
         test_cases = self._load_test_cases()    # Get all test cases
         results = []
 
@@ -65,8 +65,6 @@ class KitanoComparison(Experiment):
                    "NumVars": response[1]
                })
                count = count + 1
-               break
-            break
         return test_cases
 
     def _test_method(self, method, no_trials, test_cases):
