@@ -1,5 +1,6 @@
 from PartyProblemSimulator.Solvers.HeuristicAlgorithm import HeuristicAlgorithm
 from PartyProblemSimulator.Solvers.Organisms.BinaryGenome import BinaryGenome
+from PartyProblemSimulator.Solvers.Organisms.KitanoGenome import KitanoGenome
 from random import randint, shuffle
 
 class EvoSAP(HeuristicAlgorithm):
@@ -7,7 +8,7 @@ class EvoSAP(HeuristicAlgorithm):
 
     def __init__(self):
         """ Initializes the EvoSAP method with predefined attributes. """
-        HeuristicAlgorithm.__init__(self, 1000)
+        HeuristicAlgorithm.__init__(self, 10000)
         self._set_mutation_rate(0.9)
     
     def _initialise(self, no_vars):
@@ -76,3 +77,34 @@ class EvoSAP_2(EvoSAP):
                 crosspoint = randint(0, len(organism.get_genes()) - 1)
                 for gene in organism.get_genes()[crosspoint:]:
                     gene.mutate()
+
+class EvoSapMorph(EvoSAP_2):
+    """ EvoSAP with a morphogenetic encoding. """
+
+    def _initialise(self, no_vars):
+        """ Initialises the population of directly encoded genomes. """
+        self._repopulate([])    # Empty pop
+        while len(self.get_population()) < 1:
+            new_organism = KitanoGenome(no_vars)
+            self._add_organism(new_organism)
+    
+    def _heuristic_method(self, new_population, equation): # pragma: no cover
+        """ Applies a local search heuristic on the population. """
+        for organism in new_population:
+            # Generate a random permutation of the genes
+            random_permutation =  shuffle(list(range(0, len(organism.get_genes()))))
+            improve = 1
+            counter = 0
+            while improve > 0:  # Flip until we stop improving the organism
+                improve = 0
+                self._increment_eval_count()    # Evaluating before flip
+                old_fitness = organism.evaluate(equation)
+                current_value = organism.get_genes()[counter].get_data() # Flip the next gene in list
+                organism.get_genes()[counter].mutate()
+                self._increment_eval_count()    # Did we make an improvement?
+                new_fitness = organism.evaluate(equation)
+                if new_fitness >= old_fitness:
+                    improve = improve + (new_fitness - old_fitness) # We did! Increment improvement
+                else:
+                    organism.get_genes()[counter].set_data(current_value)
+                counter = counter + 1

@@ -1,29 +1,29 @@
+from PartyProblemSimulator.Graphing.ConnectedGraph import ConnectedGraph
 from PartyProblemSimulator.Experiments.Experiment import Experiment
+from PartyProblemSimulator.BooleanEquation.Equation import Equation
 from PartyProblemSimulator.Solvers.BlindGA import BlindGA
 from PartyProblemSimulator.Solvers.BlindKitanoGA import BlindKitanoGA
-from PartyProblemSimulator.BooleanEquation.Equation import Equation
-from PartyProblemSimulator.Graphing.ConnectedGraph import ConnectedGraph
 from datetime import datetime
 from random import randint
 from itertools import combinations
 
 class KitanoComparison(Experiment):
-    """ An experiment to compare the effectiveness of a morphogenetic approach to finding SAT solutions. """
+    """ An experiment to compare the effectiveness of different encoding methods for Ramsey theory. """
     
     def _do_experiment(self):
         """ Tries both FlipGA and EvoSAP with different mutation methods. """
-        no_trials = 20
+        no_trials = 2
         test_cases = self._load_test_cases()    # Get all test cases
         results = []
 
-        method = BlindGA() # Use blindGA first with no modification
+        method = BlindGA # Use blindga first with no modification
         temp_res = {"Method": "BlindGA - Original"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
 
-        method = BlindKitanoGA()
-        temp_res = {"Method": "BlindKitanoGA - Morphogenetic Encoding"}
+        method = BlindKitanoGA
+        temp_res = {"Method": "BlindGA - Morphogenetic"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
@@ -55,16 +55,18 @@ class KitanoComparison(Experiment):
     def _load_test_cases(self):
         """ Loads first 100 test cases from data if available. """
         test_cases = []
-        default_filename = "PartyProblemSimulator\Experiments\Data\CBS_k3_n100_m449_b90_{}.cnf"
-        counter = 0
-        while counter < 100:
-            filename = default_filename.format(counter) # Get the new file
-            response = self._interpret_file(filename)
-            test_cases.append({     # Add details to test cases
-                "Equation": response[0],
-                "NumVars": response[1]
-            })
-            counter = counter + 1
+        possible_cases = [(3, 6), (4, 18)]
+        for poss_case in possible_cases:    # For each case
+            count = poss_case[0]
+            while count < poss_case[1]:    # Have graph sizes up to the ramsey number
+               response = self._get_case(count, poss_case[0])
+               test_cases.append({     # Add details to test cases
+                   "Equation": response[0],
+                   "NumVars": response[1]
+               })
+               count = count + 1
+               break
+            break
         return test_cases
 
     def _test_method(self, method, no_trials, test_cases):
@@ -75,8 +77,7 @@ class KitanoComparison(Experiment):
             test_case_sr = 0
             trial_count = 0
             while trial_count < no_trials:
-                equation_instance = Equation(test_case['Equation'])   # Generate the equation
-                trial_res = self._do_trial(method, equation_instance, test_case['NumVars'])   # Do the trial
+                trial_res = self._do_trial(method(), Equation(test_case['Equation']), test_case['NumVars'])   # Do the trial
                 if trial_res['Success']:    # Only add information if it was successful
                     test_case_sr = test_case_sr + 1
                     test_case_aes = test_case_aes + trial_res['Evaluations']
@@ -104,53 +105,34 @@ class KitanoComparison(Experiment):
             results['Success'] = False
         return results
     
-    def _interpret_file(self, filename):
-        """ Interprets a CBS datafile """
-        clauses = []
-        vars = []
-        equation = ""
-        with open(filename, mode='r') as cnf_file: # Extract each clause from the 
-            for line in cnf_file:
-                if line[0] == 'c':  # This is a comment
-                    pass
-                elif line[0] == 'p':    # This determines the number of variables and clauses.
-                    contents = line.split(' ')
-                    var_count = int(contents[2])
-                else:
-                    line = line.replace('-', '¬') # Replace all minuses with inversion operators
-                    line = line[:-4]
-                    line = line.replace('  ', '+') # Replace all spaces with OR operators
-                    # Ensure variables are wrapped in curlies
-                    prev_num = False
-                    new_str = ""
-                    cnt = 0
-                    for c in line:
-                        if c.isdigit():
-                            if not prev_num:    # Need the opening to a variable.
-                                new_str = new_str + "{" + str(c)
-                                prev_num = True
-                            else:
-                                new_str = new_str + c # Add digit
-                        else:
-                            if prev_num:
-                                new_str = new_str + "}" + c # Close off variable
-                            else:
-                                new_str = new_str + c
-                            prev_num = False
-                        cnt = cnt + 1
-
-                    # All strings end on a number
-                    new_str = new_str + "}"
-                    new_clause = new_str
-                    clauses.append(new_clause)
+    def _get_case(self, graph_size, clique_size):
+        """ Generates a boolean equation and variable set based on the parameters. """
+        graph = ConnectedGraph(graph_size)
+        # Generate string equivalent
+        bln_eq_str = ""
+        var_set = []
+        vertex_combinations = combinations(graph.get_vertices(), clique_size)    # Get all combinations of vertices
+        for combination in vertex_combinations:
+            # Generate clause and inverse clause
+            clause_one = ""
+            clause_two = ""
+            for edge in graph.get_edges():  # Get all edges in this combination
+                if (edge.get_origin() in combination) and (edge.get_target() in combination):
+                    edge_id = str(edge.get_id())    # Found an edge in this combination
+                    var_id = "{" + edge_id + "}"
+                    clause_one = clause_one + "+¬" + var_id + ""
+                    clause_two = clause_two + "+" + var_id + ""
                     
-        # Now combine the clauses into a single formula
-        i = 0
-        for c in clauses:
-            if i is 0:
-                equation = "({})".format(c)
-            else:
-                equation = equation + ".({})".format(c)
-            i = i + 1
-        
-        return (equation, var_count)
+            # Format clause
+            clause_one = "(" + clause_one[1:] + ")" # The substring removes the first redundant "AND" symbol
+            clause_two = "(" + clause_two[1:] + ")"
+            # Add clause to equation
+            bln_eq_str = bln_eq_str + "." + clause_one + "." + clause_two
+        # Generate variables list
+        for edge in graph.get_edges():
+            var_id = "{" + str(edge.get_id()) + "}"
+            var_set.append(var_id)
+        # Format Equation
+        bln_eq_str = bln_eq_str[1:] # Removes redundant AND symbol
+        # Generate equation object
+        return (bln_eq_str, len(var_set))
