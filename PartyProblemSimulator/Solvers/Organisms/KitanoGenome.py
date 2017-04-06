@@ -11,6 +11,7 @@ class KitanoGenome(Genome):
     
     def _instantiate(self):
         """ Initialises this genome with a random grammatical representation. """
+        self.clear_genes()
         # Generate number of sub-matrices to use
         no_sub_matrices = self.get_expected_genome_size()
         # Give each sub matrix a random number of symbols
