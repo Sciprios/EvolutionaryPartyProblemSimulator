@@ -16,6 +16,7 @@ What things you need to install the software and how to install them
 
 If you wish to execute the unittests you will also need:
 
+* pytest (Python Package)
 * pytest-cov (Python Package)
 
 To run experiments you will need:
