@@ -59,7 +59,7 @@ You will then be prompted to select an experiment to run, see below for the opti
 | Option  | Title | Description | Output Format |
 | ------------- | ------------- | ------------- | ------------- |
 | 0  | SAT Solution Finding  | Tests 2 different mutation methods with both FlipGA and EvoSAP along with the original methods.  | An overview result will appear at the top of the results file with results for each test underneath.  |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  |
+| 1  | Morphogenetic encoding for clique problems  | Tests two different encoding methods for the finding of graphs with no such cliques as demanded by the test cases.  | An overview result will appear at the top of the results file with results for each test underneath.  |
 
 Enter the relevant option number and the experiment shall begin; results from the experiment shall be saved in a results file in the directory below:
 
