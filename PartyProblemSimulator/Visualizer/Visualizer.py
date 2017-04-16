@@ -49,14 +49,16 @@ class Visualizer(Subject, Observer):
         
         try:
             clique_size = int(clique_size)
-            if (clique_size <= 1) and (clique_size > graph_size):
+            if (clique_size <= 1) or (clique_size > graph_size):
                 raise Exception()
         except Exception:
             valid = False
+            print("HERE")
             self._builder.get_object("lbl_error").config(text="Clique size must be an integer > 1.")
         
-        if method not in ["EvoSAP", "FlipGA"]:
+        if (method not in ["EvoSAP", "EvoSAP1", "EvoSAP2", "FlipGA", "FlipGA1", "FlipGA2"]) and valid:
             self._builder.get_object("lbl_error").config(text="Please select a method from the list provided.")
+            valid = False
         
         if valid:   # Reset error label if entry is valid.
             self._builder.get_object("lbl_error").config(text="")
