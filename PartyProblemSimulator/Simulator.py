@@ -5,8 +5,8 @@ from PartyProblemSimulator.Graphing.ConnectedGraph import ConnectedGraph
 from PartyProblemSimulator.Graphing.Vertex import Vertex
 from PartyProblemSimulator.Graphing.Edge import Edge
 from PartyProblemSimulator.Visualizer.Visualizer import Visualizer
-from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP
-from PartyProblemSimulator.Solvers.FlipGA import FlipGA
+from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP, EvoSAP_1, EvoSAP_2
+from PartyProblemSimulator.Solvers.FlipGA import FlipGA, FlipGA_1, FlipGA_2
 from PartyProblemSimulator.Solvers.BlindGA import BlindGA
 from PartyProblemSimulator.Solvers.BlindKitanoGA import BlindKitanoGA
 from itertools import combinations
@@ -67,9 +67,18 @@ class Simulator(Subject, Observer):
         elif method == "BlindGA":
             print("BlindGA - Original")
             return BlindGA
-        elif method == "BlindGA(Morphogenetic)":
-            print("BlindGA - Morphogenetic")
-            return BlindKitanoGA
+        elif method == "EvoSAP1":
+            print("EvoSAP - Mutation 1")
+            return EvoSAP_1
+        elif method == "EvoSAP2":
+            print("EvoSAP - Mutation 2")
+            return EvoSAP_2
+        elif method == "FlipGA1":
+            print("FlipGA - Mutation 1")
+            return FlipGA_1
+        elif method == "FlipGA2":
+            print("FlipGA - Mutation 2")
+            return FlipGA_2
 
     def _poll(self):
         """ Polls the algorithm, updating observers when required. """
