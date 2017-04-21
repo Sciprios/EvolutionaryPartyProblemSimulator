@@ -53,7 +53,6 @@ class Visualizer(Subject, Observer):
                 raise Exception()
         except Exception:
             valid = False
-            print("HERE")
             self._builder.get_object("lbl_error").config(text="Clique size must be an integer > 1.")
         
         if (method not in ["EvoSAP", "EvoSAP1", "EvoSAP2", "FlipGA", "FlipGA1", "FlipGA2"]) and valid:

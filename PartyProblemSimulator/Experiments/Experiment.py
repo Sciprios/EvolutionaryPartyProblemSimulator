@@ -60,7 +60,7 @@ class Experiment(Thread):
                 for case_res in res['CaseResults']:
                     file.write("Case AES: {}\t\tCase SR: {}\n".format(case_res['AES'], case_res['SR']))
 
-    def _load_test_cases(self, results):
+    def _load_test_cases(self):
         """ Loads or creates the test cases to be used. """
         raise NotImplementedError("The _load_test_cases method of Experiment is not implemented.")
 
