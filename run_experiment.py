@@ -15,8 +15,9 @@ if __name__ == '__main__':
     print_coloured(Style.BRIGHT, "WELCOME TO EXPERIMENTS")
     print("=======================")
     print_coloured(Fore.GREEN, "Select an experiment from the list below:")
-    print("0 - SAT Solution finding")
-    print("1 - Morphogenetic Encoding for Clique Problems")
+    print(" 0 - SAT Solution finding")
+    print(" 1 - Morphogenetic Encoding for Clique Problems")
+    print("-1 - Quit")
     print("")
     print_coloured(Fore.CYAN, "For full descriptions of the experiments please refer to GitHub README.")
     while selection_valid is False:     # Get selection from user
@@ -24,7 +25,7 @@ if __name__ == '__main__':
         print("")
         try:
             selection = int(selection)  # Validation of selection
-            if (selection < 0) or (selection > 1):
+            if (selection < -1) or (selection > 1):
                 raise ValueError()
             else:
                 selection_valid = True
@@ -49,6 +50,7 @@ if __name__ == '__main__':
         else:
             exp = SatComparison()
             exp.start()
+            exp.join()
     elif selection == 1:
         print_coloured(Fore.GREEN, "Running the SAT Solution Finding experiment.")
         default_datafile = "PartyProblemSimulator\Experiments\Data\CBS_k3_n100_m449_b90_{}.cnf"    # Check all data files exist
@@ -65,3 +67,7 @@ if __name__ == '__main__':
         else:
             exp = KitanoComparison()
             exp.start()
+            exp.join()
+    elif selection == -1:   # User wants to quit
+        print_coloured(Fore.RED, "Exitting.")
+        exit()
