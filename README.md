@@ -43,6 +43,11 @@ C:\Users\Andy\Desktop\EvolutionaryPartyProblemSimulator>python run.py
 
 ### Running Experiments
 
+#### Prerequisites
+
+Before being able to run any experiments you will need to ensure the Data folder is populated with the data set available [Here](http://www.cs.ubc.ca/~hoos/SATLIB/Benchmarks/SAT/CBS/CBS_k3_n100_m435_b70.tar.gz).
+Simply extract the file to the Data folder (which is within the Experiments package), you can then use as much data as you'd like. The experiments carried out for this project used the first 100 instances.
+
 To run the experiments first enter the relevant directory for this project via a command line utility; for example:
 
 ```

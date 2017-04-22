@@ -51,14 +51,6 @@ class TestVisualizer(TestCase):
             assert False
         except Exception:
             assert True
-        
-        returnable.get.return_value = "5" # Check no error raised when invalid value is given
-        gui._builder.get_object.return_value = returnable
-        try:
-            result = gui._validate_input()
-            assert result
-        except Exception:
-            assert False
     
     @patch('PartyProblemSimulator.Visualizer.Visualizer.Visualizer._determine_colour')
     def test_draw_graph(self, det_col):
