@@ -34,28 +34,6 @@ class EvoSAP(HeuristicAlgorithm):
                 if randint(0,100) > (self.get_mutation_rate() * 10):
                     gene.mutate()
 
-    def _heuristic_method(self, new_population, equation): # pragma: no cover
-        """ Applies a local search heuristic on the population. """
-        for organism in new_population:
-            # Generate a random permutation of the genes
-            random_permutation =  shuffle(list(range(0, len(organism.get_genes()))))
-            improve = 1
-            counter = 0
-            while improve > 0:  # Flip until we stop improving the organism
-                improve = 0
-                self._increment_eval_count()    # Evaluating before flip
-                old_fitness = organism.evaluate(equation)
-                current_value = organism.get_genes()[counter].get_data() # Flip the next gene in list
-                organism.get_genes()[counter].set_data(not current_value)
-                self._increment_eval_count()    # Did we make an improvement?
-                new_fitness = organism.evaluate(equation)
-                if new_fitness >= old_fitness:
-                    improve = improve + (new_fitness - old_fitness) # We did! Increment improvement
-                else:
-                    current_value = organism.get_genes()[counter].get_data() # We didn't :( Revert the flip
-                    organism.get_genes()[counter].set_data(not current_value)
-                counter = counter + 1
-
 class EvoSAP_1(EvoSAP):
     """ EvoSAP with the Mutation 1 method. """
 

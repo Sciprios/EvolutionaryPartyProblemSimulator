@@ -1,7 +1,6 @@
 from PartyProblemSimulator.Experiments.Experiment import Experiment
 from PartyProblemSimulator.Solvers.FlipGA import FlipGA, FlipGA_1, FlipGA_2
 from PartyProblemSimulator.Solvers.EvoSAP import EvoSAP, EvoSAP_1, EvoSAP_2
-from PartyProblemSimulator.BooleanEquation.Equation import Equation
 from datetime import datetime
 from random import randint
 
@@ -14,37 +13,37 @@ class SatComparison(Experiment):
         test_cases = self._load_test_cases()    # Get all test cases
         results = []
 
-        method = FlipGA() # Use flipga first with no modification
+        method = FlipGA # Use flipga first with no modification
         temp_res = {"Method": "FlipGA - Original"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
 
-        method = FlipGA_1()
+        method = FlipGA_1
         temp_res = {"Method": "FlipGA - Mutation 1"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
 
-        method = FlipGA_2()
+        method = FlipGA_2
         temp_res = {"Method": "FlipGA - Mutation 2"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
 
-        method = EvoSAP() # Use EvoSAP first with no modification
+        method = EvoSAP # Use EvoSAP first with no modification
         temp_res = {"Method": "EvoSAP - Original"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
 
-        method = EvoSAP_1()
+        method = EvoSAP_1
         temp_res = {"Method": "EvoSAP - Mutation 1"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
         results.append(temp_res)
 
-        method = EvoSAP_2()
+        method = EvoSAP_2
         temp_res = {"Method": "EvoSAP - Mutation 2"}
         temp_res["CaseResults"] = self._test_method(method, no_trials, test_cases)  # Test the method
         temp_res["Overall"] = self._calculate_results(temp_res["CaseResults"])
@@ -63,17 +62,6 @@ class SatComparison(Experiment):
         sr = sr / len(method_results)
         return {"AES": aes, "SR": sr}
     
-    def _save_results(self, results):
-        """ Saves the results of this experiment to disk. """
-        for res in results:
-            with open('PartyProblemSimulator\Experiments\Results\{}.res'.format(res['Method']), 'w') as file:   # Open file with name of method used
-                file.write("METHOD NAME: {}\n".format(res['Method'])) # Output the goodies
-                file.write("AES: {}\n".format(res['Overall']['AES']))
-                file.write("SR: {}\n".format(res['Overall']['SR']))
-                file.write("--------------------------\n")
-                for case_res in res['CaseResults']:
-                    file.write("Case AES: {}\t\tCase SR: {}\n".format(case_res['AES'], case_res['SR']))
-
     def _load_test_cases(self):
         """ Loads first 100 test cases from data if available. """
         test_cases = []
@@ -88,43 +76,6 @@ class SatComparison(Experiment):
             })
             counter = counter + 1
         return test_cases
-
-    def _test_method(self, method, no_trials, test_cases):
-        """ Tests the given method with x trials on all test cases provided. """
-        results = []
-        for test_case in test_cases:
-            test_case_aes = 0
-            test_case_sr = 0
-            trial_count = 0
-            while trial_count < no_trials:
-                equation_instance = Equation(test_case['Equation'])   # Generate the equation
-                trial_res = self._do_trial(method, equation_instance, test_case['NumVars'])   # Do the trial
-                if trial_res['Success']:    # Only add information if it was successful
-                    test_case_sr = test_case_sr + 1
-                    test_case_aes = test_case_aes + trial_res['Evaluations']
-                trial_count = trial_count + 1
-            try:
-                test_case_aes = test_case_aes / test_case_sr    # Divide by the number of successes
-            except ZeroDivisionError:
-                test_case_aes = 0
-            
-            test_case_sr = test_case_sr / no_trials         # No. Successful trials / percentage
-            results.append({
-                "AES": test_case_aes,
-                "SR": test_case_sr
-            })
-        return results
-
-    def _do_trial(self, method, equation, variable_count):
-        """ Does a single trial of the algorithm provided. """
-        method.run(equation, variable_count)
-        results = {}    # Build response
-        results['Evaluations'] = method.get_num_evaluations()
-        if (method.get_best_genome() is None) or (method.get_best_genome().evaluate(equation) == 1):    # Did the method find a solution?
-            results['Success'] = True
-        else:
-            results['Success'] = False
-        return results
     
     def _interpret_file(self, filename):
         """ Interprets a CBS datafile """
