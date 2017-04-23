@@ -93,7 +93,7 @@ class Simulator(Subject, Observer):
                 self._generate_graph(org)
                 # Update observers
                 self._notify_observers(org)
-                sleep(5)
+                sleep(2)
         # Update when finished
         org = self._method.get_best_genome()
         self._generate_graph(org)
