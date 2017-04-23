@@ -55,7 +55,7 @@ class Visualizer(Subject, Observer):
             valid = False
             self._builder.get_object("lbl_error").config(text="Clique size must be an integer > 1.")
         
-        if (method not in ["EvoSAP", "EvoSAP1", "EvoSAP2", "FlipGA", "FlipGA1", "FlipGA2"]) and valid:
+        if (method not in ["BlindGA", "EvoSAP", "EvoSAP1", "EvoSAP2", "FlipGA", "FlipGA1", "FlipGA2"]) and valid:
             self._builder.get_object("lbl_error").config(text="Please select a method from the list provided.")
             valid = False
         
