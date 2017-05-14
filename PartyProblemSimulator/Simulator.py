@@ -13,9 +13,7 @@ from itertools import combinations
 from threading import Thread
 from tkinter import Tk
 from time import sleep
-
-
-
+from os import getpid, kill
 
 class Simulator(Subject, Observer):
     """ A simulator to process party problems. """
@@ -32,11 +30,20 @@ class Simulator(Subject, Observer):
     
     def start(self):
         """ Begins gui. """
-        root = Tk()
-        self._gui = Visualizer(root)
+        self.__root = Tk()
+        self._gui = Visualizer(self.__root)
         self._gui.subscribe(self) # Register to gui
         self.subscribe(self._gui) # Register gui to this
-        root.mainloop()
+        self.__root.protocol("WM_DELETE_WINDOW", self._gui_close)
+        self.__root.mainloop()
+    
+    def _gui_close(self):
+        """ The gui has been closed, cut threads. """
+        self._method._set_finished_flag(True)
+        if self._algo_thread is not None: self._algo_thread.join()
+        if self._poll_thread is not None: self._poll_thread.join()
+        self.__root.destroy()
+        raise SystemExit
 
     def _solve(self, clique_size, graph_size, method):
         """ Solves the given clique problem. """
@@ -84,7 +91,7 @@ class Simulator(Subject, Observer):
         """ Polls the algorithm, updating observers when required. """
         cur_fit = -1
         org = None
-        sleep(5)
+        sleep(2)
         while not self._method.is_finished():
             org = self._method.get_best_genome()
             if org is not None:
