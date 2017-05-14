@@ -41,7 +41,20 @@ Begin the service by running the python script in this directory.
 C:\Users\Andy\Desktop\EvolutionaryPartyProblemSimulator>python run.py
 ```
 
+### Running the Simulator
+
 ### Running Experiments
+To run the simulator first enter the relevant directory for this project via a command line utility; for example:
+
+```
+C:\Users\Andy\Desktop>cd EvolutionaryPartyProblemSimulator
+```
+
+Execute the run experiments script as follows:
+
+```
+C:\Users\Andy\Desktop\EvolutionaryPartyProblemSimulator>python run.py
+```
 
 #### Prerequisites
 
