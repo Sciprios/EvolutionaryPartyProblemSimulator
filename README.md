@@ -29,6 +29,8 @@ A step by step series of examples that tell you have to get the simulator runnin
 
 Download or clone this repository into a directory of your choosing.
 
+### Running the Simulator
+
 Using a command line tool enter the EvolutionaryPartyProblemSimulator repository.
 
 ```
@@ -40,8 +42,6 @@ Begin the service by running the python script in this directory.
 ```
 C:\Users\Andy\Desktop\EvolutionaryPartyProblemSimulator>python run.py
 ```
-
-### Running the Simulator
 
 ### Running Experiments
 To run the simulator first enter the relevant directory for this project via a command line utility; for example:
