@@ -21,7 +21,7 @@ class GeneticAlgorithm(object):
         self._set_finished_flag(False)
         self._reset_eval_count()
         self._initialise(no_vars)  # Initialize a population
-        while (self.get_generation() <= self.get_max_generation()) and ((self.get_best_genome() is None) or (self.get_best_genome().evaluate(equation) != 1)):
+        while (self.get_generation() <= self.get_max_generation()) and ((self.get_best_genome() is None) or (self.get_best_genome().evaluate(equation) != 1)) and not self.is_finished():
             self._set_generation(self.get_generation() + 1)
             self._evolve(equation)
             self._history_fitness.append(self.get_best_genome().evaluate(equation))
